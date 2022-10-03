@@ -47,7 +47,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <Button fx:id="AddNewUserStoryButton" layoutX="1151.0" layoutY="322.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="162.0" text="Add New User Story">
+      <Button fx:id="AddNewUserStoryButton" layoutX="1151.0" layoutY="322.0" mnemonicParsing="false" onAction="#UserStoryWindow" prefHeight="42.0" prefWidth="162.0" text="Add New User Story">
          <font>
             <Font size="15.0" />
          </font>
