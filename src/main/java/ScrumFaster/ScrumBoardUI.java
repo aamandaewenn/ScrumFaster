@@ -29,7 +29,7 @@ public class ScrumBoardUI extends Application {
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ScrumBoardUI.fxml")));
         Scene scene = new Scene(root, 320, 240);
-        stage.setTitle("Hello!");
+        stage.setTitle("ScrumFaster");
         stage.setHeight(687);
         stage.setWidth(1329);
         stage.setScene(scene);
