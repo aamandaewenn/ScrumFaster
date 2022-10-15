@@ -36,10 +36,26 @@ public class ScrumboardController {
             stage.setTitle("Create New User Story");
             stage.setHeight(450);
             stage.setWidth(450);
-            //stage.setX(500);
-            //stage.setY(500);
             stage.setScene(scene);
             stage.showAndWait();
+
+    }
+
+    /**
+     * Action listener for button that adds new team mate, opens up a window for new team mate creation
+     * note: may want to make this just a scene change on same window as lucas suggested
+     * @throws IOException if fxml file not found
+     */
+    public void newTeamMateWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newTeamMate.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 320, 240);
+        Stage stage = new Stage();
+        stage.setTitle("Add New Teammate");
+        stage.setHeight(450);
+        stage.setWidth(450);
+        stage.setScene(scene);
+        stage.showAndWait();
 
     }
 }

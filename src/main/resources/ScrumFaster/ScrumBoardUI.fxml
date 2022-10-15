@@ -22,7 +22,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <Button fx:id="AddNewTeammateButton" layoutX="1151.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="162.0" text="Add New Teammate">
+      <Button fx:id="AddNewTeammateButton" layoutX="1151.0" layoutY="265.0" mnemonicParsing="false" onAction="#newTeamMateWindow" prefHeight="42.0" prefWidth="162.0" text="Add New Teammate">
          <font>
             <Font size="15.0" />
          </font></Button>
