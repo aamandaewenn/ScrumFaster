@@ -18,6 +18,7 @@ public class CreateUserController {
     @FXML
     private ColorPicker TaskColourPicker;
 
+    //TODO: Implement This Method
     private void createUser()
     {
         //create new User object
