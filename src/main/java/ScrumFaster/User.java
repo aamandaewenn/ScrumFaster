@@ -18,6 +18,7 @@ public class User {
     {
         name = UserName;
         colour = TaskColour;
+        assignedStories = new ArrayList<UserStory>();
     }
 
     // Getters and Setters.
