@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ScrumboardController {
@@ -23,6 +24,12 @@ public class ScrumboardController {
     private Button SaveBoardButton;
     @FXML
     private Button DisplayStatisticsButton;
+
+    // ArrayList of all users added to the system.
+    public static ArrayList<User> teammates;
+
+    // ArrayList of all user stories added to the system.
+    public static ArrayList<UserStory> stories;
 
     private void helloWorld(){
         System.out.println("You pressed the button!");
