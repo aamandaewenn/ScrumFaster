@@ -18,14 +18,17 @@ public class CreateUserController {
     @FXML
     private ColorPicker TaskColourPicker;
 
-    //TODO: Implement This Method
+    // TODO: Implement This Method
     private void createUser()
     {
         //create new User object
-
-        //add user to ScrumBoardController.TeamMates
+        User newUser = new User(NameTextField.getText(), TaskColourPicker.getValue().toString());
+        
+        //add to list of users
+        ScrumboardController.teammates.add(newUser);
 
         //close window
+
 
     }
 }
