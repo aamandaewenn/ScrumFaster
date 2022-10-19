@@ -27,6 +27,8 @@ public class CreateUserController {
         //add to list of users
         ScrumboardController.teammates.add(newUser);
 
+        // make button to add user to scrumboard
+        
         //close window
 
 

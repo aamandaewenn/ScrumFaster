@@ -31,8 +31,10 @@ public class ScrumboardController {
     // ArrayList of all user stories added to the system.
     public static ArrayList<UserStory> stories;
 
-    private void helloWorld(){
-        System.out.println("You pressed the button!");
+    // Class constructor.
+    public ScrumboardController() {
+        teammates = new ArrayList<User>();
+        stories = new ArrayList<UserStory>();
     }
 
     public void UserStoryWindow() throws IOException {
@@ -64,5 +66,12 @@ public class ScrumboardController {
         stage.setScene(scene);
         stage.showAndWait();
 
+    }
+
+    /**
+     * Action listener for button that saves the board, saves the board to a file
+     * @throws IOException if fxml file not found
+     */
+    public void saveBoard() throws IOException {
     }
 }
