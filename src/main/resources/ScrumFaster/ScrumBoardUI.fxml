@@ -12,14 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
    <children>
       <Button fx:id="AddNewTeammateButton" layoutX="1208.0" layoutY="42.0" mnemonicParsing="false" onAction="#newTeamMateWindow" prefHeight="42.0" prefWidth="162.0" text="Add Team Member">
-         <font>
-            <Font name="Arial Bold" size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="AddNewUserStoryButton" layoutX="1215.0" layoutY="620.0" mnemonicParsing="false" onAction="#UserStoryWindow" prefHeight="42.0" prefWidth="162.0" text="Add New User Story">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
@@ -121,38 +116,38 @@
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <TextField layoutX="50.0" layoutY="15.0" prefHeight="26.0" prefWidth="126.0" promptText="        &lt; Persona &gt;" />
+            <TextField fx:id="personaField" layoutX="50.0" layoutY="15.0" prefHeight="26.0" prefWidth="126.0" promptText="        &lt; Persona &gt;" />
             <Label layoutX="180.0" layoutY="15.0" prefWidth="81.0" text=", I want">
                <font>
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <TextField layoutX="15.0" layoutY="50.0" prefHeight="26.0" prefWidth="246.0" promptText="                   &lt; Enter Feature Name &gt;" />
+            <TextField fx:id="featureNameField" layoutX="15.0" layoutY="50.0" prefHeight="26.0" prefWidth="246.0" promptText="                   &lt; Enter Feature Name &gt;" />
             <Label layoutX="15.0" layoutY="80.0" prefWidth="81.0" text="So that">
                <font>
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <TextArea layoutX="15.0" layoutY="110.0" prefHeight="109.0" prefWidth="246.0" promptText="Describe Feature..." />
+            <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="110.0" prefHeight="109.0" prefWidth="246.0" promptText="Describe Feature..." />
             <Label layoutX="15.0" layoutY="225.0" prefHeight="25.0" prefWidth="99.0" text="Assign to">
                <font>
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <ComboBox layoutX="120.0" layoutY="225.0" prefHeight="26.0" prefWidth="140.0" />
+            <ComboBox fx:id="assignToComboBox" layoutX="120.0" layoutY="225.0" prefHeight="26.0" prefWidth="140.0" />
             <Label layoutX="15.0" layoutY="255.0" prefHeight="25.0" prefWidth="72.0" text="Status">
                <font>
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <ComboBox layoutX="120.0" layoutY="255.0" prefHeight="26.0" prefWidth="140.0" />
+            <ComboBox fx:id="statusComboBox" layoutX="120.0" layoutY="255.0" prefHeight="26.0" prefWidth="140.0" />
             <Label layoutX="15.0" layoutY="285.0" prefHeight="25.0" prefWidth="81.0" text="Priority">
                <font>
                   <Font name="Arial Bold" size="21.0" />
                </font>
             </Label>
-            <ComboBox layoutX="120.0" layoutY="285.0" prefHeight="26.0" prefWidth="72.0" />
-            <Button layoutX="201.0" layoutY="286.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: lightblue;" text="Add">
+            <ComboBox fx:id="priorityComboBox" layoutX="120.0" layoutY="285.0" prefHeight="26.0" prefWidth="72.0" />
+            <Button layoutX="201.0" layoutY="286.0" mnemonicParsing="false" onAction="#addUserStory" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: lightblue;" text="Add">
                <font>
                   <Font size="14.0" />
                </font>
