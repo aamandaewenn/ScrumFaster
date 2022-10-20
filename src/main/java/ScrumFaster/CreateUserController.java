@@ -2,10 +2,13 @@ package ScrumFaster;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreateUserController {
@@ -18,21 +21,8 @@ public class CreateUserController {
     @FXML
     private ColorPicker TaskColourPicker;
 
-    // TODO: Implement This Method
-    private void createUser()
-    {
-        //create new User object
-        User newUser = new User(NameTextField.getText(), TaskColourPicker.getValue().toString());
-        
-        //add to list of users
-        ScrumboardController.teammates.add(newUser);
-
-        // make button to add user to scrumboard
-        
-        //close window
-
-
-    }
+    @FXML
+    private Button CreateUserButton;
 }
 
 
