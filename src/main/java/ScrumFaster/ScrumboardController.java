@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -85,8 +87,10 @@ public class ScrumboardController {
 
         // add user to scrum board
         VBox IconNameCombo = new VBox();
+        IconNameCombo.setAlignment(Pos.CENTER);
 
         Label nameLabel = new Label(name);
+        nameLabel.setFont(Font.font("Arial Bold"));
         Circle icon = new Circle(20.0);
         icon.setFill(color);
 

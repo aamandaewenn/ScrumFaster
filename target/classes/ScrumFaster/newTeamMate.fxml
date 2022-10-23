@@ -12,7 +12,7 @@
       <Pane fx:id="UserPane" layoutX="14.0" layoutY="39.0" prefHeight="321.0" prefWidth="281.0">
          <children>
             <TextField fx:id="NameTextField" layoutX="20.0" layoutY="29.0" prefHeight="26.0" prefWidth="241.0" promptText="Teammate's Name" />
-            <Button fx:id="CreateUserButton" layoutX="86.0" layoutY="273.0" mnemonicParsing="false" onAction="#createUser" text="Create Teammate" />
+            <Button fx:id="CreateUserButton" layoutX="86.0" layoutY="273.0" mnemonicParsing="false" text="Create Teammate" />
             <ColorPicker fx:id="TaskColourPicker" layoutX="133.0" layoutY="148.0" promptText="Pick Task Colour" />
             <Label fx:id="ChooseTaskLabel" layoutX="14.0" layoutY="152.0" text="Choose Task Colour" />
          </children>
