@@ -16,12 +16,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
    <children>
-      <Button fx:id="AddNewTeammateButton" layoutX="1208.0" layoutY="42.0" mnemonicParsing="false" onAction="#newTeamMateWindow" prefHeight="42.0" prefWidth="162.0" text="Add Team Member">
-      <Button fx:id="AddNewUserStoryButton" layoutX="1215.0" layoutY="620.0" mnemonicParsing="false" onAction="#UserStoryWindow" prefHeight="42.0" prefWidth="162.0" text="Add New User Story">
-         <font>
-            <Font name="Arial Bold" size="14.0" />
-         </font>
-      </Button>
       <Button fx:id="DisplayStatisticsButton" layoutX="1215.0" layoutY="670.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="162.0" text="Display Statistics">
          <font>
             <Font name="Arial Bold" size="14.0" />
