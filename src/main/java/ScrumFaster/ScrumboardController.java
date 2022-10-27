@@ -90,7 +90,6 @@ public class ScrumboardController {
 
         //create new User object
         String name = UsersTextBox.getText();
-        System.out.println(name);
         Paint color = UsersColourPicker.getValue();
             if (name.equals("")) {
                 int TeammateNumber = ScrumboardController.teammates.size() + 1;
@@ -101,8 +100,9 @@ public class ScrumboardController {
 
         User newUser = new User(name, color.toString());
 
-        //add to list of users
+        //add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
+        assignToComboBox.getItems().add(name);
 
         // add user to scrum board
         VBox IconNameCombo = new VBox();
