@@ -83,21 +83,26 @@ public class ScrumboardController {
 //    }
 
     /**
-     * Action listener for button that adds new team mate, opens up a window for new team mate creation
-     * note: may want to make this just a scene change on same window as lucas suggested
-     * @throws IOException if fxml file not found
+     * Creates a new User object and adds the user icon to the scrum board
+     *
      */
-    public void newTeamMate() throws IOException {
+    public void newTeamMate() {
 
         //create new User object
         String name = UsersTextBox.getText();
         Paint color = UsersColourPicker.getValue();
+            if (name.equals("")) {
+                int TeammateNumber = ScrumboardController.teammates.size() + 1;
+                name = "TeamMate " + TeammateNumber;
+            }
+
+        //TODO add error checking and handling (ie no name entered, colour is white)
 
         User newUser = new User(name, color.toString());
 
-        //add to list of users
+        //add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
-
+        assignToComboBox.getItems().add(name);
 
         // add user to scrum board
         VBox IconNameCombo = new VBox();
