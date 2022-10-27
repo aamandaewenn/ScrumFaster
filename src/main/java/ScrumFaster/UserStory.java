@@ -68,6 +68,6 @@ public class UserStory implements Comparable<UserStory>{
     }
 
     public int compareTo(UserStory story) {
-        return Integer.compare(this.priority, story.priority);
+        return Integer.compare(this.priority, story.priority) * -1;
     }
 }
