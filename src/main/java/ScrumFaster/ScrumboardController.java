@@ -108,9 +108,14 @@ public class ScrumboardController {
         Circle icon = new Circle(20.0);
         icon.setFill(color);
 
-        IconNameCombo.getChildren().add(icon);
-        IconNameCombo.getChildren().add(nameLabel);
+        // set padding for icon and name so that they're spread out in the VBox
+        icon.setTranslateX(20);
+        icon.setTranslateY(10);
+        nameLabel.setTranslateX(20);
+        nameLabel.setTranslateY(10);
 
+        // add icon and name to VBox
+        IconNameCombo.getChildren().addAll(icon, nameLabel);
         UsersHBox.getChildren().add(IconNameCombo);
 
         UsersScrollPane.setContent(UsersHBox);
