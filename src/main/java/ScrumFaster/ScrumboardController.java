@@ -109,4 +109,23 @@ public class ScrumboardController {
      */
     public void saveBoard() throws IOException {
     }
+
+    /**
+     * action listener for the button, displays the statistics or progress of a userstory. a pop up window will display
+     * the statistics.
+     * @throws IOException if the fxml file is not found
+     */
+
+    public void DisplayStatisticsWindow() throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("displaystats.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root,320,240);
+        Stage stage = new Stage();
+        stage.setTitle("Display Stats.");
+        stage.setHeight(450);
+        stage.setWidth(450);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
 }

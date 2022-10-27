@@ -1,2 +1,4 @@
-package ScrumFaster;public class ProgressBarController {
+package ScrumFaster;
+
+public class ProgressBarController {
 }
