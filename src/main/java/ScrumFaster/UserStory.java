@@ -1,6 +1,6 @@
 package ScrumFaster;
 
-public class UserStory {
+public class UserStory implements Comparable<UserStory>{
     private String persona;
     private String title;
     private String description;
@@ -65,5 +65,9 @@ public class UserStory {
     
     public String toString() {
         return "Persona: " + persona + "Title: " + title + " Description: " + description + " Assignee: " + assignee + " Status: " + status + " Priority: " + priority;
+    }
+
+    public int compareTo(UserStory story) {
+        return Integer.compare(this.priority, story.priority);
     }
 }
