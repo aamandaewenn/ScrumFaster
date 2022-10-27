@@ -86,9 +86,9 @@ public class ScrumboardController {
         Save that new userStory object to the stories array.
            Precond: all fields must be populated
            Postcond: stories array is modified
-           Throws an error when a user does not provide all the information
+           Displays a popUp when user does not provide all the info required
      */
-    public void addUserStory() throws IOException {
+    public void addUserStory() {
         // TODO: implement the method
         String persona = personaField.getText();
         String featureName = featureNameField.getText();
@@ -98,9 +98,17 @@ public class ScrumboardController {
         String status = statusComboBox.getAccessibleText();
         String priority = priorityComboBox.getAccessibleText();
 
-        // TODO: create a new userStory object and add it to the stories array
+        if(persona.equals("") || featureName.equals("") || description.equals("") || assignT == null || status == null || priority == null ) {
+            // TODO: implement displayPopup() method for error handling
+            // displayPopup();
+            return;
+        }
 
-        // TODO: implement error handling
+        UserStory newStory = new UserStory(persona, featureName, description, assignT, status, Integer.parseInt(priority));
+        stories.add(newStory);
+
+        System.out.println(newStory.toString());
+
     }
 
     /**

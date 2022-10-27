@@ -1,21 +1,23 @@
 package ScrumFaster;
 
 public class UserStory {
+    private String persona;
     private String title;
     private String description;
     private String assignee;
-    private String acceptanceCriteria;
     private String status;
     private int priority;
     
-    public UserStory(String title, String description, String assignee, String acceptanceCriteria, String status, int priority) {
+    public UserStory(String persona, String title, String description, String assignee, String status, int priority) {
+        this.persona = persona;
         this.title = title;
         this.description = description;
         this.assignee = assignee;
-        this.acceptanceCriteria = acceptanceCriteria;
         this.status = status;
         this.priority = priority;
     }
+
+    public String getPersona() {return persona; }
 
     public String getTitle() {
         return title;
@@ -29,16 +31,16 @@ public class UserStory {
         return assignee;
     }
 
-    public String getAcceptanceCriteria() {
-        return acceptanceCriteria;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public int getPriority() {
         return priority;
+    }
+
+    public void setPersona(String persona) {
+        this.persona = persona;
     }
 
     public void setTitle(String title) {
@@ -48,12 +50,9 @@ public class UserStory {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public void setAssignee(String assignee) {
         this.assignee = assignee;
-    }
-
-    public void setAcceptanceCriteria(String acceptanceCriteria) {
-        this.acceptanceCriteria = acceptanceCriteria;
     }
 
     public void setStatus(String status) {
@@ -65,6 +64,6 @@ public class UserStory {
     }
     
     public String toString() {
-        return "Title: " + title + " Description: " + description + " Assignee: " + assignee + " Acceptance Criteria: " + acceptanceCriteria + " Status: " + status + " Priority: " + priority;
+        return "Persona: " + persona + "Title: " + title + " Description: " + description + " Assignee: " + assignee + " Status: " + status + " Priority: " + priority;
     }
 }
