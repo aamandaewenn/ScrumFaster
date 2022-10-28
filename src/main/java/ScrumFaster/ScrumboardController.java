@@ -10,15 +10,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -172,7 +176,21 @@ public class ScrumboardController {
             return;
         }
 
-        UserStory newStory = new UserStory(persona, featureName, description, assignT, status, Integer.parseInt(priority));
+        UserStory newStory;
+
+        //TODO : RETREIVING USER BY NAME.
+
+        if(assignT==null)
+        {
+             newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
+
+        }
+        else
+        {
+//            User teammate= ScrumboardController.teammates.get();
+            newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
+
+        }
 
 
         switch (status) {
@@ -228,6 +246,9 @@ public class ScrumboardController {
         boxToUpdate.getChildren().clear();
         for(int i = 0; i < listToIterate.size(); i++) {
             VBox newStoryBox = new VBox();
+            Pane colorpane = new Pane();
+            Pane storyname= new Pane();
+            TilePane seemore= new TilePane();
 
             Label nameLabel = new Label(listToIterate.get(i).getTitle());
             nameLabel.setFont(Font.font("Arial Bold"));
@@ -235,6 +256,14 @@ public class ScrumboardController {
             newStoryBox.getChildren().add(nameLabel);
 
             boxToUpdate.getChildren().add(newStoryBox);
+
+            String color= newStory.getColor();
+            Rectangle colorrec= new Rectangle();
+            Color fillcolor= Color.web(color);
+            colorrec.setFill(fillcolor);
+            colorpane.getChildren().add(colorrec);
+            newStoryBox.getChildren().add(colorpane);
+
         }
         paneToUpdate.setContent(boxToUpdate);
 
@@ -263,5 +292,17 @@ public class ScrumboardController {
      * @throws IOException if fxml file not found
      */
     public void saveBoard() throws IOException {
+    }
+
+    public void DisplayStatistics() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("progressbar.fxml"));
+        Parent root = (Parent)fxmlLoader.load();
+        Scene scene = new Scene(root, 320.0, 240.0);
+        Stage stage = new Stage();
+        stage.setTitle("Display Stats");
+        stage.setHeight(450.0);
+        stage.setWidth(450.0);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

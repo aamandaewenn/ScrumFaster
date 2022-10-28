@@ -4,17 +4,29 @@ public class UserStory implements Comparable<UserStory>{
     private String persona;
     private String title;
     private String description;
-    private String assignee;
+    private User assignee;
     private String status;
     private int priority;
+
+    private String color;
     
-    public UserStory(String persona, String title, String description, String assignee, String status, int priority) {
+    public UserStory(String persona, String title, String description, User assignee, String status, int priority) {
         this.persona = persona;
         this.title = title;
         this.description = description;
         this.assignee = assignee;
         this.status = status;
         this.priority = priority;
+        this.color=this.assignee.getColour();
+    }
+
+    public UserStory(String persona, String title, String description,String status, int priority) {
+        this.persona = persona;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.color= "#FFFFFF";
     }
 
     public String getPersona() {return persona; }
@@ -27,12 +39,17 @@ public class UserStory implements Comparable<UserStory>{
         return description;
     }
 
-    public String getAssignee() {
+    public User getAssignee() {
         return assignee;
     }
 
     public String getStatus() {
         return status;
+    }
+
+    public String getColor()
+    {
+        return this.color;
     }
 
     public int getPriority() {
@@ -51,7 +68,7 @@ public class UserStory implements Comparable<UserStory>{
         this.description = description;
     }
 
-    public void setAssignee(String assignee) {
+    public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
 
