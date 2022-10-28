@@ -116,7 +116,7 @@ public class ScrumboardController {
 
         //create new User object
         String name = UsersTextBox.getText();
-        Paint color = UsersColourPicker.getValue();
+        Paint colour = UsersColourPicker.getValue();
             if (name.equals("")) {
                 int TeammateNumber = ScrumboardController.teammates.size() + 1;
                 name = "TeamMate " + TeammateNumber;
@@ -124,7 +124,7 @@ public class ScrumboardController {
 
         //TODO add error checking and handling (ie no name entered, colour is white)
 
-        User newUser = new User(name, color.toString());
+        User newUser = new User(name, colour.toString());
 
         //add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
@@ -137,7 +137,7 @@ public class ScrumboardController {
         Label nameLabel = new Label(name);
         nameLabel.setFont(Font.font("Arial Bold"));
         Circle icon = new Circle(20.0);
-        icon.setFill(color);
+        icon.setFill(colour);
 
         // set padding for icon and name so that they're spread out in the VBox
         icon.setTranslateX(20);
@@ -165,7 +165,7 @@ public class ScrumboardController {
         String featureName = featureNameField.getText();
         String description = descriptionField.getText();
 
-        String assignT = assignToComboBox.getValue();
+        String userName = assignToComboBox.getValue();
         String status = statusComboBox.getValue();
         String priority = priorityComboBox.getValue();
 
@@ -176,22 +176,19 @@ public class ScrumboardController {
             return;
         }
 
-        UserStory newStory;
-
-        //TODO : RETREIVING USER BY NAME.
-
-        if(assignT==null)
-        {
-             newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
-
+        // search existing users to find the user object that matches the name selected in the combo box
+        User user = null;
+        for (User u : teammates) {
+            if (u.getName().equals(userName)) {
+                user = u;
+            }
         }
-        else
-        {
-//            User teammate= ScrumboardController.teammates.get();
-            newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
-
-        }
-
+        
+        // create new user story object
+        UserStory newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
+        
+        // add new user story to the user's assigned stories
+        user.addUserStory(newStory);
 
         switch (status) {
             case "Backlog" -> {
@@ -206,9 +203,14 @@ public class ScrumboardController {
                 inProgress.add(newStory);
                 sort(inProgress);
             }
-            default -> {
+            case "Done" -> {
                 done.add(newStory);
                 sort(done);
+            }
+            default -> {
+                // if not specified, add to backlog
+                backlog.add(newStory);
+                sort(backlog);
             }
         }
 
@@ -251,8 +253,7 @@ public class ScrumboardController {
             TilePane seemore= new TilePane();
 
             // put coloured bar on user story
-            //String color= newStory.getColor();
-            String color= "#000000";
+            String color= newStory.getColor();
             Rectangle colorrec= new Rectangle();
             colorrec.setHeight(25);
             colorrec.setWidth(400);

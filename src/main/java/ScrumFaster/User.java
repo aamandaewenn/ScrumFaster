@@ -48,7 +48,7 @@ public class User {
      *
      * @param story The UserStory object to be assigned to the user.
      */
-    public void assignStoryToThisUser(UserStory story){
+    public void addUserStory(UserStory story){
         this.assignedStories.add(story);
     }
 
