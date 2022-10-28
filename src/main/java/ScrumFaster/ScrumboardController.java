@@ -169,7 +169,7 @@ public class ScrumboardController {
         String status = statusComboBox.getValue();
         String priority = priorityComboBox.getValue();
 
-        if(persona.equals("") || featureName.equals("") || description.equals("") || assignT == null || status == null || priority == null ) {
+        if(persona.equals("") || featureName.equals("") || description.equals("") || status == null || priority == null ) {
             // TODO: implement displayPopup() method for error handling
             // displayPopup();
             System.out.println("Error - not all fields are provided");
@@ -247,22 +247,33 @@ public class ScrumboardController {
         for(int i = 0; i < listToIterate.size(); i++) {
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
-            Pane storyname= new Pane();
+            HBox storyname= new HBox();
             TilePane seemore= new TilePane();
 
-            Label nameLabel = new Label(listToIterate.get(i).getTitle());
-            nameLabel.setFont(Font.font("Arial Bold"));
-
-            newStoryBox.getChildren().add(nameLabel);
-
-            boxToUpdate.getChildren().add(newStoryBox);
-
-            String color= newStory.getColor();
+            // put coloured bar on user story
+            //String color= newStory.getColor();
+            String color= "#000000";
             Rectangle colorrec= new Rectangle();
+            colorrec.setHeight(25);
+            colorrec.setWidth(400);
+
             Color fillcolor= Color.web(color);
             colorrec.setFill(fillcolor);
+
             colorpane.getChildren().add(colorrec);
             newStoryBox.getChildren().add(colorpane);
+
+            // add name to user story
+            Label nameLabel = new Label(listToIterate.get(i).getTitle());
+            nameLabel.setFont(Font.font("Arial Bold"));
+            storyname.getChildren().add(nameLabel);
+
+            Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
+            storyname.getChildren().add(priorityLabel);
+
+            newStoryBox.getChildren().add(storyname);
+
+            boxToUpdate.getChildren().add(newStoryBox);
 
         }
         paneToUpdate.setContent(boxToUpdate);
