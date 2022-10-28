@@ -226,6 +226,7 @@ public class ScrumboardController {
         }
 
         boxToUpdate.getChildren().clear();
+        //TODO change this to be a nice user story pane
         for(int i = 0; i < listToIterate.size(); i++) {
             VBox newStoryBox = new VBox();
 
