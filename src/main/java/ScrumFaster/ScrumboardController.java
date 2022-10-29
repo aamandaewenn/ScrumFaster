@@ -10,20 +10,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Collections;
 
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
@@ -112,7 +117,7 @@ public class ScrumboardController {
 
         //create new User object
         String name = UsersTextBox.getText();
-        Paint color = UsersColourPicker.getValue();
+        Paint colour = UsersColourPicker.getValue();
             if (name.equals("")) {
                 int TeammateNumber = ScrumboardController.teammates.size() + 1;
                 name = "TeamMate " + TeammateNumber;
@@ -120,7 +125,7 @@ public class ScrumboardController {
 
         //TODO add error checking and handling (ie no name entered, colour is white)
 
-        User newUser = new User(name, color.toString());
+        User newUser = new User(name, colour.toString());
 
         //add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
@@ -133,7 +138,7 @@ public class ScrumboardController {
         Label nameLabel = new Label(name);
         nameLabel.setFont(Font.font("Arial Bold"));
         Circle icon = new Circle(20.0);
-        icon.setFill(color);
+        icon.setFill(colour);
 
         // set padding for icon and name so that they're spread out in the VBox
         icon.setTranslateX(20);
@@ -161,36 +166,47 @@ public class ScrumboardController {
         String featureName = featureNameField.getText();
         String description = descriptionField.getText();
 
-        String assignT = assignToComboBox.getValue();
+        String userName = assignToComboBox.getValue();
         String status = statusComboBox.getValue();
         String priority = priorityComboBox.getValue();
 
-        if(persona.equals("") || featureName.equals("") || description.equals("") || assignT == null || status == null || priority == null ) {
+        if(persona.equals("") || featureName.equals("") || description.equals("") || status == null || priority == null ) {
             // TODO: implement displayPopup() method for error handling
             // displayPopup();
             System.out.println("Error - not all fields are provided");
             return;
         }
 
-        UserStory newStory = new UserStory(persona, featureName, description, assignT, status, Integer.parseInt(priority));
-
+        // search existing users to find the user object that matches the name selected in the combo box
+        User user = null;
+        for (User u : teammates) {
+            if (u.getName().equals(userName)) {
+                user = u;
+            }
+        }
+        
+        // create new user story object
+        UserStory newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
+        
+        // add new user story to the user's assigned stories
+        user.addUserStory(newStory);
 
         switch (status) {
             case "Backlog" -> {
                 backlog.add(newStory);
-                sort(backlog);
             }
             case "To-do" -> {
                 toDo.add(newStory);
-                sort(toDo);
             }
             case "In progress" -> {
                 inProgress.add(newStory);
-                sort(inProgress);
+            }
+            case "Done" -> {
+                done.add(newStory);
             }
             default -> {
-                done.add(newStory);
-                sort(done);
+                // if not specified, add to backlog
+                backlog.add(newStory);
             }
         }
 
@@ -202,6 +218,7 @@ public class ScrumboardController {
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
+        
         switch (newStory.getStatus()) {
             case "Backlog" -> {
                 boxToUpdate = backlogVbox;
@@ -226,36 +243,60 @@ public class ScrumboardController {
         }
 
         boxToUpdate.getChildren().clear();
-        //TODO change this to be a nice user story pane
-        for(int i = 0; i < listToIterate.size(); i++) {
-            VBox newStoryBox = new VBox();
+        // sort the list of user stories based on their priority with 5 being the highest priority
+        sort(listToIterate);
 
+        // redraw the board by adding all the user stories in sorted order
+        for(int i = listToIterate.size()-1; i >= 0; i--) {
+            // iterate through the list of user stories in reverse order 
+            // so that the highest priority is at the top
+            VBox newStoryBox = new VBox();
+            Pane colorpane = new Pane();
+            HBox storyname= new HBox();
+            TilePane seemore = new TilePane();
+
+            // put coloured bar on user story
+            String colour = listToIterate.get(i).getColor();
+            Rectangle colourRec = new Rectangle();
+            colourRec.setHeight(25);
+            colourRec.setWidth(400);
+
+            Color fillcolour = Color.web(colour);
+            colourRec.setFill(fillcolour);
+
+            colorpane.getChildren().add(colourRec);
+            newStoryBox.getChildren().add(colorpane);
+
+            // add name to user story
             Label nameLabel = new Label(listToIterate.get(i).getTitle());
             nameLabel.setFont(Font.font("Arial Bold"));
-
-            newStoryBox.getChildren().add(nameLabel);
-
+            storyname.getChildren().add(nameLabel);
+            
+            // TODO: shift priority to rightmost side of user story
+            Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
+            storyname.getChildren().add(priorityLabel);
+            newStoryBox.getChildren().add(storyname);
             boxToUpdate.getChildren().add(newStoryBox);
+
         }
+
         paneToUpdate.setContent(boxToUpdate);
 
     }
 
     public void setStatusPriority() {
-        if(statusComboBox.getItems().isEmpty()) {
-            statusComboBox.getItems().add("Backlog");
-            statusComboBox.getItems().add("To-do");
-            statusComboBox.getItems().add("In progress");
-            statusComboBox.getItems().add("Done");
-
+        String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
+        if (statusComboBox.getItems().isEmpty()) {
+            for (String status : statuses) {
+                statusComboBox.getItems().add(status);
+            }
         }
+        
 
-        if(priorityComboBox.getItems().isEmpty()) {
-            priorityComboBox.getItems().add("1");
-            priorityComboBox.getItems().add("2");
-            priorityComboBox.getItems().add("3");
-            priorityComboBox.getItems().add("4");
-            priorityComboBox.getItems().add("5");
+        if (priorityComboBox.getItems().isEmpty()) {
+            for (int i = 1; i <= 5; i++) {
+                priorityComboBox.getItems().add(""+i);
+            }
         }
     }
 
@@ -264,5 +305,17 @@ public class ScrumboardController {
      * @throws IOException if fxml file not found
      */
     public void saveBoard() throws IOException {
+    }
+
+    public void DisplayStatistics() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("progressbar.fxml"));
+        Parent root = (Parent)fxmlLoader.load();
+        Scene scene = new Scene(root, 320.0, 240.0);
+        Stage stage = new Stage();
+        stage.setTitle("Display Stats");
+        stage.setHeight(450.0);
+        stage.setWidth(450.0);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

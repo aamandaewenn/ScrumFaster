@@ -4,20 +4,24 @@ public class UserStory implements Comparable<UserStory>{
     private String persona;
     private String title;
     private String description;
-    private String assignee;
+    private User user;
     private String status;
     private int priority;
+    private String color;
     
-    public UserStory(String persona, String title, String description, String assignee, String status, int priority) {
+    public UserStory(String persona, String title, String description, User user, String status, int priority) {
         this.persona = persona;
         this.title = title;
         this.description = description;
-        this.assignee = assignee;
+        this.user = user;
         this.status = status;
         this.priority = priority;
+        this.color = this.user.getColour();
     }
 
-    public String getPersona() {return persona; }
+    public String getPersona() {
+        return persona; 
+    }
 
     public String getTitle() {
         return title;
@@ -27,12 +31,17 @@ public class UserStory implements Comparable<UserStory>{
         return description;
     }
 
-    public String getAssignee() {
-        return assignee;
+    public User getUser() {
+        return user;
     }
 
     public String getStatus() {
         return status;
+    }
+
+    public String getColor()
+    {
+        return this.color;
     }
 
     public int getPriority() {
@@ -51,8 +60,8 @@ public class UserStory implements Comparable<UserStory>{
         this.description = description;
     }
 
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setStatus(String status) {
@@ -64,7 +73,7 @@ public class UserStory implements Comparable<UserStory>{
     }
     
     public String toString() {
-        return "Persona: " + persona + "Title: " + title + " Description: " + description + " Assignee: " + assignee + " Status: " + status + " Priority: " + priority;
+        return "Persona: " + persona + "Title: " + title + " Description: " + description + " Assignee: " + user + " Status: " + status + " Priority: " + priority;
     }
 
     public int compareTo(UserStory story) {
