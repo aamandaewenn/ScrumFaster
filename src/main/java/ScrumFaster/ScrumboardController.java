@@ -133,14 +133,14 @@ public class ScrumboardController {
             WhitePopup.displayPopup();
             return;
         }
-        System.out.println(colour);
 
         // if colour is already chosen for another teammate, do not create teammate and inform user
         for (User teamMate : ScrumboardController.teammates)
         {
             if (teamMate.getColour().equals(colour.toString()))
             {
-                //displayPopup();
+                Popup DuplicatePopup = new Popup("Cannot have same colour as another user");
+                DuplicatePopup.displayPopup();
                 return;
             }
         }
@@ -193,9 +193,8 @@ public class ScrumboardController {
         String priority = priorityComboBox.getValue();
 
         if(persona.equals("") || featureName.equals("") || description.equals("") || status == null || priority == null ) {
-            // TODO: implement displayPopup() method for error handling
-            // displayPopup();
-            System.out.println("Error - not all fields are provided");
+            Popup unfilledPopup = new Popup("Please fill in all required fields");
+            unfilledPopup.displayPopup();
             return;
         }
 
