@@ -223,6 +223,7 @@ public class ScrumboardController {
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
+        
         switch (newStory.getStatus()) {
             case "Backlog" -> {
                 boxToUpdate = backlogVbox;
@@ -277,31 +278,28 @@ public class ScrumboardController {
 
             Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
             storyname.getChildren().add(priorityLabel);
-
             newStoryBox.getChildren().add(storyname);
-
             boxToUpdate.getChildren().add(newStoryBox);
 
         }
+
         paneToUpdate.setContent(boxToUpdate);
 
     }
 
     public void setStatusPriority() {
-        if(statusComboBox.getItems().isEmpty()) {
-            statusComboBox.getItems().add("Backlog");
-            statusComboBox.getItems().add("To-do");
-            statusComboBox.getItems().add("In progress");
-            statusComboBox.getItems().add("Done");
-
+        String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
+        if (statusComboBox.getItems().isEmpty()) {
+            for (String status : statuses) {
+                statusComboBox.getItems().add(status);
+            }
         }
+        
 
-        if(priorityComboBox.getItems().isEmpty()) {
-            priorityComboBox.getItems().add("1");
-            priorityComboBox.getItems().add("2");
-            priorityComboBox.getItems().add("3");
-            priorityComboBox.getItems().add("4");
-            priorityComboBox.getItems().add("5");
+        if (priorityComboBox.getItems().isEmpty()) {
+            for (int i = 1; i <= 5; i++) {
+                priorityComboBox.getItems().add(""+i);
+            }
         }
     }
 
