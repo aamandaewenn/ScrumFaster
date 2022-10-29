@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Collections;
 
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
@@ -246,22 +247,27 @@ public class ScrumboardController {
         }
 
         boxToUpdate.getChildren().clear();
+        // sort the list of user stories based on their priority with 5 being the highest priority and displayed first
+        sort(listToIterate);
+        Collections.reverse(listToIterate);
+
+        // redraw the board by adding all the user stories in sorted order
         for(int i = 0; i < listToIterate.size(); i++) {
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
             HBox storyname= new HBox();
-            TilePane seemore= new TilePane();
+            TilePane seemore = new TilePane();
 
             // put coloured bar on user story
-            String color= newStory.getColor();
-            Rectangle colorrec= new Rectangle();
-            colorrec.setHeight(25);
-            colorrec.setWidth(400);
+            String colour = listToIterate.get(i).getColor();
+            Rectangle colourRec = new Rectangle();
+            colourRec.setHeight(25);
+            colourRec.setWidth(400);
 
-            Color fillcolor= Color.web(color);
-            colorrec.setFill(fillcolor);
+            Color fillcolour = Color.web(colour);
+            colourRec.setFill(fillcolour);
 
-            colorpane.getChildren().add(colorrec);
+            colorpane.getChildren().add(colourRec);
             newStoryBox.getChildren().add(colorpane);
 
             // add name to user story
