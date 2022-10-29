@@ -194,24 +194,19 @@ public class ScrumboardController {
         switch (status) {
             case "Backlog" -> {
                 backlog.add(newStory);
-                sort(backlog);
             }
             case "To-do" -> {
                 toDo.add(newStory);
-                sort(toDo);
             }
             case "In progress" -> {
                 inProgress.add(newStory);
-                sort(inProgress);
             }
             case "Done" -> {
                 done.add(newStory);
-                sort(done);
             }
             default -> {
                 // if not specified, add to backlog
                 backlog.add(newStory);
-                sort(backlog);
             }
         }
 
@@ -248,12 +243,13 @@ public class ScrumboardController {
         }
 
         boxToUpdate.getChildren().clear();
-        // sort the list of user stories based on their priority with 5 being the highest priority and displayed first
+        // sort the list of user stories based on their priority with 5 being the highest priority
         sort(listToIterate);
-        Collections.reverse(listToIterate);
 
         // redraw the board by adding all the user stories in sorted order
-        for(int i = 0; i < listToIterate.size(); i++) {
+        for(int i = listToIterate.size()-1; i >= 0; i--) {
+            // iterate through the list of user stories in reverse order 
+            // so that the highest priority is at the top
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
             HBox storyname= new HBox();
@@ -275,7 +271,8 @@ public class ScrumboardController {
             Label nameLabel = new Label(listToIterate.get(i).getTitle());
             nameLabel.setFont(Font.font("Arial Bold"));
             storyname.getChildren().add(nameLabel);
-
+            
+            // TODO: shift priority to rightmost side of user story
             Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
             storyname.getChildren().add(priorityLabel);
             newStoryBox.getChildren().add(storyname);
