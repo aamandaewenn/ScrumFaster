@@ -129,7 +129,8 @@ public class ScrumboardController {
         // if colour is white don't create a new teammate and inform user
         if (colour.toString().equals("0xffffffff"))
         {
-            //displayPopup();
+            Popup WhitePopup = new Popup("Colour cannot be set to white");
+            WhitePopup.displayPopup();
             return;
         }
         System.out.println(colour);
