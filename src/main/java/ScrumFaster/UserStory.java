@@ -7,7 +7,6 @@ public class UserStory implements Comparable<UserStory>{
     private User user;
     private String status;
     private int priority;
-
     private String color;
     
     public UserStory(String persona, String title, String description, User user, String status, int priority) {
@@ -17,10 +16,12 @@ public class UserStory implements Comparable<UserStory>{
         this.user = user;
         this.status = status;
         this.priority = priority;
-        this.color=this.user.getColour();
+        this.color = this.user.getColour();
     }
 
-    public String getPersona() {return persona; }
+    public String getPersona() {
+        return persona; 
+    }
 
     public String getTitle() {
         return title;

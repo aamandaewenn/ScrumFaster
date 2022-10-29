@@ -4,26 +4,26 @@ import java.util.ArrayList;
 
 public class User {
 
-    private ArrayList<UserStory> assignedStories;
+    private ArrayList<UserStory> stories;
     private String name;
     private String colour;
 
     /**
      * Class constructor.
      *
-     * @param UserName The name for the new user.
-     * @param TaskColour The colour for the new user.
+     * @param name The name for the new user.
+     * @param colour The colour for the new user.
      */
-    public User(String UserName, String TaskColour)
+    public User(String name, String colour)
     {
-        name = UserName;
-        colour = TaskColour;
-        assignedStories = new ArrayList<UserStory>();
+        this.name = name;
+        this.colour = colour;
+        this.stories = new ArrayList<UserStory>();
     }
 
     // Getters and Setters.
     public ArrayList<UserStory> getStories() {
-        return assignedStories;
+        return stories;
     }
 
     public String getName() {
@@ -49,7 +49,7 @@ public class User {
      * @param story The UserStory object to be assigned to the user.
      */
     public void addUserStory(UserStory story){
-        this.assignedStories.add(story);
+        this.stories.add(story);
     }
 
 
@@ -58,7 +58,7 @@ public class User {
      *
      * @param story The UserStory object to remove from this user.
      */
-    public void removeStoryFromThisUser(UserStory story){
-        this.assignedStories.remove(story);
+    public void removeUserStory(UserStory story){
+        this.stories.remove(story);
     }
 }
