@@ -55,7 +55,6 @@ public class ScrumboardController {
     @FXML
     private ComboBox<String> priorityComboBox;
 
-
     @FXML
     private TextField UsersTextBox;
 
@@ -83,8 +82,6 @@ public class ScrumboardController {
     @FXML
     private VBox doneVbox;
 
-
-
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
 
@@ -96,18 +93,19 @@ public class ScrumboardController {
 
     private static HBox UsersHBox = new HBox();
 
-//    public void UserStoryWindow() throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root, 320, 240);
-//            Stage stage = new Stage();
-//            stage.setTitle("Create New User Story");
-//            stage.setHeight(450);
-//            stage.setWidth(450);
-//            stage.setScene(scene);
-//            stage.showAndWait();
-//
-//    }
+    // public void UserStoryWindow() throws IOException {
+    // FXMLLoader fxmlLoader = new
+    // FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
+    // Parent root = fxmlLoader.load();
+    // Scene scene = new Scene(root, 320, 240);
+    // Stage stage = new Stage();
+    // stage.setTitle("Create New User Story");
+    // stage.setHeight(450);
+    // stage.setWidth(450);
+    // stage.setScene(scene);
+    // stage.showAndWait();
+    //
+    // }
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
@@ -115,19 +113,19 @@ public class ScrumboardController {
      */
     public void newTeamMate() {
 
-        //create new User object
+        // create new User object
         String name = UsersTextBox.getText();
         Paint colour = UsersColourPicker.getValue();
-            if (name.equals("")) {
-                int TeammateNumber = ScrumboardController.teammates.size() + 1;
-                name = "TeamMate " + TeammateNumber;
-            }
+        if (name.equals("")) {
+            int TeammateNumber = ScrumboardController.teammates.size() + 1;
+            name = "TeamMate " + TeammateNumber;
+        }
 
-        //TODO add error checking and handling (ie no name entered, colour is white)
+        // TODO add error checking and handling (ie no name entered, colour is white)
 
         User newUser = new User(name, colour.toString());
 
-        //add to list of users and to combo box
+        // add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
         assignToComboBox.getItems().add(name);
 
@@ -154,12 +152,12 @@ public class ScrumboardController {
     }
 
     /*
-        Create a new user story: obtain all the information filled out by a user,
-        create a new userStory object that will get populated with that info.
-        Save that new userStory object to the stories array.
-           Precond: all fields must be populated
-           Postcond: stories array is modified
-           Displays a popUp when user does not provide all the info required
+     * Create a new user story: obtain all the information filled out by a user,
+     * create a new userStory object that will get populated with that info.
+     * Save that new userStory object to the stories array.
+     * Precond: all fields must be populated
+     * Postcond: stories array is modified
+     * Displays a popUp when user does not provide all the info required
      */
     public void addUserStory() {
         String persona = personaField.getText();
@@ -253,34 +251,80 @@ public class ScrumboardController {
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
             HBox storyname= new HBox();
-            TilePane seemore = new TilePane();
+            // add a see more button that, when clicked, will expand to show details
+            // of user story and let user edit the user story
 
-            // put coloured bar on user story
-            String colour = listToIterate.get(i).getColor();
-            Rectangle colourRec = new Rectangle();
-            colourRec.setHeight(25);
-            colourRec.setWidth(400);
+            Button seeMore = new Button("See More");
+            seeMore.setOnAction(e -> {
+                try {
+                    seeMore(newStory);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
 
-            Color fillcolour = Color.web(colour);
-            colourRec.setFill(fillcolour);
+            // TilePane seemore = new TilePane();
+            // Label storynameLabel = new Label(listToIterate.get(i).getTitle());
+            // Label seemoreLabel = new Label("See more");
+            // Label priorityLabel = new Label("Priority: " + listToIterate.get(i).getPriority());
+            // Label descriptionLabel = new Label(listToIterate.get(i).getDescription());
+            // Label assignedToLabel = new Label("Assigned to: " + listToIterate.get(i).getUser().getName());
+            // Label statusLabel = new Label("Status: " + listToIterate.get(i).getStatus());
+            // Label personaLabel = new Label("Persona: " + listToIterate.get(i).getPersona());
+            // Button editButton = new Button("Edit");
+            // Button deleteButton = new Button("Delete");
 
-            colorpane.getChildren().add(colourRec);
-            newStoryBox.getChildren().add(colorpane);
+            // // set the color of the pane to the color of the user
+            // colorpane.setStyle("-fx-background-color: " + listToIterate.get(i).getUser().getColour() + ";");
 
-            // add name to user story
-            Label nameLabel = new Label(listToIterate.get(i).getTitle());
-            nameLabel.setFont(Font.font("Arial Bold"));
-            storyname.getChildren().add(nameLabel);
+            // // put the story name and priority in a horizontal box
+            // storyname.getChildren().addAll(storynameLabel, priorityLabel);
+
+            // // put the see more label in a tile pane
+            // seemore.getChildren().add(seemoreLabel);
+
+            // // add all the labels to the new story box
+            // newStoryBox.getChildren().addAll(colorpane, storyname, seemore, personaLabel, descriptionLabel, assignedToLabel, statusLabel, editButton, deleteButton);
             
-            // TODO: shift priority to rightmost side of user story
-            Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
-            storyname.getChildren().add(priorityLabel);
-            newStoryBox.getChildren().add(storyname);
-            boxToUpdate.getChildren().add(newStoryBox);
+            // // set the style of the new story box
+            // newStoryBox.setStyle("-fx-border-color: black; -fx-border-width: 1px; -fx-background-color: #f2f2f2; -fx-padding: 10px; -fx-spacing: 10px;");
+
+
+            // // put coloured bar on user story
+            // String colour = listToIterate.get(i).getColour();
+            // Rectangle colourRec = new Rectangle();
+            // colourRec.setHeight(25);
+            // colourRec.setWidth(400);
+
+            // Color fillcolour = Color.web(colour);
+            // colourRec.setFill(fillcolour);
+
+            // colorpane.getChildren().add(colourRec);
+            // newStoryBox.getChildren().add(colorpane);
+
+            // // add name to user story
+            // Label nameLabel = new Label(listToIterate.get(i).getTitle());
+            // nameLabel.setFont(Font.font("Arial Bold"));
+            // storyname.getChildren().add(nameLabel);
+            
+            // // TODO: shift priority to rightmost side of user story
+            // Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
+            // storyname.getChildren().add(priorityLabel);
+            // newStoryBox.getChildren().add(storyname);
+            // boxToUpdate.getChildren().add(newStoryBox);
 
         }
 
         paneToUpdate.setContent(boxToUpdate);
+
+    }
+
+    /* Expand to show details of user story and allow editing */
+    public void seeMore(UserStory story) throws IOException {
+        // expand to show details of user story and let user edit the user story
+        // create a new window
+
 
     }
 

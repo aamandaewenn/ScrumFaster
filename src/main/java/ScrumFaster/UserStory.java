@@ -7,8 +7,21 @@ public class UserStory implements Comparable<UserStory>{
     private User user;
     private String status;
     private int priority;
-    private String color;
+    private String colour;
     
+    /* Class contructor for creating use story without assigned user */
+    public UserStory(String persona, String title, String description, String status, int priority){
+        this.persona = persona;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        // set colour to white since there is no user assigned to the story.
+        this.colour = "#FFFFFF";
+
+    }
+
+    /* Class constructor for creating user story with assigned user */
     public UserStory(String persona, String title, String description, User user, String status, int priority) {
         this.persona = persona;
         this.title = title;
@@ -16,7 +29,7 @@ public class UserStory implements Comparable<UserStory>{
         this.user = user;
         this.status = status;
         this.priority = priority;
-        this.color = this.user.getColour();
+        this.colour = this.user.getColour();
     }
 
     public String getPersona() {
@@ -39,9 +52,9 @@ public class UserStory implements Comparable<UserStory>{
         return status;
     }
 
-    public String getColor()
+    public String getColour()
     {
-        return this.color;
+        return this.colour;
     }
 
     public int getPriority() {
@@ -76,7 +89,9 @@ public class UserStory implements Comparable<UserStory>{
         return "Persona: " + persona + "Title: " + title + " Description: " + description + " Assignee: " + user + " Status: " + status + " Priority: " + priority;
     }
 
+    // compare two user stories by priority
+    @Override
     public int compareTo(UserStory story) {
-        return Integer.compare(this.priority, story.priority);
+        return Integer.compare(this.getPriority(), story.getPriority());
     }
 }
