@@ -33,7 +33,19 @@ import java.util.Collections;
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
 
-public class ScrumboardController {
+///////////////////////////importing files for the progress bar///////////////////////////
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+
+
+public class ScrumboardController implements Initializable {
     @FXML
     private Button AddNewUserStoryButton;
     @FXML
@@ -81,6 +93,14 @@ public class ScrumboardController {
     private VBox inProgressVbox;
     @FXML
     private VBox doneVbox;
+
+    @FXML
+    private Label progresslabel;
+
+    @FXML
+    private ProgressBar myprogressbar;
+
+
 
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
@@ -280,6 +300,8 @@ public class ScrumboardController {
                 listToIterate = done;
                 paneToUpdate = DoneScrollPane;
             }
+
+
         }
 
         // reset the VBox to be updated
@@ -344,6 +366,8 @@ public class ScrumboardController {
 
         paneToUpdate.setContent(boxToUpdate);
 
+        increaseprogress();
+
     }
 
     /**
@@ -371,15 +395,44 @@ public class ScrumboardController {
     public void saveBoard() throws IOException {
     }
 
-    public void DisplayStatistics() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("progressbar.fxml"));
-        Parent root = (Parent)fxmlLoader.load();
-        Scene scene = new Scene(root, 320.0, 240.0);
-        Stage stage = new Stage();
-        stage.setTitle("Display Stats");
-        stage.setHeight(450.0);
-        stage.setWidth(450.0);
-        stage.setScene(scene);
-        stage.showAndWait();
+
+
+
+    //we could use the BigDecimal class because it gives the user complete control over rounding behaviour.
+    BigDecimal progress = new BigDecimal(String.format("%.2f",0.0)); //this is a big decimal constructor, where we could pass in a format string.
+    //format the string to be %.2f, and the arguments will be the initial value we will begin with
+    //which is set t0 zero.
+    //another variable will be use to calulate the percent of work done over the ones that are not complete.
+
+    public void increaseprogress()
+    {
+
+
+        if(progress.doubleValue() < 1)
+        {
+            Double sum_backlog= Double.valueOf(backlog.size()); /* integar variables to store the total user stories in each array list.*/
+            Double sum_todo= Double.valueOf(toDo.size());
+            Double sum_inprogress= Double.valueOf(inProgress.size());
+            Double sum_done= Double.valueOf(done.size());
+
+
+             progress= new BigDecimal(String.format("%.2f",(sum_done/(sum_backlog+sum_todo+sum_inprogress+sum_done)))); //this is to access the value stored in the progress construct
+             System.out.println(progress.doubleValue()); //this prints the value to the console.
+             myprogressbar.setProgress(progress.doubleValue()); //pass in value of the progress, for this project we will be passing in the
+                // the ratio of the work done over the work that is not yet done.
+
+
+            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%"); //cast as in intergar for precison sake
+        }
+
+
     }
+
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+            myprogressbar.setStyle("-fx-accent: green;");
+
+
+    }
+
 }
