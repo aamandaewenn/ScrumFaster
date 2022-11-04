@@ -111,6 +111,8 @@ public class ScrumboardController {
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
+     * @precondition : colour cannot be white, or same colour as another user
+     * @postcondition: creates a new teammate user of entered name (or if no name teamMate #) and colour, adds icon to board
      *
      */
     public void newTeamMate() {
