@@ -192,10 +192,6 @@ public class ScrumboardController {
         user.addUserStory(newStory);
 
         switch (status) {
-            case "Backlog" -> {
-                backlog.add(newStory);
-                sort(backlog);
-            }
             case "To-do" -> {
                 toDo.add(newStory);
                 sort(toDo);
@@ -256,29 +252,51 @@ public class ScrumboardController {
         for(int i = 0; i < listToIterate.size(); i++) {
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
+            Pane blankSpacePane = new Pane();
             HBox storyname= new HBox();
+
+            newStoryBox.setMaxWidth(258);
+
             TilePane seemore = new TilePane();
 
             // put coloured bar on user story
             String colour = listToIterate.get(i).getColor();
             Rectangle colourRec = new Rectangle();
-            colourRec.setHeight(25);
+            colourRec.setHeight(15);
             colourRec.setWidth(400);
 
             Color fillcolour = Color.web(colour);
             colourRec.setFill(fillcolour);
+
+            // Blank white rectangle for spacing between tasks
+            Rectangle blankRec = new Rectangle();
+            blankRec.setHeight(25);
+            blankRec.setWidth(400);
+
+
+            Color blankWhiteColour = Color.web("transparent");
+            blankRec.setFill(blankWhiteColour);
 
             colorpane.getChildren().add(colourRec);
             newStoryBox.getChildren().add(colorpane);
 
             // add name to user story
             Label nameLabel = new Label(listToIterate.get(i).getTitle());
+            nameLabel.setMaxWidth(210);
+            nameLabel.setWrapText(true);
+
             nameLabel.setFont(Font.font("Arial Bold"));
             storyname.getChildren().add(nameLabel);
 
-            Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
+            Label priorityLabel = new Label("  "+ listToIterate.get(i).getPriority());
+
+
             storyname.getChildren().add(priorityLabel);
             newStoryBox.getChildren().add(storyname);
+            newStoryBox.getChildren().add(blankRec);
+
+
+
             boxToUpdate.getChildren().add(newStoryBox);
 
         }
