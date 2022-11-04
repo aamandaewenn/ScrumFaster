@@ -61,7 +61,7 @@
             </Pane>
             <ScrollPane fx:id="ToDoScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="toDoVbox" prefHeight="580.0" prefWidth="258.0" />
+                  <VBox fx:id="toDoVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
@@ -78,7 +78,7 @@
             </Pane>
             <ScrollPane fx:id="InProgressScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="inProgressVbox" prefHeight="578.0" prefWidth="258.0" />
+                  <VBox fx:id="inProgressVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
@@ -95,7 +95,7 @@
             </Pane>
             <ScrollPane fx:id="DoneScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="doneVbox" prefHeight="579.0" prefWidth="259.0" />
+                  <VBox fx:id="doneVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
