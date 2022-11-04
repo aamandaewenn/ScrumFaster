@@ -271,69 +271,52 @@ public class ScrumboardController {
             // so that the highest priority is at the top
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
+            Pane blankSpacePane = new Pane();
             HBox storyname= new HBox();
-            // add a see more button that, when clicked, will expand to show details
-            // of user story and let user edit the user story
 
-            Button seeMore = new Button("See More");
-            seeMore.setOnAction(e -> {
-                try {
-                    seeMore(newStory);
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            });
+            newStoryBox.setMaxWidth(258);
 
-            // TilePane seemore = new TilePane();
-            // Label storynameLabel = new Label(listToIterate.get(i).getTitle());
-            // Label seemoreLabel = new Label("See more");
-            // Label priorityLabel = new Label("Priority: " + listToIterate.get(i).getPriority());
-            // Label descriptionLabel = new Label(listToIterate.get(i).getDescription());
-            // Label assignedToLabel = new Label("Assigned to: " + listToIterate.get(i).getUser().getName());
-            // Label statusLabel = new Label("Status: " + listToIterate.get(i).getStatus());
-            // Label personaLabel = new Label("Persona: " + listToIterate.get(i).getPersona());
-            // Button editButton = new Button("Edit");
-            // Button deleteButton = new Button("Delete");
+            TilePane seemore = new TilePane();
 
-            // // set the color of the pane to the color of the user
-            // colorpane.setStyle("-fx-background-color: " + listToIterate.get(i).getUser().getColour() + ";");
-
-            // // put the story name and priority in a horizontal box
-            // storyname.getChildren().addAll(storynameLabel, priorityLabel);
-
-            // // put the see more label in a tile pane
-            // seemore.getChildren().add(seemoreLabel);
-
-            // // add all the labels to the new story box
-            // newStoryBox.getChildren().addAll(colorpane, storyname, seemore, personaLabel, descriptionLabel, assignedToLabel, statusLabel, editButton, deleteButton);
-            
-            // // set the style of the new story box
-            // newStoryBox.setStyle("-fx-border-color: black; -fx-border-width: 1px; -fx-background-color: #f2f2f2; -fx-padding: 10px; -fx-spacing: 10px;");
-
-
-            // // put coloured bar on user story
-            // String colour = listToIterate.get(i).getColour();
-            // Rectangle colourRec = new Rectangle();
-            // colourRec.setHeight(25);
-            // colourRec.setWidth(400);
+            // put coloured bar on user story
+            String colour = listToIterate.get(i).getColour();
+            Rectangle colourRec = new Rectangle();
+            colourRec.setHeight(15);
+            colourRec.setWidth(400);
 
             // Color fillcolour = Color.web(colour);
             // colourRec.setFill(fillcolour);
 
-            // colorpane.getChildren().add(colourRec);
-            // newStoryBox.getChildren().add(colorpane);
+            // Blank white rectangle for spacing between tasks
+            Rectangle blankRec = new Rectangle();
+            blankRec.setHeight(25);
+            blankRec.setWidth(400);
 
-            // // add name to user story
-            // Label nameLabel = new Label(listToIterate.get(i).getTitle());
-            // nameLabel.setFont(Font.font("Arial Bold"));
-            // storyname.getChildren().add(nameLabel);
-            
-            // // TODO: shift priority to rightmost side of user story
-            // Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
-            // storyname.getChildren().add(priorityLabel);
-            // newStoryBox.getChildren().add(storyname);
-            // boxToUpdate.getChildren().add(newStoryBox);
+
+            Color blankWhiteColour = Color.web("transparent");
+            blankRec.setFill(blankWhiteColour);
+
+            colorpane.getChildren().add(colourRec);
+            newStoryBox.getChildren().add(colorpane);
+
+            // add name to user story
+            Label nameLabel = new Label(listToIterate.get(i).getTitle());
+            nameLabel.setMaxWidth(210);
+            nameLabel.setWrapText(true);
+
+            nameLabel.setFont(Font.font("Arial Bold"));
+            storyname.getChildren().add(nameLabel);
+
+            Label priorityLabel = new Label("  "+ listToIterate.get(i).getPriority());
+
+
+            storyname.getChildren().add(priorityLabel);
+            newStoryBox.getChildren().add(storyname);
+            newStoryBox.getChildren().add(blankRec);
+
+
+
+            boxToUpdate.getChildren().add(newStoryBox);
 
         }
 
