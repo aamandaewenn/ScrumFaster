@@ -197,18 +197,27 @@ public class ScrumboardController {
         }
 
         // search existing users to find the user object that matches the name selected in the combo box
-        User user = null;
-        for (User u : teammates) {
-            if (u.getName().equals(userName)) {
-                user = u;
+            User user = null;
+            for (User u : teammates) {
+                if (u.getName().equals(userName)) {
+                    user = u;
+                }
             }
+
+            // create new user story object
+        UserStory newStory;
+            //create when no user chosen
+        if (user == null){
+            newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
         }
-        
-        // create new user story object
-        UserStory newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
-        
-        // add new user story to the user's assigned stories
-        user.addUserStory(newStory);
+            //create when user is chosen
+        else {
+            newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
+
+            // add new user story to the user's assigned stories
+            user.addUserStory(newStory);
+        }
+
 
         switch (status) {
             case "Backlog" -> {
