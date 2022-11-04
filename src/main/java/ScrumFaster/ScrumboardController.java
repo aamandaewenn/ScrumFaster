@@ -419,16 +419,4 @@ public class ScrumboardController implements Initializable {
 
     }
 
-
-//    public void DisplayStatistics() throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("progressbar.fxml"));
-//        Parent root = (Parent)fxmlLoader.load();
-//        Scene scene = new Scene(root, 320.0, 240.0);
-//        Stage stage = new Stage();
-//        stage.setTitle("Display Stats");
-//        stage.setHeight(450.0);
-//        stage.setWidth(450.0);
-//        stage.setScene(scene);
-//        stage.showAndWait();
-//    }
 }
