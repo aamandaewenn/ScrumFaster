@@ -113,23 +113,44 @@ public class ScrumboardController {
      */
     public void newTeamMate() {
 
-        // create new User object
+        //get values from board
         String name = UsersTextBox.getText();
         Paint colour = UsersColourPicker.getValue();
-        if (name.equals("")) {
-            int TeammateNumber = ScrumboardController.teammates.size() + 1;
-            name = "TeamMate " + TeammateNumber;
+
+        // if name is not entered create team mate called teamMate #
+            if (name.equals("")) {
+                int TeammateNumber = ScrumboardController.teammates.size() + 1;
+                name = "TeamMate " + TeammateNumber;
+            }
+
+
+        // if colour is white don't create a new teammate and inform user
+        if (colour.toString().equals("0xffffffff"))
+        {
+            Popup WhitePopup = new Popup("Colour cannot be set to white");
+            WhitePopup.displayPopup();
+            return;
         }
 
-        // TODO add error checking and handling (ie no name entered, colour is white)
+        // if colour is already chosen for another teammate, do not create teammate and inform user
+        for (User teamMate : ScrumboardController.teammates)
+        {
+            if (teamMate.getColour().equals(colour.toString()))
+            {
+                Popup DuplicatePopup = new Popup("Cannot have same colour as another user");
+                DuplicatePopup.displayPopup();
+                return;
+            }
+        }
 
+        // create user object
         User newUser = new User(name, colour.toString());
 
         // add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
         assignToComboBox.getItems().add(name);
 
-        // add user to scrum board
+        // add user to scrum board by creating icon
         VBox IconNameCombo = new VBox();
         IconNameCombo.setAlignment(Pos.CENTER);
 
@@ -148,6 +169,7 @@ public class ScrumboardController {
         IconNameCombo.getChildren().addAll(icon, nameLabel);
         UsersHBox.getChildren().add(IconNameCombo);
 
+        // add icon's vbox to the board
         UsersScrollPane.setContent(UsersHBox);
     }
 
@@ -169,9 +191,8 @@ public class ScrumboardController {
         String priority = priorityComboBox.getValue();
 
         if(persona.equals("") || featureName.equals("") || description.equals("") || status == null || priority == null ) {
-            // TODO: implement displayPopup() method for error handling
-            // displayPopup();
-            System.out.println("Error - not all fields are provided");
+            Popup unfilledPopup = new Popup("Please fill in all required fields");
+            unfilledPopup.displayPopup();
             return;
         }
 
