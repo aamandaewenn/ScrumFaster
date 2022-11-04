@@ -92,6 +92,6 @@ public class UserStory implements Comparable<UserStory>{
     // compare two user stories by priority
     @Override
     public int compareTo(UserStory story) {
-        return Integer.compare(this.getPriority(), story.getPriority()) * -1;
+        return Integer.compare(this.getPriority(), story.getPriority());
     }
 }

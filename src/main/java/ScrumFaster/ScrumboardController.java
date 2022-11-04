@@ -262,7 +262,8 @@ public class ScrumboardController {
         }
 
         boxToUpdate.getChildren().clear();
-        // sort the list of user stories based on their priority with 5 being the highest priority
+        // sort the list of user stories based on their 
+        // priority with 5 being the highest priority
         sort(listToIterate);
 
         // redraw the board by adding all the user stories in sorted order
@@ -284,8 +285,8 @@ public class ScrumboardController {
             colourRec.setHeight(15);
             colourRec.setWidth(400);
 
-            // Color fillcolour = Color.web(colour);
-            // colourRec.setFill(fillcolour);
+            Color fillcolour = Color.web(colour);
+            colourRec.setFill(fillcolour);
 
             // Blank white rectangle for spacing between tasks
             Rectangle blankRec = new Rectangle();
@@ -314,21 +315,11 @@ public class ScrumboardController {
             newStoryBox.getChildren().add(storyname);
             newStoryBox.getChildren().add(blankRec);
 
-
-
             boxToUpdate.getChildren().add(newStoryBox);
 
         }
 
         paneToUpdate.setContent(boxToUpdate);
-
-    }
-
-    /* Expand to show details of user story and allow editing */
-    public void seeMore(UserStory story) throws IOException {
-        // expand to show details of user story and let user edit the user story
-        // create a new window
-
 
     }
 
