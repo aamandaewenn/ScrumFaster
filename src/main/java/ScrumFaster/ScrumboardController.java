@@ -107,21 +107,27 @@ public class ScrumboardController {
     //
     // }
 
+    // private User addUser(String name, String colour) {
+    //     User user = new User(name, colour);
+    //     teammates.add(user);
+    //     return user;
+    // }
+
+
     /**
      * Creates a new User object and adds the user icon to the scrum board
-     *
      */
     public void newTeamMate() {
 
-        //get values from board
+        // get values from board
         String name = UsersTextBox.getText();
         Paint colour = UsersColourPicker.getValue();
 
-        // if name is not entered create team mate called teamMate #
-            if (name.equals("")) {
-                int TeammateNumber = ScrumboardController.teammates.size() + 1;
-                name = "TeamMate " + TeammateNumber;
-            }
+        // if name is not entered, create team mate called "TeamMate #"
+        if (name.equals("")) {
+            int TeammateNumber = ScrumboardController.teammates.size() + 1;
+            name = "TeamMate " + TeammateNumber;
+        }
 
 
         // if colour is white don't create a new teammate and inform user
@@ -204,14 +210,15 @@ public class ScrumboardController {
                 }
             }
 
-            // create new user story object
+        // create new user story object
         UserStory newStory;
+        
+        if (user == null) {
             //create when no user chosen
-        if (user == null){
             newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
         }
-            //create when user is chosen
         else {
+            //create when user is chosen
             newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
 
             // add new user story to the user's assigned stories
@@ -237,16 +244,21 @@ public class ScrumboardController {
                 backlog.add(newStory);
             }
         }
-
+        // redraw the scrum board
         updateBoard(newStory);
     }
 
+    /**
+     * Updates the scrum board by adding the new user story to the correct section
+     * @param newStory the new user story to be added to the scrum board
+     */
     public void updateBoard(UserStory newStory) {
 
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
         
+        // determine which section of the scrum board to update
         switch (newStory.getStatus()) {
             case "Backlog" -> {
                 boxToUpdate = backlogVbox;
@@ -270,7 +282,9 @@ public class ScrumboardController {
             }
         }
 
+        // reset the VBox to be updated
         boxToUpdate.getChildren().clear();
+
         // sort the list of user stories based on their 
         // priority with 5 being the highest priority
         sort(listToIterate);
@@ -332,6 +346,9 @@ public class ScrumboardController {
 
     }
 
+    /**
+     * Add statuses to the status combo box
+     */
     public void setStatusPriority() {
         String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
         if (statusComboBox.getItems().isEmpty()) {
@@ -340,7 +357,6 @@ public class ScrumboardController {
             }
         }
         
-
         if (priorityComboBox.getItems().isEmpty()) {
             for (int i = 1; i <= 5; i++) {
                 priorityComboBox.getItems().add(""+i);

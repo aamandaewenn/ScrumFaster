@@ -57,8 +57,14 @@ public class User {
      * Removes a UserStory object from the array list of this users assigned stories.
      *
      * @param story The UserStory object to remove from this user.
+     * @throws Exception If the story is not assigned to this user
      */
-    public void removeUserStory(UserStory story){
-        this.stories.remove(story);
+    public void removeUserStory(UserStory story) throws Exception {
+        // check if the story is assigned to this user
+        if (this.stories.contains(story)) {
+            this.stories.remove(story);
+        } else {
+            throw new Exception("Story is not assigned to this user");
+        }
     }
 }
