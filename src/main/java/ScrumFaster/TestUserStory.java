@@ -31,7 +31,6 @@ public class TestUserStory {
         } else {
             System.out.println("Error: User story not created");
         }
-        
 
         // Create a user story with an assigned user
         tests++;
