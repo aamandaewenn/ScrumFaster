@@ -104,6 +104,7 @@ public class TestUserStory {
         }
 
         // check that user story was added to user
+        tests++;
         if (user1.getStories().size() == 2) {
             passed++;
 
@@ -122,6 +123,7 @@ public class TestUserStory {
         tests++;
         UserStory story4 = new UserStory("Katia", "Edit User Story", "Edit a user story on the board", user1, "To Do",
                 3);
+        user1.addUserStory(story4);
 
         // check that user story was added to user
         if (user1.getStories().size() == 3) {
