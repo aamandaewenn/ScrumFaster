@@ -1,7 +1,7 @@
 package ScrumFaster;
 
 /* Test Cases for User Class */
-public class TestUser {
+public class testUser {
 
     public static void main(String[] args) {
 
