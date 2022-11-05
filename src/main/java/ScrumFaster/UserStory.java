@@ -94,4 +94,13 @@ public class UserStory implements Comparable<UserStory>{
     public int compareTo(UserStory story) {
         return Integer.compare(this.getPriority(), story.getPriority());
     }
+
+    public boolean equals(UserStory story) {
+        return this.getPersona().equals(story.getPersona())
+                && this.getTitle().equals(story.getTitle())
+                && this.getDescription().equals(story.getDescription())
+                && this.getUser().equals(story.getUser())
+                && this.getStatus().equals(story.getStatus())
+                && this.getPriority() == story.getPriority();
+    }
 }

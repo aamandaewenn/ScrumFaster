@@ -397,7 +397,6 @@ public class ScrumboardController implements Initializable {
 
 
 
-
     //we could use the BigDecimal class because it gives the user complete control over rounding behaviour.
     BigDecimal progress = new BigDecimal(String.format("%.2f",0.0)); //this is a big decimal constructor, where we could pass in a format string.
     //format the string to be %.2f, and the arguments will be the initial value we will begin with
@@ -431,8 +430,6 @@ public class ScrumboardController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
             myprogressbar.setStyle("-fx-accent: green;");
-
-
     }
 
 }

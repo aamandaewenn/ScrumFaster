@@ -1,6 +1,6 @@
 package ScrumFaster;
 
-// /* Test Cases for USer Story Class */
+/* Test Cases for USer Story Class */
 public class TestUserStory {
     public static void main(String[] args) {
         int tests = 0;

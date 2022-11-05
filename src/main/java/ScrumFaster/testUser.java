@@ -37,13 +37,14 @@ public class TestUser {
             System.out.println("Error: User colour not changed properly");
         }
 
-        tests += 2;
+        tests++;
         // Create a new user story and assign to test user
         UserStory story1 = new UserStory("Katia", "Add Users", "Add users to board", "Backlog", 3);
         testUser.addUserStory(story1);
 
         if (testUser.getStories().size() == 1) {
             // check that user story was added
+            tests++;
             passed++;
             // check that all attributes of the user story are correct
             if (testUser.getStories().get(0).getPersona().equals("Katia")
@@ -79,6 +80,17 @@ public class TestUser {
         // check that the user story was added
         if (testUser.getStories().size() == 3) {
             passed++;
+            // check that all attributes of the user story are correct
+            tests++;
+            if (testUser.getStories().get(2).getPersona().equals("Sam")
+                    && testUser.getStories().get(2).getTitle().equals("Add User Stories")
+                    && testUser.getStories().get(2).getDescription().equals("Add user stories to board")
+                    && testUser.getStories().get(2).getStatus().equals("Backlog")
+                    && testUser.getStories().get(2).getPriority() == 4) {
+                passed++;
+            } else {
+                System.out.println("Error: User story attributes not initiated properly");
+            }
         } else {
             System.out.println("Error: failed to add user story to user with multiple existing stories");
         }
@@ -88,7 +100,7 @@ public class TestUser {
         try {
             testUser.removeUserStory(story2);
             if (testUser.getStories().size() == 2) {
-                // check that the correct user story was removed
+                // check that the correct user story was removed from user
                 if (testUser.getStories().get(0).getPersona().equals("Katia")
                         && testUser.getStories().get(0).getTitle().equals("Add Users")
                         && testUser.getStories().get(0).getDescription().equals("Add users to board")
@@ -102,6 +114,14 @@ public class TestUser {
                     passed++;
                 } else {
                     System.out.println("Error: User story not removed properly");
+                }
+
+                // test that story's user is set to null
+                tests++;
+                if (story2.getUser() == null) {
+                    passed++;
+                } else {
+                    System.out.println("Error: User story's user not set to null after unassigning user");
                 }
             } else {
                 System.out.println("Error: failed to remove user story from user with multiple existing stories");
