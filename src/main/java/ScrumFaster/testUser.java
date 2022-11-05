@@ -1,7 +1,7 @@
 package ScrumFaster;
 
 /* Test Cases for User Class */
-public class testUser {
+public class TestUser {
 
     public static void main(String[] args) {
 
@@ -88,7 +88,7 @@ public class testUser {
         try {
             testUser.removeUserStory(story2);
             if (testUser.getStories().size() == 2) {
-                // check that the correct user story was removed
+                // check that the correct user story was removed from user
                 if (testUser.getStories().get(0).getPersona().equals("Katia")
                         && testUser.getStories().get(0).getTitle().equals("Add Users")
                         && testUser.getStories().get(0).getDescription().equals("Add users to board")
@@ -102,6 +102,14 @@ public class testUser {
                     passed++;
                 } else {
                     System.out.println("Error: User story not removed properly");
+                }
+
+                // test that story's user is set to null
+                tests++;
+                if (story2.getUser() == null) {
+                    passed++;
+                } else {
+                    System.out.println("Error: User story's user not set to null after unassigning user");
                 }
             } else {
                 System.out.println("Error: failed to remove user story from user with multiple existing stories");

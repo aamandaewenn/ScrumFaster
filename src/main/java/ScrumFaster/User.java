@@ -62,9 +62,14 @@ public class User {
     public void removeUserStory(UserStory story) throws Exception {
         // check if the story is assigned to this user
         if (this.stories.contains(story)) {
+            story.setUser(null);
             this.stories.remove(story);
         } else {
             throw new Exception("Story is not assigned to this user");
         }
     }
 }
+
+/*
+ * Test Cases for User Class
+ */

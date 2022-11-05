@@ -40,7 +40,6 @@ public class ProgressBarController implements Initializable {
             progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%"); //cast as in intergar for precison sake
         }
 
-
     }
 
     @Override
