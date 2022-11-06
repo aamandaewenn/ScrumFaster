@@ -159,6 +159,71 @@ public class testUser {
             passed++;
         }
 
+        // compare two users that are the same: user object to compare to is itself
+        tests++;
+        if (testUser.equals(testUser)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to itself");
+        }
+
+        // compare two users that are the same: 
+        // two user objects with same name and colour,
+        // neither have any user stories
+        tests++;
+        User testUser2 = new User("Amanda", "#00FF00");
+        if (testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are the same");
+        }
+
+        // compare two users that are different: 
+        // two user objects with same name and colour,
+        // but different user stories
+        tests++;
+        testUser.addUserStory(story1);
+        if (!testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are different");
+        }
+
+        // compare two users that are the same: 
+        // two user objects with same name, colour, and user stories
+        tests++;
+        testUser2.addUserStory(story1);
+        if (testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are the same");
+        }
+
+        // compare two users that are different: object to compare to is null
+        tests++;
+        if (!testUser.equals(null)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to null");
+        }
+
+        // compare two users that are different: object to compare to is not a user
+        tests++;
+        if (!testUser.equals(story1)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to non-user object");
+        }
+
+        // compare two users that are different: two user objects with different attributes
+        tests++;
+        User testUser3 = new User("Katia", "#FF0000");
+        if (!testUser.equals(testUser3)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are different");
+        }
+
         System.out.println("Testing complete: Passed " + passed + " out of " + tests + " tests.");
     }
 

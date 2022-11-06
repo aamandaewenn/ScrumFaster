@@ -9,7 +9,7 @@ public class TestUserStory {
         // Create a user story with no assigned user
         tests++;
         UserStory story1 = new UserStory("Katia", "Create User Story",
-                "Create a user story to complete during a sprint", "To Do", 1);
+                "Create a user story to complete during a sprint", "To Do", 5);
 
         // check that story was created
         if (story1 != null) {
@@ -21,7 +21,7 @@ public class TestUserStory {
                     && story1.getTitle().equals("Create User Story")
                     && story1.getDescription().equals("Create a user story to complete during a sprint")
                     && story1.getStatus().equals("To Do")
-                    && story1.getPriority() == 1
+                    && story1.getPriority() == 5
                     && story1.getColour().equals("#FFFFFF")) {
                 passed++;
             } else {
@@ -138,6 +138,31 @@ public class TestUserStory {
             }
         } else {
             System.out.println("Error: Failed to add user story to user with multiple existing stories");
+        }
+
+        // comparing user stories with different priority
+        tests++;
+        if (story1.compareTo(story2) != 0) {
+            passed++;
+        } else {
+            System.out.println("Error: Failed to compare user story with different priority");
+        }
+
+        // test setter for priority
+        tests++;
+        story2.setPriority(5);
+        if (story1.getPriority() == 5) {
+            passed++;
+        } else {
+            System.out.println("Error: Failed to set priority");
+        }
+
+        // comparing user stories with same priority
+        tests++;
+        if (story1.compareTo(story2) == 0) {
+            passed++;
+        } else {
+            System.out.println("Error: Failed to compare user story with same priority");
         }
 
         System.out.println("Testing complete: Passed " + passed + " out of " + tests + " tests.");
