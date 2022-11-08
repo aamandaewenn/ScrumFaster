@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -16,11 +17,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
    <children>
-      <Button fx:id="DisplayStatisticsButton" layoutX="1215.0" layoutY="670.0" mnemonicParsing="false" onAction="#DisplayStatistics" prefHeight="42.0" prefWidth="162.0" text="Display Statistics">
-         <font>
-            <Font name="Arial Bold" size="14.0" />
-         </font>
-      </Button>
       <Button fx:id="SaveBoardButton" layoutX="1215.0" layoutY="721.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="162.0" text="Save Board">
          <font>
             <Font name="Arial Bold" size="14.0" />
@@ -31,7 +27,7 @@
             <Font name="Arial" size="58.0" />
          </font>
       </Text>
-      <AnchorPane fx:id="StoriesVbox" layoutX="20.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: lightgrey;">
+      <AnchorPane fx:id="StoriesVbox" layoutX="20.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: transparent;">
          <children>
             <Pane layoutX="15.0" layoutY="2.0" prefHeight="60.0" prefWidth="255.0" style="-fx-background-color: #4e5bbf;">
                <children>
@@ -44,11 +40,11 @@
             </Pane>
             <ScrollPane fx:id="BacklogScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="backlogVbox" prefHeight="578.0" prefWidth="258.0" />
+                  <VBox fx:id="backlogVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="toDoPane" layoutX="300.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: lightgrey;">
+      <AnchorPane fx:id="toDoPane" layoutX="300.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: transparent;">
          <children>
             <Pane layoutX="15.0" layoutY="2.0" prefHeight="60.0" prefWidth="255.0" style="-fx-background-color: #4e5bbf;">
                <children>
@@ -61,11 +57,11 @@
             </Pane>
             <ScrollPane fx:id="ToDoScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="toDoVbox" prefHeight="580.0" prefWidth="258.0" />
+                  <VBox fx:id="toDoVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="InProgressPane" layoutX="580.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: lightgrey;">
+      <AnchorPane fx:id="InProgressPane" layoutX="580.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: transparent;">
          <children>
             <Pane layoutX="15.0" layoutY="2.0" prefHeight="60.0" prefWidth="255.0" style="-fx-background-color: #4e5bbf;">
                <children>
@@ -78,11 +74,11 @@
             </Pane>
             <ScrollPane fx:id="InProgressScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="inProgressVbox" prefHeight="578.0" prefWidth="258.0" />
+                  <VBox fx:id="inProgressVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="DonePane" layoutX="860.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: lightgrey;">
+      <AnchorPane fx:id="DonePane" layoutX="860.0" layoutY="120.0" prefHeight="652.0" prefWidth="283.0" style="-fx-background-color: transparent;">
          <children>
             <Pane layoutX="15.0" layoutY="2.0" prefHeight="60.0" prefWidth="255.0" style="-fx-background-color: #4e5bbf;">
                <children>
@@ -95,11 +91,11 @@
             </Pane>
             <ScrollPane fx:id="DoneScrollPane" hbarPolicy="NEVER" layoutX="12.0" layoutY="72.0" prefHeight="580.0" prefWidth="259.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="doneVbox" prefHeight="579.0" prefWidth="259.0" />
+                  <VBox fx:id="doneVbox" />
                </content></ScrollPane>
          </children>
       </AnchorPane>
-      <VBox layoutX="510.0" layoutY="20.0" prefHeight="77.0" prefWidth="5.0" style="-fx-background-color: #4e5bbf;" />
+      <VBox layoutX="505.0" layoutY="20.0" prefHeight="77.0" prefWidth="5.0" style="-fx-background-color: #4e5bbf;" />
       <Pane layoutX="1154.0" layoutY="195.0" prefHeight="60.0" prefWidth="270.0" style="-fx-background-color: grey;">
          <children>
             <Text fill="#ffffffc7" layoutX="15.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="CREATE USER STORY" textAlignment="CENTER">
@@ -163,7 +159,7 @@
             </Button>
          </children>
       </Pane>
-      <ScrollPane fx:id="UsersScrollPane" hbarPolicy="NEVER" layoutX="516.0" layoutY="20.0" prefHeight="78.0" prefWidth="619.0" vbarPolicy="NEVER" />
+      <ScrollPane fx:id="UsersScrollPane" hbarPolicy="NEVER" layoutX="516.0" layoutY="20.0" prefHeight="78.0" prefWidth="610.0" style="-fx-background-radius: 20;" stylesheets="@scrollpaneStyle.css" vbarPolicy="NEVER" />
       <VBox alignment="CENTER" layoutX="1137.0" prefHeight="138.0" prefWidth="321.0" spacing="10.0">
          <children>
             <TextField fx:id="UsersTextBox" promptText="Team Member Name" />
@@ -183,5 +179,7 @@
             <Insets top="10.0" />
          </padding>
       </VBox>
+      <ProgressBar fx:id="myprogressbar" layoutX="1178.0" layoutY="642.0" prefHeight="30.0" prefWidth="231.0" progress="0.0" />
+      <Label fx:id="progresslabel" layoutX="1275.0" layoutY="625.0" text="Label" />
    </children>
 </AnchorPane>

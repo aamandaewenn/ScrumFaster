@@ -18,7 +18,7 @@ import javafx.stage.Window;
 /**
  * A class that creates a popup window to display a message to user
  */
-public class Popup{
+public class Popup {
 
     /**
      * the message to display to user
@@ -27,11 +27,11 @@ public class Popup{
 
     /**
      * A method to create a Popup object
+     * 
      * @param errorMessage the message to display to the usr
      * @author Amanda
      */
-    public Popup(String errorMessage)
-    {
+    public Popup(String errorMessage) {
         message = errorMessage;
     }
 
@@ -45,16 +45,15 @@ public class Popup{
         Stage stage = new Stage();
         Scene scene = new Scene(pane, 500, 100);
 
-        //label to display the message
+        // label to display the message
         Label label = new Label(this.message);
         pane.getChildren().add(label);
         label.setFont(Font.font("Arial Bold"));
 
-        //button to close the window
+        // button to close the window
         Button button = new Button();
         button.setText("OK");
-        button.setOnAction(e ->
-        {
+        button.setOnAction(e -> {
             stage.close();
         });
         pane.getChildren().add(button);

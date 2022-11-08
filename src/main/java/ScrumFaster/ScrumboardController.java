@@ -33,7 +33,19 @@ import java.util.Collections;
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
 
-public class ScrumboardController {
+///////////////////////////importing files for the progress bar///////////////////////////
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+
+
+public class ScrumboardController implements Initializable {
     @FXML
     private Button AddNewUserStoryButton;
     @FXML
@@ -54,7 +66,6 @@ public class ScrumboardController {
     private ComboBox<String> statusComboBox;
     @FXML
     private ComboBox<String> priorityComboBox;
-
 
     @FXML
     private TextField UsersTextBox;
@@ -83,6 +94,12 @@ public class ScrumboardController {
     @FXML
     private VBox doneVbox;
 
+    @FXML
+    private Label progresslabel;
+
+    @FXML
+    private ProgressBar myprogressbar;
+
 
 
     // ArrayList of all users added to the system.
@@ -96,36 +113,41 @@ public class ScrumboardController {
 
     private static HBox UsersHBox = new HBox();
 
-//    public void UserStoryWindow() throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root, 320, 240);
-//            Stage stage = new Stage();
-//            stage.setTitle("Create New User Story");
-//            stage.setHeight(450);
-//            stage.setWidth(450);
-//            stage.setScene(scene);
-//            stage.showAndWait();
-//
-//    }
+    // public void UserStoryWindow() throws IOException {
+    // FXMLLoader fxmlLoader = new
+    // FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
+    // Parent root = fxmlLoader.load();
+    // Scene scene = new Scene(root, 320, 240);
+    // Stage stage = new Stage();
+    // stage.setTitle("Create New User Story");
+    // stage.setHeight(450);
+    // stage.setWidth(450);
+    // stage.setScene(scene);
+    // stage.showAndWait();
+    //
+    // }
+
+    // private User addUser(String name, String colour) {
+    //     User user = new User(name, colour);
+    //     teammates.add(user);
+    //     return user;
+    // }
+
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
-     * @precondition : colour cannot be white, or same colour as another user
-     * @postcondition: creates a new teammate user of entered name (or if no name teamMate #) and colour, adds icon to board
-     *
      */
     public void newTeamMate() {
 
-        //get values from board
+        // get values from board
         String name = UsersTextBox.getText();
         Paint colour = UsersColourPicker.getValue();
 
-        // if name is not entered create team mate called teamMate #
-            if (name.equals("")) {
-                int TeammateNumber = ScrumboardController.teammates.size() + 1;
-                name = "TeamMate " + TeammateNumber;
-            }
+        // if name is not entered, create team mate called "TeamMate #"
+        if (name.equals("")) {
+            int TeammateNumber = ScrumboardController.teammates.size() + 1;
+            name = "TeamMate " + TeammateNumber;
+        }
 
 
         // if colour is white don't create a new teammate and inform user
@@ -150,7 +172,7 @@ public class ScrumboardController {
         // create user object
         User newUser = new User(name, colour.toString());
 
-        //add to list of users and to combo box
+        // add to list of users and to combo box
         ScrumboardController.teammates.add(newUser);
         assignToComboBox.getItems().add(name);
 
@@ -178,12 +200,12 @@ public class ScrumboardController {
     }
 
     /*
-        Create a new user story: obtain all the information filled out by a user,
-        create a new userStory object that will get populated with that info.
-        Save that new userStory object to the stories array.
-           Precond: all fields must be populated
-           Postcond: stories array is modified
-           Displays a popUp when user does not provide all the info required
+     * Create a new user story: obtain all the information filled out by a user,
+     * create a new userStory object that will get populated with that info.
+     * Save that new userStory object to the stories array.
+     * Precond: all fields must be populated
+     * Postcond: stories array is modified
+     * Displays a popUp when user does not provide all the info required
      */
     public void addUserStory() {
         String persona = personaField.getText();
@@ -201,18 +223,28 @@ public class ScrumboardController {
         }
 
         // search existing users to find the user object that matches the name selected in the combo box
-        User user = null;
-        for (User u : teammates) {
-            if (u.getName().equals(userName)) {
-                user = u;
+            User user = null;
+            for (User u : teammates) {
+                if (u.getName().equals(userName)) {
+                    user = u;
+                }
             }
-        }
-        
+
         // create new user story object
-        UserStory newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
+        UserStory newStory;
         
-        // add new user story to the user's assigned stories
-        user.addUserStory(newStory);
+        if (user == null) {
+            //create when no user chosen
+            newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
+        }
+        else {
+            //create when user is chosen
+            newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
+
+            // add new user story to the user's assigned stories
+            user.addUserStory(newStory);
+        }
+
 
         switch (status) {
             case "Backlog" -> {
@@ -232,16 +264,21 @@ public class ScrumboardController {
                 backlog.add(newStory);
             }
         }
-
+        // redraw the scrum board
         updateBoard(newStory);
     }
 
+    /**
+     * Updates the scrum board by adding the new user story to the correct section
+     * @param newStory the new user story to be added to the scrum board
+     */
     public void updateBoard(UserStory newStory) {
 
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
         
+        // determine which section of the scrum board to update
         switch (newStory.getStatus()) {
             case "Backlog" -> {
                 boxToUpdate = backlogVbox;
@@ -263,10 +300,15 @@ public class ScrumboardController {
                 listToIterate = done;
                 paneToUpdate = DoneScrollPane;
             }
+
+
         }
 
+        // reset the VBox to be updated
         boxToUpdate.getChildren().clear();
-        // sort the list of user stories based on their priority with 5 being the highest priority
+
+        // sort the list of user stories based on their 
+        // priority with 5 being the highest priority
         sort(listToIterate);
 
         // redraw the board by adding all the user stories in sorted order
@@ -275,38 +317,62 @@ public class ScrumboardController {
             // so that the highest priority is at the top
             VBox newStoryBox = new VBox();
             Pane colorpane = new Pane();
+            Pane blankSpacePane = new Pane();
             HBox storyname= new HBox();
+
+            newStoryBox.setMaxWidth(258);
+
             TilePane seemore = new TilePane();
 
             // put coloured bar on user story
-            String colour = listToIterate.get(i).getColor();
+            String colour = listToIterate.get(i).getColour();
             Rectangle colourRec = new Rectangle();
-            colourRec.setHeight(25);
+            colourRec.setHeight(15);
             colourRec.setWidth(400);
 
             Color fillcolour = Color.web(colour);
             colourRec.setFill(fillcolour);
+
+            // Blank white rectangle for spacing between tasks
+            Rectangle blankRec = new Rectangle();
+            blankRec.setHeight(25);
+            blankRec.setWidth(400);
+
+
+            Color blankWhiteColour = Color.web("transparent");
+            blankRec.setFill(blankWhiteColour);
 
             colorpane.getChildren().add(colourRec);
             newStoryBox.getChildren().add(colorpane);
 
             // add name to user story
             Label nameLabel = new Label(listToIterate.get(i).getTitle());
+            nameLabel.setMaxWidth(210);
+            nameLabel.setWrapText(true);
+
             nameLabel.setFont(Font.font("Arial Bold"));
             storyname.getChildren().add(nameLabel);
-            
-            // TODO: shift priority to rightmost side of user story
-            Label priorityLabel = new Label(""+ listToIterate.get(i).getPriority());
+
+            Label priorityLabel = new Label("  "+ listToIterate.get(i).getPriority());
+
+
             storyname.getChildren().add(priorityLabel);
             newStoryBox.getChildren().add(storyname);
+            newStoryBox.getChildren().add(blankRec);
+
             boxToUpdate.getChildren().add(newStoryBox);
 
         }
 
         paneToUpdate.setContent(boxToUpdate);
 
+        increaseprogress();
+
     }
 
+    /**
+     * Add statuses to the status combo box
+     */
     public void setStatusPriority() {
         String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
         if (statusComboBox.getItems().isEmpty()) {
@@ -315,7 +381,6 @@ public class ScrumboardController {
             }
         }
         
-
         if (priorityComboBox.getItems().isEmpty()) {
             for (int i = 1; i <= 5; i++) {
                 priorityComboBox.getItems().add(""+i);
@@ -330,15 +395,44 @@ public class ScrumboardController {
     public void saveBoard() throws IOException {
     }
 
-    public void DisplayStatistics() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("progressbar.fxml"));
-        Parent root = (Parent)fxmlLoader.load();
-        Scene scene = new Scene(root, 320.0, 240.0);
-        Stage stage = new Stage();
-        stage.setTitle("Display Stats");
-        stage.setHeight(450.0);
-        stage.setWidth(450.0);
-        stage.setScene(scene);
-        stage.showAndWait();
+
+
+
+    //we could use the BigDecimal class because it gives the user complete control over rounding behaviour.
+    BigDecimal progress = new BigDecimal(String.format("%.2f",0.0)); //this is a big decimal constructor, where we could pass in a format string.
+    //format the string to be %.2f, and the arguments will be the initial value we will begin with
+    //which is set t0 zero.
+    //another variable will be use to calulate the percent of work done over the ones that are not complete.
+
+    public void increaseprogress()
+    {
+
+
+        if(progress.doubleValue() < 1)
+        {
+            Double sum_backlog= Double.valueOf(backlog.size()); /* integar variables to store the total user stories in each array list.*/
+            Double sum_todo= Double.valueOf(toDo.size());
+            Double sum_inprogress= Double.valueOf(inProgress.size());
+            Double sum_done= Double.valueOf(done.size());
+
+
+             progress= new BigDecimal(String.format("%.2f",(sum_done/(sum_backlog+sum_todo+sum_inprogress+sum_done)))); //this is to access the value stored in the progress construct
+             System.out.println(progress.doubleValue()); //this prints the value to the console.
+             myprogressbar.setProgress(progress.doubleValue()); //pass in value of the progress, for this project we will be passing in the
+                // the ratio of the work done over the work that is not yet done.
+
+
+            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%"); //cast as in intergar for precison sake
+        }
+
+
     }
+
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+            myprogressbar.setStyle("-fx-accent: green;");
+
+
+    }
+
 }
