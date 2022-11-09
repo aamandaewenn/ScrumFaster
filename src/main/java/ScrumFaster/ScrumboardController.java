@@ -371,7 +371,7 @@ public class ScrumboardController implements Initializable {
     }
 
     /**
-     * Add statuses to the status combo box
+     * Add statuses and priorities to combo box as well as a null/non-assigned option for assignee combo box
      */
     public void setStatusPriority() {
         String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
@@ -385,6 +385,11 @@ public class ScrumboardController implements Initializable {
             for (int i = 1; i <= 5; i++) {
                 priorityComboBox.getItems().add(""+i);
             }
+        }
+
+        if (assignToComboBox.getItems().isEmpty())
+        {
+            assignToComboBox.getItems().add("");
         }
     }
 
@@ -420,7 +425,6 @@ public class ScrumboardController implements Initializable {
              System.out.println(progress.doubleValue()); //this prints the value to the console.
              myprogressbar.setProgress(progress.doubleValue()); //pass in value of the progress, for this project we will be passing in the
                 // the ratio of the work done over the work that is not yet done.
-
 
             progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%"); //cast as in intergar for precison sake
         }
