@@ -22,6 +22,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.channels.Pipe;
 import java.util.ArrayList;
@@ -220,6 +221,25 @@ public class ScrumboardController implements Initializable {
             Popup unfilledPopup = new Popup("Please fill in all required fields");
             unfilledPopup.displayPopup();
             return;
+        }
+
+        // do not allow two user stories with same name to be created
+        ArrayList<ArrayList<UserStory>> storyLists = new ArrayList<ArrayList<UserStory>>();
+        storyLists.add(backlog);
+        storyLists.add(toDo);
+        storyLists.add(inProgress);
+        storyLists.add(done);
+        for (ArrayList<UserStory> list : storyLists)
+        {
+            for (UserStory story : list)
+            {
+                if (story.getTitle().equals(featureName))
+                {
+                    Popup RepeatName = new Popup("Two user stories cannot have the same name. Please try again");
+                    RepeatName.displayPopup();
+                    return;
+                }
+            }
         }
 
         // search existing users to find the user object that matches the name selected in the combo box
