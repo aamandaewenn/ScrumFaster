@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Collections;
+import java.util.IllegalFormatWidthException;
 
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
@@ -197,6 +198,7 @@ public class ScrumboardController implements Initializable {
         // add icon's vbox to the board
         UsersScrollPane.setContent(UsersHBox);
     }
+
 
     /*
      * Create a new user story: obtain all the information filled out by a user,
@@ -457,26 +459,17 @@ public class ScrumboardController implements Initializable {
     }
 
     public void goToNextSprint() {
-        // move all incomplete tasks back to backlog
 
-        // move to do stories to backlog
-        while (!toDo.isEmpty()) {
-            UserStory toDoStory = toDo.get(0);
-            toDoStory.setStatus("Backlog");
-            backlog.add(toDoStory);
-            toDo.remove(toDoStory);
-            updateBoard(toDoStory);
+        ArrayList<UserStory> incompleteStories = new ArrayList<>();
+        
+        // move all incomplete stories to the backlog
+        incompleteStories.addAll(toDo); toDo.clear();
+        incompleteStories.addAll(inProgress); inProgress.clear();
 
-        }
-
-        // move inProgress stories to backlog
-        while (!inProgress.isEmpty()) {
-            UserStory toDoStory = inProgress.get(0);
-            toDoStory.setStatus("Backlog");
-            backlog.add(toDoStory);
-            inProgress.remove(toDoStory);
-            updateBoard(toDoStory);
-
+        for (UserStory task : incompleteStories) {
+            task.setStatus("Backlog");
+            backlog.add(task);
+            updateBoard(task);
         }
 
         // add together points from done
