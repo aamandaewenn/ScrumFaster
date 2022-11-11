@@ -100,6 +100,9 @@ public class ScrumboardController implements Initializable {
     @FXML
     private Button nextSprintButton;
 
+    @FXML
+    private Button viewBurndownButton;
+
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
 
@@ -528,4 +531,18 @@ public class ScrumboardController implements Initializable {
         // TODO write classes and functions to make burndown chart
     }
 
+     public void BurndownChartWindow() throws IOException {
+        // TODO chi put the name of the burndown fxml file in here and then uncomment this
+         /*
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(""));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 320, 240);
+        Stage stage = new Stage();
+        stage.setTitle("Burndown Chart");
+        stage.setHeight(450);
+        stage.setWidth(450);
+        stage.setScene(scene);
+        stage.showAndWait();
+          */
+    }
 }
