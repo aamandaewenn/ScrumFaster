@@ -342,7 +342,6 @@ public class ScrumboardController implements Initializable {
 
             // redraw the board by adding all the user stories in sorted order
             for (int i = listToIterate.size() - 1; i >= 0; i--) {
-                System.out.println("hi");
                 // iterate through the list of user stories in reverse order
                 // so that the highest priority is at the top
                 VBox newStoryBox = new VBox();
@@ -477,7 +476,6 @@ public class ScrumboardController implements Initializable {
         while (!toDo.isEmpty())
         {
             UserStory toDoStory = toDo.get(0);
-            System.out.println("iterate");
             toDoStory.setStatus("Backlog");
             backlog.add(toDoStory);
             toDo.remove(toDoStory);
@@ -485,7 +483,24 @@ public class ScrumboardController implements Initializable {
 
         }
 
+        // move inProgress stories to backlog
+        while (!inProgress.isEmpty())
+        {
+            UserStory toDoStory = inProgress.get(0);
+            toDoStory.setStatus("Backlog");
+            backlog.add(toDoStory);
+            inProgress.remove(toDoStory);
+            updateBoard(toDoStory);
+
+        }
+
         // add together points from done
+        int pointsCompleted = 0;
+        for (UserStory completedStory: done)
+        {
+            pointsCompleted = pointsCompleted + completedStory.getPriority();
+        }
+        System.out.println(pointsCompleted);
 
         // keep count of which sprint we are on
 
