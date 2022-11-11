@@ -191,5 +191,10 @@
             <Font name="Arial Bold" size="14.0" />
          </font>
       </Button>
+      <Button fx:id="viewBurndownButton" layoutX="1222.0" layoutY="759.0" mnemonicParsing="false" onAction="#BurndownChartWindow" text="View Burndown">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
