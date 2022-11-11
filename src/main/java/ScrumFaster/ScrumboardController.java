@@ -44,8 +44,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
-
 public class ScrumboardController implements Initializable {
     @FXML
     private Button AddNewUserStoryButton;
@@ -104,8 +102,6 @@ public class ScrumboardController implements Initializable {
     @FXML
     private Button nextSprintButton;
 
-
-
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
 
@@ -135,11 +131,10 @@ public class ScrumboardController implements Initializable {
     // }
 
     // private User addUser(String name, String colour) {
-    //     User user = new User(name, colour);
-    //     teammates.add(user);
-    //     return user;
+    // User user = new User(name, colour);
+    // teammates.add(user);
+    // return user;
     // }
-
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
@@ -156,20 +151,17 @@ public class ScrumboardController implements Initializable {
             name = "TeamMate " + TeammateNumber;
         }
 
-
         // if colour is white don't create a new teammate and inform user
-        if (colour.toString().equals("0xffffffff"))
-        {
+        if (colour.toString().equals("0xffffffff")) {
             Popup WhitePopup = new Popup("Colour cannot be set to white");
             WhitePopup.displayPopup();
             return;
         }
 
-        // if colour is already chosen for another teammate, do not create teammate and inform user
-        for (User teamMate : ScrumboardController.teammates)
-        {
-            if (teamMate.getColour().equals(colour.toString()))
-            {
+        // if colour is already chosen for another teammate, do not create teammate and
+        // inform user
+        for (User teamMate : ScrumboardController.teammates) {
+            if (teamMate.getColour().equals(colour.toString())) {
                 Popup DuplicatePopup = new Popup("Cannot have same colour as another user");
                 DuplicatePopup.displayPopup();
                 return;
@@ -223,7 +215,8 @@ public class ScrumboardController implements Initializable {
         String status = statusComboBox.getValue();
         String priority = priorityComboBox.getValue();
 
-        if(persona.equals("") || featureName.equals("") || description.equals("") || status == null || priority == null ) {
+        if (persona.equals("") || featureName.equals("") || description.equals("") || status == null
+                || priority == null) {
             Popup unfilledPopup = new Popup("Please fill in all required fields");
             unfilledPopup.displayPopup();
             return;
@@ -235,12 +228,9 @@ public class ScrumboardController implements Initializable {
         storyLists.add(toDo);
         storyLists.add(inProgress);
         storyLists.add(done);
-        for (ArrayList<UserStory> list : storyLists)
-        {
-            for (UserStory story : list)
-            {
-                if (story.getTitle().equals(featureName))
-                {
+        for (ArrayList<UserStory> list : storyLists) {
+            for (UserStory story : list) {
+                if (story.getTitle().equals(featureName)) {
                     Popup RepeatName = new Popup("Two user stories cannot have the same name. Please try again");
                     RepeatName.displayPopup();
                     return;
@@ -248,29 +238,28 @@ public class ScrumboardController implements Initializable {
             }
         }
 
-        // search existing users to find the user object that matches the name selected in the combo box
-            User user = null;
-            for (User u : teammates) {
-                if (u.getName().equals(userName)) {
-                    user = u;
-                }
+        // search existing users to find the user object that matches the name selected
+        // in the combo box
+        User user = null;
+        for (User u : teammates) {
+            if (u.getName().equals(userName)) {
+                user = u;
             }
+        }
 
         // create new user story object
         UserStory newStory;
-        
+
         if (user == null) {
-            //create when no user chosen
+            // create when no user chosen
             newStory = new UserStory(persona, featureName, description, status, Integer.parseInt(priority));
-        }
-        else {
-            //create when user is chosen
+        } else {
+            // create when user is chosen
             newStory = new UserStory(persona, featureName, description, user, status, Integer.parseInt(priority));
 
             // add new user story to the user's assigned stories
             user.addUserStory(newStory);
         }
-
 
         switch (status) {
             case "Backlog" -> {
@@ -296,18 +285,19 @@ public class ScrumboardController implements Initializable {
 
     /**
      * Updates the scrum board by adding the new user story to the correct section
+     * 
      * @param newStory the new user story to be added to the scrum board
      */
     public void updateBoard(UserStory newStory) {
 
         // create cases so that whole board updates
-        String[] cases = {"Backlog", "To-do", "In progress", "Done"};
+        String[] cases = { "Backlog", "To-do", "In progress", "Done" };
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
 
-        for (int j = 0; j<=3; j++) {
-            //choose which section of board is updating this iteration
+        for (int j = 0; j <= 3; j++) {
+            // choose which section of board is updating this iteration
             String whichSection = cases[j];
 
             // determine which section of the scrum board to update
@@ -332,7 +322,6 @@ public class ScrumboardController implements Initializable {
                     listToIterate = done;
                     paneToUpdate = DoneScrollPane;
                 }
-
 
             }
 
@@ -370,7 +359,6 @@ public class ScrumboardController implements Initializable {
                 blankRec.setHeight(25);
                 blankRec.setWidth(400);
 
-
                 Color blankWhiteColour = Color.web("transparent");
                 blankRec.setFill(blankWhiteColour);
 
@@ -387,7 +375,6 @@ public class ScrumboardController implements Initializable {
 
                 Label priorityLabel = new Label("  " + listToIterate.get(i).getPriority());
 
-
                 storyname.getChildren().add(priorityLabel);
                 newStoryBox.getChildren().add(storyname);
                 newStoryBox.getChildren().add(blankRec);
@@ -398,89 +385,82 @@ public class ScrumboardController implements Initializable {
 
             paneToUpdate.setContent(boxToUpdate);
 
-            increaseprogress();
+            updateProgress();
         }
     }
 
     /**
-     * Add statuses and priorities to combo box as well as a null/non-assigned option for assignee combo box
+     * Add statuses and priorities to combo box as well as a null/non-assigned
+     * option for assignee combo box
      */
     public void setStatusPriority() {
-        String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
+        String statuses[] = { "Backlog", "To-do", "In progress", "Done" };
         if (statusComboBox.getItems().isEmpty()) {
             System.out.println("this executes");
             for (String status : statuses) {
                 statusComboBox.getItems().add(status);
             }
         }
-        
+
         if (priorityComboBox.getItems().isEmpty()) {
             for (int i = 1; i <= 5; i++) {
-                priorityComboBox.getItems().add(""+i);
+                priorityComboBox.getItems().add("" + i);
             }
         }
 
-        //TODO Figure out how to make this execute exactly once even if box is not empty since user can be added first
-        // right now it only executes if a drop down menu is selected before a user is added
-        if (assignToComboBox.getItems().isEmpty())
-        {
+        // TODO Figure out how to make this execute exactly once even if box is not
+        // empty since user can be added first
+        // right now it only executes if a drop down menu is selected before a user is
+        // added
+        if (assignToComboBox.getItems().isEmpty()) {
             assignToComboBox.getItems().add("");
         }
     }
 
     /**
      * Action listener for button that saves the board, saves the board to a file
+     * 
      * @throws IOException if fxml file not found
      */
     public void saveBoard() throws IOException {
     }
 
+    // we could use the BigDecimal class because it gives the user complete control
+    // over rounding behaviour.
+    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+                                                                      // could pass in a format string.
+    // format the string to be %.2f, and the arguments will be the initial value we
+    // will begin with
+    // which is set t0 zero.
+    // another variable will be use to calulate the percent of work done over the
+    // ones that are not complete.
 
+    public void updateProgress() {
 
+        if (progress.doubleValue() < 1) {
+            // find total number of user stories in every section
+            Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
+            
+            // ratio of stories that are done to total number of stories
+            progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
+            myprogressbar.setProgress(progress.doubleValue());
 
-    //we could use the BigDecimal class because it gives the user complete control over rounding behaviour.
-    BigDecimal progress = new BigDecimal(String.format("%.2f",0.0)); //this is a big decimal constructor, where we could pass in a format string.
-    //format the string to be %.2f, and the arguments will be the initial value we will begin with
-    //which is set t0 zero.
-    //another variable will be use to calulate the percent of work done over the ones that are not complete.
-
-    public void increaseprogress()
-    {
-
-
-        if(progress.doubleValue() < 1)
-        {
-            Double sum_backlog= Double.valueOf(backlog.size()); /* integar variables to store the total user stories in each array list.*/
-            Double sum_todo= Double.valueOf(toDo.size());
-            Double sum_inprogress= Double.valueOf(inProgress.size());
-            Double sum_done= Double.valueOf(done.size());
-
-
-             progress= new BigDecimal(String.format("%.2f",(sum_done/(sum_backlog+sum_todo+sum_inprogress+sum_done)))); //this is to access the value stored in the progress construct
-             System.out.println(progress.doubleValue()); //this prints the value to the console.
-             myprogressbar.setProgress(progress.doubleValue()); //pass in value of the progress, for this project we will be passing in the
-                // the ratio of the work done over the work that is not yet done.
-
-            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%"); //cast as in intergar for precison sake
+            // display the progress as a percentage
+            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
         }
 
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        myprogressbar.setStyle("-fx-accent: blue;");
 
     }
 
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
-            myprogressbar.setStyle("-fx-accent: green;");
-
-
-    }
-
-    public void goToNextSprint()
-    {
+    public void goToNextSprint() {
         // move all incomplete tasks back to backlog
 
         // move to do stories to backlog
-        while (!toDo.isEmpty())
-        {
+        while (!toDo.isEmpty()) {
             UserStory toDoStory = toDo.get(0);
             toDoStory.setStatus("Backlog");
             backlog.add(toDoStory);
@@ -490,8 +470,7 @@ public class ScrumboardController implements Initializable {
         }
 
         // move inProgress stories to backlog
-        while (!inProgress.isEmpty())
-        {
+        while (!inProgress.isEmpty()) {
             UserStory toDoStory = inProgress.get(0);
             toDoStory.setStatus("Backlog");
             backlog.add(toDoStory);
@@ -502,8 +481,7 @@ public class ScrumboardController implements Initializable {
 
         // add together points from done
         int pointsCompleted = 0;
-        for (UserStory completedStory: done)
-        {
+        for (UserStory completedStory : done) {
             pointsCompleted = pointsCompleted + completedStory.getPriority();
         }
         System.out.println(pointsCompleted);
@@ -512,9 +490,7 @@ public class ScrumboardController implements Initializable {
         sprintNumber++;
 
         // pass the points and sprint count to function to make graph
-        //TODO write classes and functions to make burndown chart
+        // TODO write classes and functions to make burndown chart
     }
-
-
 
 }
