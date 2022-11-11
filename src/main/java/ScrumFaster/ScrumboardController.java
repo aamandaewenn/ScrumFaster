@@ -408,6 +408,7 @@ public class ScrumboardController implements Initializable {
     public void setStatusPriority() {
         String statuses[] = {"Backlog", "To-do", "In progress", "Done"};
         if (statusComboBox.getItems().isEmpty()) {
+            System.out.println("this executes");
             for (String status : statuses) {
                 statusComboBox.getItems().add(status);
             }
@@ -419,6 +420,8 @@ public class ScrumboardController implements Initializable {
             }
         }
 
+        //TODO Figure out how to make this execute exactly once even if box is not empty since user can be added first
+        // right now it only executes if a drop down menu is selected before a user is added
         if (assignToComboBox.getItems().isEmpty())
         {
             assignToComboBox.getItems().add("");
