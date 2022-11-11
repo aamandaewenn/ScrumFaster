@@ -101,6 +101,9 @@ public class ScrumboardController implements Initializable {
     @FXML
     private ProgressBar myprogressbar;
 
+    @FXML
+    private Button nextSprintButton;
+
 
 
     // ArrayList of all users added to the system.
@@ -294,100 +297,107 @@ public class ScrumboardController implements Initializable {
      */
     public void updateBoard(UserStory newStory) {
 
+        // create cases so that whole board updates
+        String[] cases = {"Backlog", "To-do", "In progress", "Done"};
         VBox boxToUpdate;
         ArrayList<UserStory> listToIterate;
         ScrollPane paneToUpdate;
-        
-        // determine which section of the scrum board to update
-        switch (newStory.getStatus()) {
-            case "Backlog" -> {
-                boxToUpdate = backlogVbox;
-                listToIterate = backlog;
-                paneToUpdate = BacklogScrollPane;
-            }
-            case "To-do" -> {
-                boxToUpdate = toDoVbox;
-                listToIterate = toDo;
-                paneToUpdate = ToDoScrollPane;
-            }
-            case "In progress" -> {
-                boxToUpdate = inProgressVbox;
-                listToIterate = inProgress;
-                paneToUpdate = InProgressScrollPane;
-            }
-            default -> {
-                boxToUpdate = doneVbox;
-                listToIterate = done;
-                paneToUpdate = DoneScrollPane;
-            }
+
+        for (int j = 0; j<=3; j++) {
+            //choose which section of board is updating this iteration
+            String whichSection = cases[j];
+
+            // determine which section of the scrum board to update
+            switch (whichSection) {
+                case "Backlog" -> {
+                    boxToUpdate = backlogVbox;
+                    listToIterate = backlog;
+                    paneToUpdate = BacklogScrollPane;
+                }
+                case "To-do" -> {
+                    boxToUpdate = toDoVbox;
+                    listToIterate = toDo;
+                    paneToUpdate = ToDoScrollPane;
+                }
+                case "In progress" -> {
+                    boxToUpdate = inProgressVbox;
+                    listToIterate = inProgress;
+                    paneToUpdate = InProgressScrollPane;
+                }
+                default -> {
+                    boxToUpdate = doneVbox;
+                    listToIterate = done;
+                    paneToUpdate = DoneScrollPane;
+                }
 
 
+            }
+
+            // reset the VBox to be updated
+            boxToUpdate.getChildren().clear();
+
+            // sort the list of user stories based on their
+            // priority with 5 being the highest priority
+            sort(listToIterate);
+
+            // redraw the board by adding all the user stories in sorted order
+            for (int i = listToIterate.size() - 1; i >= 0; i--) {
+                System.out.println("hi");
+                // iterate through the list of user stories in reverse order
+                // so that the highest priority is at the top
+                VBox newStoryBox = new VBox();
+                Pane colorpane = new Pane();
+                Pane blankSpacePane = new Pane();
+                HBox storyname = new HBox();
+
+                newStoryBox.setMaxWidth(258);
+
+                TilePane seemore = new TilePane();
+
+                // put coloured bar on user story
+                String colour = listToIterate.get(i).getColour();
+                Rectangle colourRec = new Rectangle();
+                colourRec.setHeight(15);
+                colourRec.setWidth(400);
+
+                Color fillcolour = Color.web(colour);
+                colourRec.setFill(fillcolour);
+
+                // Blank white rectangle for spacing between tasks
+                Rectangle blankRec = new Rectangle();
+                blankRec.setHeight(25);
+                blankRec.setWidth(400);
+
+
+                Color blankWhiteColour = Color.web("transparent");
+                blankRec.setFill(blankWhiteColour);
+
+                colorpane.getChildren().add(colourRec);
+                newStoryBox.getChildren().add(colorpane);
+
+                // add name to user story
+                Label nameLabel = new Label(listToIterate.get(i).getTitle());
+                nameLabel.setMaxWidth(210);
+                nameLabel.setWrapText(true);
+
+                nameLabel.setFont(Font.font("Arial Bold"));
+                storyname.getChildren().add(nameLabel);
+
+                Label priorityLabel = new Label("  " + listToIterate.get(i).getPriority());
+
+
+                storyname.getChildren().add(priorityLabel);
+                newStoryBox.getChildren().add(storyname);
+                newStoryBox.getChildren().add(blankRec);
+
+                boxToUpdate.getChildren().add(newStoryBox);
+
+            }
+
+            paneToUpdate.setContent(boxToUpdate);
+
+            increaseprogress();
         }
-
-        // reset the VBox to be updated
-        boxToUpdate.getChildren().clear();
-
-        // sort the list of user stories based on their 
-        // priority with 5 being the highest priority
-        sort(listToIterate);
-
-        // redraw the board by adding all the user stories in sorted order
-        for(int i = listToIterate.size()-1; i >= 0; i--) {
-            // iterate through the list of user stories in reverse order 
-            // so that the highest priority is at the top
-            VBox newStoryBox = new VBox();
-            Pane colorpane = new Pane();
-            Pane blankSpacePane = new Pane();
-            HBox storyname= new HBox();
-
-            newStoryBox.setMaxWidth(258);
-
-            TilePane seemore = new TilePane();
-
-            // put coloured bar on user story
-            String colour = listToIterate.get(i).getColour();
-            Rectangle colourRec = new Rectangle();
-            colourRec.setHeight(15);
-            colourRec.setWidth(400);
-
-            Color fillcolour = Color.web(colour);
-            colourRec.setFill(fillcolour);
-
-            // Blank white rectangle for spacing between tasks
-            Rectangle blankRec = new Rectangle();
-            blankRec.setHeight(25);
-            blankRec.setWidth(400);
-
-
-            Color blankWhiteColour = Color.web("transparent");
-            blankRec.setFill(blankWhiteColour);
-
-            colorpane.getChildren().add(colourRec);
-            newStoryBox.getChildren().add(colorpane);
-
-            // add name to user story
-            Label nameLabel = new Label(listToIterate.get(i).getTitle());
-            nameLabel.setMaxWidth(210);
-            nameLabel.setWrapText(true);
-
-            nameLabel.setFont(Font.font("Arial Bold"));
-            storyname.getChildren().add(nameLabel);
-
-            Label priorityLabel = new Label("  "+ listToIterate.get(i).getPriority());
-
-
-            storyname.getChildren().add(priorityLabel);
-            newStoryBox.getChildren().add(storyname);
-            newStoryBox.getChildren().add(blankRec);
-
-            boxToUpdate.getChildren().add(newStoryBox);
-
-        }
-
-        paneToUpdate.setContent(boxToUpdate);
-
-        increaseprogress();
-
     }
 
     /**
@@ -458,5 +468,30 @@ public class ScrumboardController implements Initializable {
 
 
     }
+
+    public void goToNextSprint()
+    {
+        // move all incomplete tasks back to backlog
+
+        // move to do stories to backlog
+        while (!toDo.isEmpty())
+        {
+            UserStory toDoStory = toDo.get(0);
+            System.out.println("iterate");
+            toDoStory.setStatus("Backlog");
+            backlog.add(toDoStory);
+            toDo.remove(toDoStory);
+            updateBoard(toDoStory);
+
+        }
+
+        // add together points from done
+
+        // keep count of which sprint we are on
+
+        // pass the points and sprint count to function to make graph
+    }
+
+
 
 }
