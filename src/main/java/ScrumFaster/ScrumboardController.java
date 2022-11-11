@@ -21,16 +21,11 @@ import javafx.scene.text.Font;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.channels.Pipe;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Collections;
-import java.util.IllegalFormatWidthException;
+import java.util.*;
 
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
@@ -52,6 +47,8 @@ public class ScrumboardController implements Initializable {
     private Button AddNewTeamMateButton;
     @FXML
     private Button SaveBoardButton;
+    @FXML
+    private Button LoadBoardButton;
     @FXML
     private Button DisplayStatisticsButton;
     @FXML
@@ -136,6 +133,7 @@ public class ScrumboardController implements Initializable {
     // teammates.add(user);
     // return user;
     // }
+
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
@@ -263,6 +261,7 @@ public class ScrumboardController implements Initializable {
             user.addUserStory(newStory);
         }
 
+
         switch (status) {
             case "Backlog" -> {
                 backlog.add(newStory);
@@ -287,7 +286,7 @@ public class ScrumboardController implements Initializable {
 
     /**
      * Updates the scrum board by adding the new user story to the correct section
-     * 
+     *
      * @param newStory the new user story to be added to the scrum board
      */
     public void updateBoard(UserStory newStory) {
@@ -421,10 +420,53 @@ public class ScrumboardController implements Initializable {
 
     /**
      * Action listener for button that saves the board, saves the board to a file
-     * 
+     *
      * @throws IOException if fxml file not found
      */
     public void saveBoard() throws IOException {
+        Map<String, ArrayList<?>> map = new HashMap<String, ArrayList<?>>();
+        map.put("teammates", teammates);
+        map.put("backlog", backlog);
+        map.put("toDo", toDo);
+        map.put("inProgress", inProgress);
+        map.put("done", done);
+
+
+        try{
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("ScrumBoardSaveFile.dat"));
+            output.writeObject(map);
+            output.close();
+        }
+        catch (IOException ioe){
+            System.out.println("error writing to file");
+        }
+
+    }
+
+
+    /**
+     * Action listener for button that loads a save file and updates the board.
+     * @throws IOException if fxml file not found
+     */
+    public void loadBoard() throws IOException {
+        Map<String, ArrayList<?>> map = null;
+
+        try{
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("ScrumBoardSaveFile.dat"));
+            map = (Map<String, ArrayList<?>>) input.readObject();
+        }
+        catch (IOException ioe){
+            System.out.println("error reading from file");
+        }
+        catch (ClassNotFoundException cnfe){
+            System.out.println("class not found");
+        }
+
+        teammates = (ArrayList<User>) map.get("teammates");
+
+        for (User teammate : teammates) {
+            System.out.println(teammate);
+        }
     }
 
     // we could use the BigDecimal class because it gives the user complete control
@@ -442,7 +484,7 @@ public class ScrumboardController implements Initializable {
         if (progress.doubleValue() < 1) {
             // find total number of user stories in every section
             Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
-            
+
             // ratio of stories that are done to total number of stories
             progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
             myprogressbar.setProgress(progress.doubleValue());
@@ -461,7 +503,7 @@ public class ScrumboardController implements Initializable {
     public void goToNextSprint() {
 
         ArrayList<UserStory> incompleteStories = new ArrayList<>();
-        
+
         // move all incomplete stories to the backlog
         incompleteStories.addAll(toDo); toDo.clear();
         incompleteStories.addAll(inProgress); inProgress.clear();
