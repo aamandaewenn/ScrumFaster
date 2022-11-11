@@ -1,6 +1,8 @@
 package ScrumFaster;
 
-public class UserStory implements Comparable<UserStory> {
+import java.io.Serializable;
+
+public class UserStory implements Serializable, Comparable<UserStory> {
     private String persona;
     private String title;
     private String description;

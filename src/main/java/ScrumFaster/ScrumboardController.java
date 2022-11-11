@@ -21,15 +21,11 @@ import javafx.scene.text.Font;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.channels.Pipe;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Collections;
+import java.util.*;
 
 import static java.util.Collections.list;
 import static java.util.Collections.sort;
@@ -42,8 +38,6 @@ import javafx.scene.control.ProgressBar;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.ResourceBundle;
-
 
 
 public class ScrumboardController implements Initializable {
@@ -53,6 +47,8 @@ public class ScrumboardController implements Initializable {
     private Button AddNewTeamMateButton;
     @FXML
     private Button SaveBoardButton;
+    @FXML
+    private Button LoadBoardButton;
     @FXML
     private Button DisplayStatisticsButton;
     @FXML
@@ -418,6 +414,49 @@ public class ScrumboardController implements Initializable {
      * @throws IOException if fxml file not found
      */
     public void saveBoard() throws IOException {
+        Map<String, ArrayList<?>> map = new HashMap<String, ArrayList<?>>();
+        map.put("teammates", teammates);
+        map.put("backlog", backlog);
+        map.put("toDo", toDo);
+        map.put("inProgress", inProgress);
+        map.put("done", done);
+
+
+        try{
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("ScrumBoardSaveFile.dat"));
+            output.writeObject(map);
+            output.close();
+        }
+        catch (IOException ioe){
+            System.out.println("error writing to file");
+        }
+
+    }
+
+
+    /**
+     * Action listener for button that loads a save file and updates the board.
+     * @throws IOException if fxml file not found
+     */
+    public void loadBoard() throws IOException {
+        Map<String, ArrayList<?>> map = null;
+
+        try{
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("ScrumBoardSaveFile.dat"));
+            map = (Map<String, ArrayList<?>>) input.readObject();
+        }
+        catch (IOException ioe){
+            System.out.println("error reading from file");
+        }
+        catch (ClassNotFoundException cnfe){
+            System.out.println("class not found");
+        }
+
+        teammates = (ArrayList<User>) map.get("teammates");
+
+        for (User teammate : teammates) {
+            System.out.println(teammate);
+        }
     }
 
 
