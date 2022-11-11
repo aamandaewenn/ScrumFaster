@@ -117,6 +117,9 @@ public class ScrumboardController implements Initializable {
 
     private static HBox UsersHBox = new HBox();
 
+    // the number of sprints we have finished
+    private static int sprintNumber = 0;
+
     // public void UserStoryWindow() throws IOException {
     // FXMLLoader fxmlLoader = new
     // FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
@@ -502,9 +505,11 @@ public class ScrumboardController implements Initializable {
         }
         System.out.println(pointsCompleted);
 
-        // keep count of which sprint we are on
+        // keep count of how many sprints we have finished
+        sprintNumber++;
 
         // pass the points and sprint count to function to make graph
+        //TODO write classes and functions to make burndown chart
     }
 
 
