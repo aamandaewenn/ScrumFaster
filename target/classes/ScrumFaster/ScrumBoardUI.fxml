@@ -181,7 +181,7 @@
       </VBox>
       <ProgressBar fx:id="myprogressbar" layoutX="1178.0" layoutY="642.0" prefHeight="30.0" prefWidth="231.0" progress="0.0" />
       <Label fx:id="progresslabel" layoutX="1275.0" layoutY="625.0" text="Label" />
-      <Button fx:id="nextSpringButton" layoutX="1037.0" layoutY="779.0" mnemonicParsing="false" onAction="#goToNextSprint" text="Next Sprint">
+      <Button fx:id="nextSprintButton" layoutX="1037.0" layoutY="779.0" mnemonicParsing="false" onAction="#goToNextSprint" text="Next Sprint">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
