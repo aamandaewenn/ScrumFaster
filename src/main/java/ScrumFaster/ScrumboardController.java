@@ -40,7 +40,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ScrumboardController implements Initializable {
+public class ScrumboardController {
     @FXML
     private Button AddNewUserStoryButton;
     @FXML
@@ -386,7 +386,7 @@ public class ScrumboardController implements Initializable {
 
             paneToUpdate.setContent(boxToUpdate);
 
-            updateProgress();
+            //updateProgress();
         }
     }
 
@@ -471,7 +471,7 @@ public class ScrumboardController implements Initializable {
 
     // we could use the BigDecimal class because it gives the user complete control
     // over rounding behaviour.
-    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+    //BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
                                                                       // could pass in a format string.
     // format the string to be %.2f, and the arguments will be the initial value we
     // will begin with
@@ -479,26 +479,25 @@ public class ScrumboardController implements Initializable {
     // another variable will be use to calulate the percent of work done over the
     // ones that are not complete.
 
-    public void updateProgress() {
-
-        if (progress.doubleValue() < 1) {
-            // find total number of user stories in every section
-            Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
-
-            // ratio of stories that are done to total number of stories
-            progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
-            myprogressbar.setProgress(progress.doubleValue());
-
-            // display the progress as a percentage
-            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
-        }
-
-    }
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        myprogressbar.setStyle("-fx-accent: blue;");
-
-    }
+//    public void updateProgress() {
+//
+//        if (progress.doubleValue() < 1) {
+//            // find total number of user stories in every section
+//            Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
+//
+//            // ratio of stories that are done to total number of stories
+//            progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
+//            myprogressbar.setProgress(progress.doubleValue());
+//
+//            // display the progress as a percentage
+//            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
+//        }
+//
+//    }
+//
+//    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        myprogressbar.setStyle("-fx-accent: blue;");
+//    }
 
     public void goToNextSprint() {
 
