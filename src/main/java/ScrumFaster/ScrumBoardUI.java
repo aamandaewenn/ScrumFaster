@@ -21,7 +21,6 @@ import java.util.Objects;
  Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("FXML FILE NAME HERE.fxml")));
  Scene scene = new Scene(root, 320, 240);
 
-
  */
 
 public class ScrumBoardUI extends Application {
