@@ -83,7 +83,7 @@ public class testUser {
             System.out.println("Error: failed to add user story to user with multiple existing stories");
         }
 
-        tests ++;
+        tests++;
         // remove user story
         try {
             testUser.removeUserStory(story2);
@@ -167,7 +167,7 @@ public class testUser {
             System.out.println("Error: failed to compare user to itself");
         }
 
-        // compare two users that are the same: 
+        // compare two users that are the same:
         // two user objects with same name and colour,
         // neither have any user stories
         tests++;
@@ -178,7 +178,7 @@ public class testUser {
             System.out.println("Error: failed to compare two users that are the same");
         }
 
-        // compare two users that are different: 
+        // compare two users that are different:
         // two user objects with same name and colour,
         // but different user stories
         tests++;
@@ -189,7 +189,7 @@ public class testUser {
             System.out.println("Error: failed to compare two users that are different");
         }
 
-        // compare two users that are the same: 
+        // compare two users that are the same:
         // two user objects with same name, colour, and user stories
         tests++;
         testUser2.addUserStory(story1);
@@ -215,7 +215,8 @@ public class testUser {
             System.out.println("Error: failed to compare user to non-user object");
         }
 
-        // compare two users that are different: two user objects with different attributes
+        // compare two users that are different: two user objects with different
+        // attributes
         tests++;
         User testUser3 = new User("Katia", "#FF0000");
         if (!testUser.equals(testUser3)) {

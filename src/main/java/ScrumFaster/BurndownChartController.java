@@ -2,16 +2,15 @@ package ScrumFaster;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
- 
- 
+
 public class BurndownChartController extends Application {
- 
-    @Override public void start(Stage stage) {
+
+    @Override
+    public void start(Stage stage) {
         stage.setTitle("Burndown Chart");
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -19,13 +18,13 @@ public class BurndownChartController extends Application {
         xAxis.setLabel("Sprints");
         yAxis.setLabel("Story Points");
 
-        final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
-       
+        final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+
         lineChart.setTitle("Burndown Chart");
-                          
+
         XYChart.Series ideal = new XYChart.Series();
         ideal.setName("Ideal Burndown");
-        
+
         ideal.getData().add(new XYChart.Data(1, 65));
         ideal.getData().add(new XYChart.Data(2, 60));
         ideal.getData().add(new XYChart.Data(3, 55));
@@ -41,7 +40,6 @@ public class BurndownChartController extends Application {
         ideal.getData().add(new XYChart.Data(13, 5));
         ideal.getData().add(new XYChart.Data(14, 0));
 
-        
         XYChart.Series actual = new XYChart.Series();
         actual.setName("Actual Burndown");
         actual.getData().add(new XYChart.Data(1, 65));
@@ -58,14 +56,14 @@ public class BurndownChartController extends Application {
         actual.getData().add(new XYChart.Data(12, 15));
         actual.getData().add(new XYChart.Data(13, 10));
         actual.getData().add(new XYChart.Data(14, 0));
-        
-        Scene scene  = new Scene(lineChart,800,600);
+
+        Scene scene = new Scene(lineChart, 800, 600);
         lineChart.getData().addAll(ideal, actual);
-       
+
         stage.setScene(scene);
         stage.show();
     }
- 
+
     public static void main(String[] args) {
         launch(args);
     }

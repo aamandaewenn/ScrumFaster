@@ -137,7 +137,6 @@ public class ScrumboardController implements Initializable {
     // return user;
     // }
 
-
     /**
      * Creates a new User object and adds the user icon to the scrum board
      */
@@ -199,7 +198,6 @@ public class ScrumboardController implements Initializable {
         // add icon's vbox to the board
         UsersScrollPane.setContent(UsersHBox);
     }
-
 
     /*
      * Create a new user story: obtain all the information filled out by a user,
@@ -263,7 +261,6 @@ public class ScrumboardController implements Initializable {
             // add new user story to the user's assigned stories
             user.addUserStory(newStory);
         }
-
 
         switch (status) {
             case "Backlog" -> {
@@ -434,34 +431,30 @@ public class ScrumboardController implements Initializable {
         map.put("inProgress", inProgress);
         map.put("done", done);
 
-
-        try{
+        try {
             ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("ScrumBoardSaveFile.dat"));
             output.writeObject(map);
             output.close();
-        }
-        catch (IOException ioe){
+        } catch (IOException ioe) {
             System.out.println("error writing to file");
         }
 
     }
 
-
     /**
      * Action listener for button that loads a save file and updates the board.
+     * 
      * @throws IOException if fxml file not found
      */
     public void loadBoard() throws IOException {
         Map<String, ArrayList<?>> map = null;
 
-        try{
+        try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("ScrumBoardSaveFile.dat"));
             map = (Map<String, ArrayList<?>>) input.readObject();
-        }
-        catch (IOException ioe){
+        } catch (IOException ioe) {
             System.out.println("error reading from file");
-        }
-        catch (ClassNotFoundException cnfe){
+        } catch (ClassNotFoundException cnfe) {
             System.out.println("class not found");
         }
 
@@ -489,7 +482,7 @@ public class ScrumboardController implements Initializable {
             Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
 
             // ratio of stories that are done to total number of stories
-            progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
+            progress = new BigDecimal(String.format("%.2f", done.size() / (total_stories)));
             myprogressbar.setProgress(progress.doubleValue());
 
             // display the progress as a percentage
@@ -508,8 +501,10 @@ public class ScrumboardController implements Initializable {
         ArrayList<UserStory> incompleteStories = new ArrayList<>();
 
         // move all incomplete stories to the backlog
-        incompleteStories.addAll(toDo); toDo.clear();
-        incompleteStories.addAll(inProgress); inProgress.clear();
+        incompleteStories.addAll(toDo);
+        toDo.clear();
+        incompleteStories.addAll(inProgress);
+        inProgress.clear();
 
         for (UserStory task : incompleteStories) {
             task.setStatus("Backlog");
@@ -531,18 +526,19 @@ public class ScrumboardController implements Initializable {
         // TODO write classes and functions to make burndown chart
     }
 
-     public void BurndownChartWindow() throws IOException {
-        // TODO chi put the name of the burndown fxml file in here and then uncomment this
-         /*
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(""));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 320, 240);
-        Stage stage = new Stage();
-        stage.setTitle("Burndown Chart");
-        stage.setHeight(450);
-        stage.setWidth(450);
-        stage.setScene(scene);
-        stage.showAndWait();
-          */
+    public void BurndownChartWindow() throws IOException {
+        // TODO chi put the name of the burndown fxml file in here and then uncomment
+        // this
+        /*
+         * FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(""));
+         * Parent root = fxmlLoader.load();
+         * Scene scene = new Scene(root, 320, 240);
+         * Stage stage = new Stage();
+         * stage.setTitle("Burndown Chart");
+         * stage.setHeight(450);
+         * stage.setWidth(450);
+         * stage.setScene(scene);
+         * stage.showAndWait();
+         */
     }
 }
