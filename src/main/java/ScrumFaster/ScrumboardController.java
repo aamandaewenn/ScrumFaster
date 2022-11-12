@@ -396,7 +396,7 @@ public class ScrumboardController implements Initializable {
     /**
      * Add statuses and priorities to combo box as well as a null/non-assigned
      * option for assignee combo box
-     */
+     **/
     public void setStatusPriority() {
         String statuses[] = { "Backlog", "To-do", "In progress", "Done" };
         if (statusComboBox.getItems().isEmpty()) {
@@ -410,14 +410,6 @@ public class ScrumboardController implements Initializable {
             for (int i = 1; i <= 5; i++) {
                 priorityComboBox.getItems().add("" + i);
             }
-        }
-
-        // TODO Figure out how to make this execute exactly once even if box is not
-        // empty since user can be added first
-        // right now it only executes if a drop down menu is selected before a user is
-        // added
-        if (assignToComboBox.getItems().isEmpty()) {
-            assignToComboBox.getItems().add("");
         }
     }
 
@@ -498,11 +490,25 @@ public class ScrumboardController implements Initializable {
 
     }
 
+    /**
+     * Initialize the scrumBoard progress bar and assign to user combo box
+     * @param url ?
+     * @param resourceBundle ?
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // set colour of progress bar
         myprogressbar.setStyle("-fx-accent: blue;");
+
+        // add no user option to assign to user combo box
+        assignToComboBox.getItems().add("");
 
     }
 
+    /**
+     * Updates board to reflect next spring when button is pressed
+     * @postcondition: user stories in inProgress and to-do are moved to backlog
+     * @postcondition: number of sprint updates
+     */
     public void goToNextSprint() {
 
         ArrayList<UserStory> incompleteStories = new ArrayList<>();
