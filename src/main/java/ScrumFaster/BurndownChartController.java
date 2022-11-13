@@ -1,5 +1,7 @@
 package ScrumFaster;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -8,6 +10,10 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 public class BurndownChartController extends Application {
+
+    int totalPoints = 3;  // total number of stories
+    int numStories = 2;
+    Double averagePoints;  // average number of points per story
 
     @Override
     public void start(Stage stage) {
@@ -25,37 +31,26 @@ public class BurndownChartController extends Application {
         XYChart.Series ideal = new XYChart.Series();
         ideal.setName("Ideal Burndown");
 
-        ideal.getData().add(new XYChart.Data(1, 65));
-        ideal.getData().add(new XYChart.Data(2, 60));
-        ideal.getData().add(new XYChart.Data(3, 55));
-        ideal.getData().add(new XYChart.Data(4, 50));
-        ideal.getData().add(new XYChart.Data(5, 45));
-        ideal.getData().add(new XYChart.Data(6, 40));
-        ideal.getData().add(new XYChart.Data(7, 35));
-        ideal.getData().add(new XYChart.Data(8, 30));
-        ideal.getData().add(new XYChart.Data(9, 25));
-        ideal.getData().add(new XYChart.Data(10, 20));
-        ideal.getData().add(new XYChart.Data(11, 15));
-        ideal.getData().add(new XYChart.Data(12, 10));
-        ideal.getData().add(new XYChart.Data(13, 5));
-        ideal.getData().add(new XYChart.Data(14, 0));
+        Double averagePoints = Double.valueOf(totalPoints) / numStories;
+        Double decrement = totalPoints / averagePoints;
+        System.out.println("decrement: " + decrement);
+
+        // map ideal burndown to chart
+        for (int i = 0; i <= decrement; i++) {
+            System.out.println("x: " + i + " y: " + (totalPoints - (i * averagePoints)));
+
+            if (totalPoints - i * averagePoints >= 0) {
+                ideal.getData().add(new XYChart.Data(i, (totalPoints - i * averagePoints)));
+            } else {
+                ideal.getData().add(new XYChart.Data(i, 0));
+            }
+        }
 
         XYChart.Series actual = new XYChart.Series();
         actual.setName("Actual Burndown");
-        actual.getData().add(new XYChart.Data(1, 65));
-        actual.getData().add(new XYChart.Data(2, 50));
-        actual.getData().add(new XYChart.Data(3, 75));
-        actual.getData().add(new XYChart.Data(4, 29));
-        actual.getData().add(new XYChart.Data(5, 45));
-        actual.getData().add(new XYChart.Data(6, 20));
-        actual.getData().add(new XYChart.Data(7, 35));
-        actual.getData().add(new XYChart.Data(8, 45));
-        actual.getData().add(new XYChart.Data(9, 55));
-        actual.getData().add(new XYChart.Data(10, 7));
-        actual.getData().add(new XYChart.Data(11, 15));
-        actual.getData().add(new XYChart.Data(12, 15));
-        actual.getData().add(new XYChart.Data(13, 10));
-        actual.getData().add(new XYChart.Data(14, 0));
+        actual.getData().add(new XYChart.Data(1, 5));
+        actual.getData().add(new XYChart.Data(2, 4));
+        actual.getData().add(new XYChart.Data(3, 3));
 
         Scene scene = new Scene(lineChart, 800, 600);
         lineChart.getData().addAll(ideal, actual);
