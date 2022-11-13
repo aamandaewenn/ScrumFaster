@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -134,6 +135,37 @@ public class ScrumboardController {
     // return user;
     // }
 
+    /**
+     * Displays the passed user object on the board as an icon and adds the name to the combo box
+     * @param name name of the teammate to display
+     * @param colour colour of the teammate to display
+     */
+    public void displayTeammate(String name, String colour) {
+        // add the name to the combo box
+        assignToComboBox.getItems().add(name);
+
+        // add user to scrum board by creating icon
+        VBox IconNameCombo = new VBox();
+        IconNameCombo.setAlignment(Pos.CENTER);
+
+        Label nameLabel = new Label(name);
+        nameLabel.setFont(Font.font("Arial Bold"));
+        Circle icon = new Circle(20.0);
+        icon.setFill(Color.valueOf(colour));
+
+        // set padding for icon and name so that they're spread out in the VBox
+        icon.setTranslateX(20);
+        icon.setTranslateY(10);
+        nameLabel.setTranslateX(20);
+        nameLabel.setTranslateY(10);
+
+        // add icon and name to VBox
+        IconNameCombo.getChildren().addAll(icon, nameLabel);
+        UsersHBox.getChildren().add(IconNameCombo);
+
+        // add icon's vbox to the board
+        UsersScrollPane.setContent(UsersHBox);
+    }
 
     /**
      * Creates a new User object and adds the user icon to the scrum board
@@ -170,40 +202,20 @@ public class ScrumboardController {
         // create user object
         User newUser = new User(name, colour.toString());
 
-        // add to list of users and to combo box
+        // add to list of users
         ScrumboardController.teammates.add(newUser);
-        assignToComboBox.getItems().add(name);
 
-        // add user to scrum board by creating icon
-        VBox IconNameCombo = new VBox();
-        IconNameCombo.setAlignment(Pos.CENTER);
-
-        Label nameLabel = new Label(name);
-        nameLabel.setFont(Font.font("Arial Bold"));
-        Circle icon = new Circle(20.0);
-        icon.setFill(colour);
-
-        // set padding for icon and name so that they're spread out in the VBox
-        icon.setTranslateX(20);
-        icon.setTranslateY(10);
-        nameLabel.setTranslateX(20);
-        nameLabel.setTranslateY(10);
-
-        // add icon and name to VBox
-        IconNameCombo.getChildren().addAll(icon, nameLabel);
-        UsersHBox.getChildren().add(IconNameCombo);
-
-        // add icon's vbox to the board
-        UsersScrollPane.setContent(UsersHBox);
+        // display new user on the board
+        displayTeammate(name, colour.toString());
     }
 
 
-    /*
+    /**
      * Create a new user story: obtain all the information filled out by a user,
      * create a new userStory object that will get populated with that info.
      * Save that new userStory object to the stories array.
-     * Precond: all fields must be populated
-     * Postcond: stories array is modified
+     * @Precond: all fields must be populated
+     * @Postcond: stories array is modified
      * Displays a popUp when user does not provide all the info required
      */
     public void addUserStory() {
@@ -261,7 +273,6 @@ public class ScrumboardController {
             user.addUserStory(newStory);
         }
 
-
         switch (status) {
             case "Backlog" -> {
                 backlog.add(newStory);
@@ -280,16 +291,23 @@ public class ScrumboardController {
                 backlog.add(newStory);
             }
         }
+
+        // clear all fields in the new user story form
+        personaField.clear();
+        featureNameField.clear();
+        descriptionField.clear();
+        assignToComboBox.valueProperty().set(null);
+        statusComboBox.valueProperty().set(null);
+        priorityComboBox.valueProperty().set(null);
+
         // redraw the scrum board
-        updateBoard(newStory);
+        updateBoard();
     }
 
     /**
-     * Updates the scrum board by adding the new user story to the correct section
-     *
-     * @param newStory the new user story to be added to the scrum board
+     * Updates the scrum board
      */
-    public void updateBoard(UserStory newStory) {
+    public void updateBoard() {
 
         // create cases so that whole board updates
         String[] cases = { "Backlog", "To-do", "In progress", "Done" };
@@ -386,7 +404,7 @@ public class ScrumboardController {
 
             paneToUpdate.setContent(boxToUpdate);
 
-            //updateProgress();
+            // updateProgress();
         }
     }
 
@@ -431,16 +449,24 @@ public class ScrumboardController {
         map.put("inProgress", inProgress);
         map.put("done", done);
 
+        // allow a user to choose a file by themselves
+        Stage stageSave = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        // user can only save .dat files
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Dat files", "*.dat")
+        );
+        fileChooser.setTitle("Save the board file");
+        File saveFile = fileChooser.showSaveDialog(stageSave);
 
-        try{
-            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("ScrumBoardSaveFile.dat"));
+        try {
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(saveFile.getAbsolutePath()));
             output.writeObject(map);
             output.close();
         }
         catch (IOException ioe){
             System.out.println("error writing to file");
         }
-
     }
 
 
@@ -451,21 +477,52 @@ public class ScrumboardController {
     public void loadBoard() throws IOException {
         Map<String, ArrayList<?>> map = null;
 
-        try{
-            ObjectInputStream input = new ObjectInputStream(new FileInputStream("ScrumBoardSaveFile.dat"));
+        // allow a user to choose a file by themselves
+        Stage stageLoad = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        // user can only choose from .dat files
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Dat files", "*.dat")
+        );
+        fileChooser.setTitle("Choose the board to load");
+        File openedFile = fileChooser.showOpenDialog(stageLoad);
+        // TODO: there probably should be an initial directory to navigate from for convenience
+        //fileChooser.setInitialDirectory(new File("data"));
+
+        try {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream(openedFile.getAbsolutePath()));
             map = (Map<String, ArrayList<?>>) input.readObject();
         }
-        catch (IOException ioe){
+        catch (IOException ioe) {
             System.out.println("error reading from file");
         }
-        catch (ClassNotFoundException cnfe){
+        catch (ClassNotFoundException cnfe) {
             System.out.println("class not found");
         }
 
-        teammates = (ArrayList<User>) map.get("teammates");
+        // check if the map read from the file is null or not
+        if (map != null) {
+            // set main arrays to info read from the file
+            teammates = (ArrayList<User>) map.get("teammates");
+            backlog = (ArrayList<UserStory>) map.get("backlog");
+            toDo = (ArrayList<UserStory>) map.get("toDo");
+            inProgress = (ArrayList<UserStory>) map.get("inProgress");
+            done = (ArrayList<UserStory>) map.get("done");
 
-        for (User teammate : teammates) {
-            System.out.println(teammate);
+            // update the board to display the info read from the file regarding all the user stories
+            updateBoard();
+
+            // For cases when user clicks 'Load Board' more than once,
+            // clear the teammates HBoxand combo box before adding to them to avoid duplicates
+            UsersHBox.getChildren().clear();
+            assignToComboBox.getItems().clear();
+
+            // update the teammates section to display info read from the file regarding all the teammates
+            for (User teammate : teammates) {
+                displayTeammate(teammate.getName(), teammate.getColour());
+            }
+        } else {
+            System.out.println("Info was not read from the file");
         }
     }
 
@@ -510,7 +567,7 @@ public class ScrumboardController {
         for (UserStory task : incompleteStories) {
             task.setStatus("Backlog");
             backlog.add(task);
-            updateBoard(task);
+            updateBoard();
         }
 
         // add together points from done
@@ -526,5 +583,4 @@ public class ScrumboardController {
         // pass the points and sprint count to function to make graph
         // TODO write classes and functions to make burndown chart
     }
-
 }
