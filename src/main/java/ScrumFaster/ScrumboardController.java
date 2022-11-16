@@ -252,7 +252,6 @@ public class ScrumboardController implements Initializable {
 
         // add user story points to total points
         totalPoints += newStory.getPriority();
-        System.out.println(totalPoints);
 
         switch (status) {
             case "Backlog" -> {
@@ -555,8 +554,6 @@ public class ScrumboardController implements Initializable {
 
         // map ideal burndown to chart
         for (int i = 0; i <= decrement; i++) {
-            System.out.println("x: " + i + " y: " + (totalPoints - (i * averagePoints)));
-
             if (totalPoints - i * averagePoints >= 0) {
                 ideal.getData().add(new XYChart.Data(i, totalPoints - i * averagePoints));
             } else {
