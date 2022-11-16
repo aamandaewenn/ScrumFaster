@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -250,7 +251,8 @@ public class ScrumboardController implements Initializable {
         }
 
         // add user story points to total points
-        totalPoints += newStory.getPriority(); System.out.println(totalPoints);
+        totalPoints += newStory.getPriority();
+        System.out.println(totalPoints);
 
         switch (status) {
             case "Backlog" -> {
@@ -263,7 +265,8 @@ public class ScrumboardController implements Initializable {
                 inProgress.add(newStory);
             }
             case "Done" -> {
-                done.add(newStory); totalPointsCompleted += newStory.getPriority();
+                done.add(newStory);
+                totalPointsCompleted += newStory.getPriority();
             }
             default -> {
                 // if not specified, add to backlog
@@ -467,31 +470,28 @@ public class ScrumboardController implements Initializable {
 
     public void updateProgress() {
 
-        if (progress.doubleValue() < 1) {
-            // find total number of user stories in every section
-            Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
+        // find total number of user stories in every section
+        Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
 
-            // ratio of stories that are done to total number of stories
-            progress = new BigDecimal(String.format("%.2f", done.size() / (total_stories)));
-            myprogressbar.setProgress(progress.doubleValue());
+        // ratio of stories that are done to total number of stories
+        progress = new BigDecimal(String.format("%.2f", done.size() / (total_stories)));
+        myprogressbar.setProgress(progress.doubleValue());
 
-            // display the progress as a percentage
-            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
-        }
+        // display the progress as a percentage
+        progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
 
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         myprogressbar.setStyle("-fx-accent: blue;");
-
     }
 
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
-    // LineChart<Number, Number> burndownChart = new LineChart<Number, Number>(xAxis, yAxis);
-    // Scene scene = new Scene(burndownChart, 800, 600);
-    // final XYChart.Series ideal = new XYChart.Series();
-    final XYChart.Series actual = new XYChart.Series();
+    
+    // list of points of actual team velocity
+    // index will be x value, value will be y value
+    ArrayList<Integer> finalActual = new ArrayList<Integer>();
 
     public void goToNextSprint() {
 
@@ -509,81 +509,48 @@ public class ScrumboardController implements Initializable {
             updateBoard(task);
         }
 
-        // add together points from done
-        // int pointsCompleted = 0;
-        for (UserStory completedStory : done) {
-            // pointsCompleted = pointsCompleted + completedStory.getPriority();
-            totalPointsCompleted += completedStory.getPriority();
+        sprintNumber++; // keep count of how many sprints we have finished
+
+        // update the chart with the new sprint
+        if (finalActual.size() < sprintNumber) {
+            // add y value at x index if it does not exist
+            finalActual.add(totalPoints - totalPointsCompleted);
+        } else {
+            // otherwise, overwrite the value at the index
+            finalActual.set(sprintNumber - 1, totalPoints - totalPointsCompleted);
         }
-
-        // keep count of how many sprints we have finished
-        sprintNumber++;
-
-        actual.getData().add(new XYChart.Data(sprintNumber, totalPoints - totalPointsCompleted));
-
-        // pass the points and sprint count to function to update graph
-        // updateChart();
     }
-
-    /*
-     * Update the burndown chart after a sprint
-     * 
-     * @param pointsCompleted the number of points completed in the sprint
-     * 
-     * @param sprintNumber the number of sprints that have been completed
-     */
-//     public Scene updateChart() {
-        
-//         burndownChart.setTitle("Burndown Chart");
-//         xAxis.setLabel("Sprints Completed");
-//         yAxis.setLabel("Remaining Effort");
-//         // final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-
-//         ideal.setName("Ideal Burndown");
-//         actual.setName("Actual Burndown");
-// ;       
-//         Double averagePoints = Double.valueOf(totalPoints) / (backlog.size() + toDo.size() + inProgress.size() + done.size());
-//         Double decrement = totalPoints / averagePoints;
-
-//         // map ideal burndown to chart
-//         for (int i = 0; i <= decrement; i++) {
-//             ideal.getData().add(new XYChart.Data(i, totalPoints - decrement * i));
-//         }
-//         burndownChart.getData().addAll(ideal, actual);
-
-//         // XYChart.Series actual = new XYChart.Series();
-
-
-//         // // temporary hard coded data
-//         // sprintNumber = 5;
-//         // totalPointsCompleted = 10;
-//         // for (int i = 0; i <= sprintNumber; i++) {
-//         //     actual.getData().add(new XYChart.Data(i, totalPoints - totalPointsCompleted));
-//         // }
-
-//         burndownChart.getData().addAll(ideal, actual);
-//         return new Scene(burndownChart, 800, 600);
-//     }
 
     /*
      * This function is called when the user clicks on the "View Burndown" button.
      * It will open a new window with the burndown chart depicting team velocity.
      */
     public void BurndownChartWindow() throws IOException {
+
+        // draw the burndown chart
         LineChart<Number, Number> burndownChart = new LineChart<Number, Number>(xAxis, yAxis);
-        // clear burndown chart
         burndownChart.setTitle("Burndown Chart");
-        
+
         xAxis.setLabel("Sprints Completed");
         yAxis.setLabel("Remaining Effort");
 
+        // map ideal burndown to chart
         final XYChart.Series ideal = new XYChart.Series();
-        // final XYChart.Series actual = new XYChart.Series();
+        final XYChart.Series actual = new XYChart.Series();
 
         ideal.setName("Ideal Burndown");
         actual.setName("Actual Burndown");
-;       
-        Double averagePoints = Double.valueOf(totalPoints) / (backlog.size() + toDo.size() + inProgress.size() + done.size());
+
+        actual.getData().add(new XYChart.Data(0, totalPoints));
+        for (int i = 0; i < finalActual.size(); i++) {
+            // plot the effort remaining for each sprint prior to the current one
+            actual.getData().add(new XYChart.Data(i + 1, finalActual.get(i)));
+        }
+
+        // points will correspond to the number of sprints needed to complete the story
+        // calculate number of sprints needed to complete entire projet based on average story points
+        Double averagePoints = Double.valueOf(totalPoints)
+                / (backlog.size() + toDo.size() + inProgress.size() + done.size());
         Double decrement = totalPoints / averagePoints;
 
         // map ideal burndown to chart
@@ -598,20 +565,8 @@ public class ScrumboardController implements Initializable {
             }
         }
 
-        // XYChart.Series actual = new XYChart.Series();
-        // actual.setName("Actual Burndown");
-
-        // // temporary hard coded data
-        // sprintNumber = 5; totalPointsCompleted = 10;
-        // for (int i = 0; i <= sprintNumber; i++) {
-        // actual.getData().add(new XYChart.Data(i, totalPoints -
-        // totalPointsCompleted));
-        // }
-
         Scene scene = new Scene(burndownChart, 800, 600);
-        // burndownChart.getData().addAll(ideal, actual);
-        burndownChart.getData().clear();
-        burndownChart.getData().add(ideal);
+        burndownChart.getData().addAll(ideal, actual);
 
         Stage stage = new Stage();
         stage.setTitle("Burndown Chart");
