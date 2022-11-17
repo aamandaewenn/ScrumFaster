@@ -9,7 +9,6 @@ public class User implements Serializable {
     private String name;
     private String colour;
     // an id to access users based on and hash users
-    private int id;
 
     /**
      * Class constructor.
@@ -21,7 +20,6 @@ public class User implements Serializable {
         this.name = name;
         this.colour = colour;
         this.stories = new ArrayList<UserStory>();
-        this.id = this.name.hashCode();
     }
 
     // Getters and Setters.
@@ -43,10 +41,6 @@ public class User implements Serializable {
 
     public void setColour(String colour) {
         this.colour = colour;
-    }
-
-    public int getID(){
-        return this.id;
     }
 
     // Class methods
