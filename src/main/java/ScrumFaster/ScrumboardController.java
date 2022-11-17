@@ -1,9 +1,11 @@
 package ScrumFaster;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -96,6 +98,9 @@ public class ScrumboardController implements Initializable {
 
     @FXML
     private ProgressBar myprogressbar;
+
+    @FXML
+    private Label taskupdate;
 
     @FXML
     private Button nextSprintButton;
@@ -347,7 +352,8 @@ public class ScrumboardController implements Initializable {
 
                 newStoryBox.setMaxWidth(258);
 
-                TilePane seemore = new TilePane();
+                TilePane tilePane = new TilePane();
+
 
                 // put coloured bar on user story
                 String colour = listToIterate.get(i).getColour();
@@ -379,9 +385,32 @@ public class ScrumboardController implements Initializable {
 
                 Label priorityLabel = new Label("  " + listToIterate.get(i).getPriority());
 
+                //setting the edit and delete button
+                Button one= new Button("edit");
+                one.setPrefSize(50,50);
+                Button two=new Button("delete");
+                two.setPrefSize(60,50);
+
+                tilePane.setOrientation(Orientation.HORIZONTAL);
+
+                //Setting the alignment for the Tile Pane
+                tilePane.setTileAlignment(Pos.CENTER_LEFT);
+
+                //Setting the preferred columns for the Tile Pane
+                tilePane.setPrefRows(1);
+
+                //Retrieving the observable list of the Tile Pane
+                ObservableList list = tilePane.getChildren();
+
+                //Adding the array of buttons to the pane
+                list.addAll(one, two);
+
+
                 storyname.getChildren().add(priorityLabel);
                 newStoryBox.getChildren().add(storyname);
                 newStoryBox.getChildren().add(blankRec);
+                newStoryBox.getChildren().add(tilePane);
+
 
                 boxToUpdate.getChildren().add(newStoryBox);
 
@@ -471,7 +500,7 @@ public class ScrumboardController implements Initializable {
     // format the string to be %.2f, and the arguments will be the initial value we
     // will begin with
     // which is set t0 zero.
-    // another variable will be use to calulate the percent of work done over the
+    // another variable will be used to calculate the percent of work done over the
     // ones that are not complete.
 
     public void updateProgress() {
@@ -479,6 +508,7 @@ public class ScrumboardController implements Initializable {
         if (progress.doubleValue() < 1) {
             // find total number of user stories in every section
             Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
+            int total_storiesint=total_stories.intValue();
 
             // ratio of stories that are done to total number of stories
             progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
@@ -486,6 +516,9 @@ public class ScrumboardController implements Initializable {
 
             // display the progress as a percentage
             progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
+
+            //display ratio of task done to that not done.
+            taskupdate.setText(done.size() +" / "+ total_storiesint+" "+"Tasks Completed");
         }
 
     }

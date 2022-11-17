@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="1460.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScrumFaster.ScrumboardController">
    <children>
       <Button fx:id="SaveBoardButton" layoutX="1154.0" layoutY="694.0" mnemonicParsing="false" onAction="#saveBoard" prefHeight="42.0" prefWidth="125.0" text="Save Board">
          <font>
@@ -96,22 +96,13 @@
          </children>
       </AnchorPane>
       <VBox layoutX="505.0" layoutY="20.0" prefHeight="77.0" prefWidth="5.0" style="-fx-background-color: #4e5bbf;" />
-      <Pane layoutX="1154.0" layoutY="195.0" prefHeight="60.0" prefWidth="270.0" style="-fx-background-color: grey;">
+      <Pane layoutX="1154.0" layoutY="209.0" prefHeight="60.0" prefWidth="270.0" style="-fx-background-color: #4e5bbf;">
          <children>
             <Text fill="#ffffffc7" layoutX="15.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="CREATE USER STORY" textAlignment="CENTER">
                <font>
                   <Font name="Arial" size="22.0" />
                </font>
             </Text>
-         </children>
-      </Pane>
-      <Pane layoutX="1154.0" layoutY="120.0" prefHeight="60.0" prefWidth="283.0">
-         <children>
-            <Label layoutX="26.0" layoutY="33.0" text="0 / 0 Tasks Completed" textAlignment="CENTER">
-               <font>
-                  <Font name="Arial Bold" size="22.0" />
-               </font>
-            </Label>
          </children>
       </Pane>
       <Pane layoutX="1154.0" layoutY="269.0" prefHeight="339.0" prefWidth="270.0" style="-fx-background-color: white;">
@@ -163,12 +154,10 @@
       <VBox alignment="CENTER" layoutX="1137.0" prefHeight="138.0" prefWidth="321.0" spacing="10.0">
          <children>
             <TextField fx:id="UsersTextBox" promptText="Team Member Name" />
-            <Label fx:id="UsersTaskColourLabel" text="Task Colour">
-               <font>
-                  <Font name="Arial Bold Italic" size="12.0" />
-               </font>
-            </Label>
-            <ColorPicker fx:id="UsersColourPicker" />
+            <ColorPicker fx:id="UsersColourPicker">
+               <VBox.margin>
+                  <Insets right="200.0" />
+               </VBox.margin></ColorPicker>
             <Button fx:id="AddNewTeammateButton" mnemonicParsing="false" onAction="#newTeamMate" prefHeight="20.0" prefWidth="162.0" text="Add Team Member">
                <font>
                   <Font name="Arial Bold" size="14.0" />
@@ -179,8 +168,8 @@
             <Insets top="10.0" />
          </padding>
       </VBox>
-      <ProgressBar fx:id="myprogressbar" layoutX="1178.0" layoutY="642.0" prefHeight="30.0" prefWidth="231.0" progress="0.0" />
-      <Label fx:id="progresslabel" layoutX="1275.0" layoutY="625.0" text="Label" />
+      <ProgressBar fx:id="myprogressbar" layoutX="1182.0" layoutY="633.0" prefHeight="30.0" prefWidth="231.0" progress="0.0" />
+      <Label fx:id="progresslabel" layoutX="1275.0" layoutY="616.0" text="Label" />
       <Button fx:id="LoadBoardButton" layoutX="1289.0" layoutY="694.0" mnemonicParsing="false" onAction="#loadBoard" prefHeight="42.0" prefWidth="125.0" text="Load Board">
          <font>
             <Font name="Arial Bold" size="14.0" />
@@ -196,5 +185,14 @@
             <Font name="Arial Bold" size="14.0" />
          </font>
       </Button>
+      <Pane layoutX="1223.0" layoutY="663.0" prefHeight="17.0" prefWidth="121.0">
+         <children>
+            <Label fx:id="taskupdate" layoutX="-36.0" layoutY="2.0" text="0 / 0 Tasks Completed" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
