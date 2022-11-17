@@ -88,7 +88,8 @@ public class User implements Serializable {
 
         User user = (User) other;
         // all attributes must be equal
-        if (this.name.equals(user.getName()) && this.colour.equals(user.getColour()) && this.stories.size() == user.getStories().size()) {
+        if (this.name.equals(user.getName()) && this.colour.equals(user.getColour())
+                && this.stories.size() == user.getStories().size()) {
             // check that user stories assigned to this user are equal
             for (int i = 0; i < this.stories.size(); i++) {
                 if (!this.getStories().get(i).equals(user.getStories().get(i))) {

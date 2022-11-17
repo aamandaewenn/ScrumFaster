@@ -102,7 +102,7 @@ public class TestUserStory {
         } else {
             System.out.println("Error: User story not created");
         }
-        
+
         tests++;
         // check that user story was added to user
         if (user1.getStories().size() == 2) {

@@ -8,6 +8,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -67,10 +71,8 @@ public class ScrumboardController {
 
     @FXML
     private TextField UsersTextBox;
-
     @FXML
     private ColorPicker UsersColourPicker;
-
     @FXML
     private ScrollPane UsersScrollPane;
 
@@ -94,7 +96,6 @@ public class ScrumboardController {
 
     @FXML
     private Label progresslabel;
-
     @FXML
     private ProgressBar myprogressbar;
 
@@ -117,36 +118,23 @@ public class ScrumboardController {
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
 
-    // Priority queues for each section displayed in the board
+    // List of stories for each section displayed in the board
     ArrayList<UserStory> backlog = new ArrayList<UserStory>();
     ArrayList<UserStory> toDo = new ArrayList<UserStory>();
     ArrayList<UserStory> inProgress = new ArrayList<UserStory>();
     ArrayList<UserStory> done = new ArrayList<UserStory>();
 
+    // List of all users in the system
     private static HBox UsersHBox = new HBox();
 
-    // the number of sprints we have finished
+    // number of sprints completed
     private static int sprintNumber = 0;
 
-    // public void UserStoryWindow() throws IOException {
-    // FXMLLoader fxmlLoader = new
-    // FXMLLoader(getClass().getResource("CreateUserStory.fxml"));
-    // Parent root = fxmlLoader.load();
-    // Scene scene = new Scene(root, 320, 240);
-    // Stage stage = new Stage();
-    // stage.setTitle("Create New User Story");
-    // stage.setHeight(450);
-    // stage.setWidth(450);
-    // stage.setScene(scene);
-    // stage.showAndWait();
-    //
-    // }
+    // total points of all stories
+    private static int totalPoints = 0;
 
-    // private User addUser(String name, String colour) {
-    // User user = new User(name, colour);
-    // teammates.add(user);
-    // return user;
-    // }
+    // total points of of stories in the done section
+    private static int totalPointsCompleted = 0;
 
     /**
      * Displays the passed user object on the board as an icon and adds the name to the combo box
@@ -286,6 +274,15 @@ public class ScrumboardController {
             user.addUserStory(newStory);
         }
 
+        // add user story points to total points
+        totalPoints += newStory.getPriority();
+
+        // scale finalActual points to match new total
+        for (int i = 0; i < finalActual.size(); i++) {
+            finalActual.set(i, finalActual.get(i) + newStory.getPriority());
+        }
+
+        // add new story to the correct list
         switch (status) {
             case "Backlog" -> {
                 backlog.add(newStory);
@@ -298,6 +295,7 @@ public class ScrumboardController {
             }
             case "Done" -> {
                 done.add(newStory);
+                totalPointsCompleted += newStory.getPriority();
             }
             default -> {
                 // if not specified, add to backlog
@@ -468,15 +466,14 @@ public class ScrumboardController {
             ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(saveFile.getAbsolutePath()));
             output.writeObject(map);
             output.close();
-        }
-        catch (IOException ioe){
+        } catch (IOException ioe) {
             System.out.println("error writing to file");
         }
     }
 
-
     /**
      * Action listener for button that loads a save file and updates the board.
+     *
      * @throws IOException if fxml file not found
      */
     public void loadBoard() throws IOException {
@@ -531,20 +528,40 @@ public class ScrumboardController {
         }
     }
 
+    // we could use the BigDecimal class because it gives the user complete control
+    // over rounding behaviour.
+    //BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+                                                                      // could pass in a format string.
+    // format the string to be %.2f, and the arguments will be the initial value we
+    // will begin with
+    // which is set t0 zero.
+    // another variable will be use to calulate the percent of work done over the
+    // ones that are not complete.
 
     public void updateProgress() {
 
-        if (progress.doubleValue() < 1) {
-            // find total number of user stories in every section
-            Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
+        // find total number of user stories in every section
+        Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
 
-            // ratio of stories that are done to total number of stories
-            progress = new BigDecimal(String.format("%.2f", done.size()/(total_stories)));
-            myprogressbar.setProgress(progress.doubleValue());
+        // ratio of stories that are done to total number of stories
+        progress = new BigDecimal(String.format("%.2f", done.size() / (total_stories)));
+        myprogressbar.setProgress(progress.doubleValue());
 
-            // display the progress as a percentage
-            progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
-        }
+        // display the progress as a percentage
+        progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
+
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        myprogressbar.setStyle("-fx-accent: blue;");
+    }
+
+    final NumberAxis xAxis = new NumberAxis();
+    final NumberAxis yAxis = new NumberAxis();
+
+    // list of points of actual team velocity
+    // index will be x value, value will be y value
+    ArrayList<Integer> finalActual = new ArrayList<Integer>();
 
     }
 
@@ -572,8 +589,10 @@ public class ScrumboardController {
         ArrayList<UserStory> incompleteStories = new ArrayList<>();
 
         // move all incomplete stories to the backlog
-        incompleteStories.addAll(toDo); toDo.clear();
-        incompleteStories.addAll(inProgress); inProgress.clear();
+        incompleteStories.addAll(toDo);
+        toDo.clear();
+        incompleteStories.addAll(inProgress);
+        inProgress.clear();
 
         for (UserStory task : incompleteStories) {
             task.setStatus("Backlog");
@@ -581,26 +600,63 @@ public class ScrumboardController {
             updateBoard();
         }
 
-        // add together points from done
-        int pointsCompleted = 0;
-        for (UserStory completedStory : done) {
-            pointsCompleted = pointsCompleted + completedStory.getPriority();
+        sprintNumber++; // keep count of how many sprints we have finished
+
+        // update the chart with the new sprint
+        if (finalActual.size() < sprintNumber) {
+            // add y value at x index if it does not exist
+            finalActual.add(totalPoints - totalPointsCompleted);
+        } else {
+            // otherwise, overwrite the value at the index
+            finalActual.set(sprintNumber - 1, totalPoints - totalPointsCompleted);
         }
-        System.out.println(pointsCompleted);
-
-        // keep count of how many sprints we have finished
-        sprintNumber++;
-
-        // pass the points and sprint count to function to make graph
-        // TODO write classes and functions to make burndown chart
     }
 
-     public void BurndownChartWindow() throws IOException {
-        // TODO chi put the name of the burndown fxml file in here and then uncomment this
-         /*
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(""));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 320, 240);
+    /*
+     * This function is called when the user clicks on the "View Burndown" button.
+     * It will open a new window with the burndown chart depicting team velocity.
+     */
+    public void BurndownChartWindow() throws IOException {
+
+        // draw the burndown chart
+        LineChart<Number, Number> burndownChart = new LineChart<Number, Number>(xAxis, yAxis);
+        burndownChart.setTitle("Burndown Chart");
+
+        xAxis.setLabel("Sprints Completed");
+        yAxis.setLabel("Remaining Effort");
+
+        // map ideal burndown to chart
+        final XYChart.Series ideal = new XYChart.Series();
+        final XYChart.Series actual = new XYChart.Series();
+
+        ideal.setName("Ideal Burndown");
+        actual.setName("Actual Burndown");
+
+        actual.getData().add(new XYChart.Data(0, totalPoints));
+        for (int i = 0; i < finalActual.size(); i++) {
+            // plot the effort remaining for each sprint prior to the current one
+            actual.getData().add(new XYChart.Data(i + 1, finalActual.get(i)));
+        }
+
+        // points will correspond to the number of sprints needed to complete the story
+        // calculate number of sprints needed to complete entire projet based on average story points
+        Double averagePoints = Double.valueOf(totalPoints)
+                / (backlog.size() + toDo.size() + inProgress.size() + done.size());
+        Double decrement = totalPoints / averagePoints;
+
+        // map ideal burndown to chart
+        for (int i = 0; i <= decrement; i++) {
+            if (totalPoints - i * averagePoints >= 0) {
+                ideal.getData().add(new XYChart.Data(i, totalPoints - i * averagePoints));
+            } else {
+                ideal.getData().add(new XYChart.Data(i, 0));
+                break;
+            }
+        }
+
+        Scene scene = new Scene(burndownChart, 800, 600);
+        burndownChart.getData().addAll(ideal, actual);
+
         Stage stage = new Stage();
         stage.setTitle("Burndown Chart");
         stage.setHeight(450);
