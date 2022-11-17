@@ -45,7 +45,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ScrumboardController {
+public class ScrumboardController implements Initializable {
     @FXML
     private Button AddNewUserStoryButton;
     @FXML
@@ -178,10 +178,11 @@ public class ScrumboardController {
         Paint colour = UsersColourPicker.getValue();
 
         // if name is not entered, create team mate called "TeamMate #"
-        if (name.equals("")) {
+        if (name.equals("") || name.equals("No User Assigned")) {
             int TeammateNumber = ScrumboardController.teammates.size() + 1;
             name = "TeamMate " + TeammateNumber;
         }
+
 
         // if colour is white don't create a new teammate and inform user
         if (colour.toString().equals("0xffffffff")) {
@@ -190,11 +191,19 @@ public class ScrumboardController {
             return;
         }
 
-        // if colour is already chosen for another teammate, do not create teammate and
-        // inform user
         for (User teamMate : ScrumboardController.teammates) {
+            // if colour is already chosen for another teammate, do not create teammate and
+            // inform user
             if (teamMate.getColour().equals(colour.toString())) {
                 Popup DuplicatePopup = new Popup("Cannot have same colour as another user");
+                DuplicatePopup.displayPopup();
+                return;
+            }
+            if (teamMate.getName().equals(name))
+            {
+                String popupMessage = "Cannot have users with same name. You could try ";
+                popupMessage =  popupMessage.concat(name).concat("2 instead");
+                Popup DuplicatePopup = new Popup(popupMessage);
                 DuplicatePopup.displayPopup();
                 return;
             }
@@ -552,9 +561,6 @@ public class ScrumboardController {
 
     }
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        myprogressbar.setStyle("-fx-accent: blue;");
-    }
 
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
@@ -563,7 +569,6 @@ public class ScrumboardController {
     // index will be x value, value will be y value
     ArrayList<Integer> finalActual = new ArrayList<Integer>();
 
-    }
 
     /**
      * Initialize the scrumBoard progress bar and assign to user combo box
@@ -575,7 +580,7 @@ public class ScrumboardController {
         myprogressbar.setStyle("-fx-accent: blue;");
 
         // add no user option to assign to user combo box
-        assignToComboBox.getItems().add("");
+        assignToComboBox.getItems().add("No User Assigned");
 
     }
 
@@ -663,6 +668,6 @@ public class ScrumboardController {
         stage.setWidth(450);
         stage.setScene(scene);
         stage.showAndWait();
-          */
+
     }
 }
