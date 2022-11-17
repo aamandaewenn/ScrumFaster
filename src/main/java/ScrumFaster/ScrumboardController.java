@@ -104,6 +104,16 @@ public class ScrumboardController {
     @FXML
     private Button viewBurndownButton;
 
+    // we could use the BigDecimal class because it gives the user complete control
+    // over rounding behaviour.
+    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+    // could pass in a format string.
+    // format the string to be %.2f, and the arguments will be the initial value we
+    // will begin with
+    // which is set t0 zero.
+    // another variable will be use to calulate the percent of work done over the
+    // ones that are not complete.
+
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
 
@@ -521,15 +531,6 @@ public class ScrumboardController {
         }
     }
 
-    // we could use the BigDecimal class because it gives the user complete control
-    // over rounding behaviour.
-    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
-                                                                      // could pass in a format string.
-    // format the string to be %.2f, and the arguments will be the initial value we
-    // will begin with
-    // which is set t0 zero.
-    // another variable will be use to calulate the percent of work done over the
-    // ones that are not complete.
 
     public void updateProgress() {
 
