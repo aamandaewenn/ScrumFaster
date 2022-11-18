@@ -59,6 +59,11 @@ public class UserStory implements Serializable, Comparable<UserStory> {
         return this.colour;
     }
 
+    public void setColour(String colour)
+    {
+        this.colour = colour;
+    }
+
     public int getPriority() {
         return priority;
     }

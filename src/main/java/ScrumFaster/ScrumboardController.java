@@ -370,17 +370,6 @@ public class ScrumboardController {
                 TitledPane seeMorePane = new TitledPane();
                 newStoryBox.setMaxWidth(258);
 
-                //create two buttons for editing and deleting
-                Button editButton= new Button("edit");
-                editButton.setPrefSize(50,50);
-                Button deleteButton= new Button("delete");
-                deleteButton.setPrefSize(60,50);
-                deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        deleteStory(currentStory);
-                    }
-                });
 
                 // create drop down menus for editing the stories
                 ComboBox<String> asigneeChoice = new ComboBox<>();
@@ -391,6 +380,25 @@ public class ScrumboardController {
                 ComboBox<String> statusChoice = new ComboBox<>();
                 String[] statuses = { "Backlog)", "To-do", "In progress", "Done" };
                 statusChoice.getItems().addAll(statuses);
+
+                //create two buttons for editing and deleting
+                Button editButton= new Button("edit");
+                editButton.setPrefSize(50,50);
+                editButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        editStory(currentStory,asigneeChoice.getValue(), priorityChoice.getValue(), statusChoice.getValue() );
+                    }
+                });
+                Button deleteButton= new Button("delete");
+                deleteButton.setPrefSize(60,50);
+                deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        deleteStory(currentStory);
+                    }
+                });
+
 
                 // create pane to put inside see more
                 Pane droppedDownPane = new Pane();
@@ -724,6 +732,93 @@ public class ScrumboardController {
         else if (status.equals("Done"))
             this.done.remove(story);
 
+        updateBoard();
+    }
+
+    /**
+     * Change the attributes of a user story when edit is selected
+     * @param story the story to be edited
+     * @param user a user to assign the story to (can be null if no change wanted)
+     * @param priority the new priority you want the story to be (can be null if no change wanted)
+     * @param status the new status you want the story to have (can be null if no change wanted)
+     * @precondition story is on board and edit button is selected
+     * @postcondition: story attributes change, board updates, user's stories may change if reassigning,
+     * status list may change if moving story around board, burndown chart may change if changing priority
+     */
+    protected void editStory(UserStory story, String user, String priority, String status) {
+        // change status
+        if ((status != null)) {
+            if (!status.equals(story.getStatus())) {
+                // remove from old status list
+                String oldStatus = story.getStatus();
+                if (oldStatus.equals("Backlog")) {
+                    this.backlog.remove(story);
+                } else if (oldStatus.equals("To-do"))
+                    this.toDo.remove(story);
+                else if (oldStatus.equals("In progress"))
+                    this.inProgress.remove(story);
+                else if (oldStatus.equals("Done"))
+                    this.done.remove(story);
+                // add to new status list
+                story.setStatus(status);
+                if (status.equals("Backlog")) {
+                    this.backlog.add(story);
+                } else if (status.equals("To-do"))
+                    this.toDo.add(story);
+                else if (status.equals("In progress"))
+                    this.inProgress.add(story);
+                else if (status.equals("Done"))
+                    this.done.add(story);
+            }
+        }
+
+        // change priority
+        if (priority != null) {
+            System.out.println("change in priority");
+            int newPriority = Integer.parseInt(priority);
+            if (newPriority != story.getPriority()) {
+                story.setPriority(newPriority);
+                // possibly update burndown values here not sure?
+            }
+        }
+        // change user
+        if (user != null) {
+            // find user that was selected
+            User newUser = null;
+            for (User u : teammates) {
+                if (u.getName().equals(user)) {
+                    newUser = u;
+                }
+            }
+            User oldUser = story.getUser();
+            if (newUser == null || oldUser == null) {
+                if (oldUser != null) {
+                    try {
+                        oldUser.removeUserStory(story);
+                        // we now know that newUser is null so just set attribute to null
+                        story.setUser(null);
+                        story.setColour("White");
+                    } catch (Exception e) {
+                        // this should never happen as we check if user is null before removing
+                    }
+                }
+                else if (newUser != null){
+                    // oldUser is null, new user is not
+                    newUser.addUserStory(story);
+                    story.setColour(newUser.getColour());
+                }
+                // if both are null, nothing to change
+            } else if (!(newUser.equals(oldUser))) {
+                try {
+                    oldUser.removeUserStory(story);
+                } catch (Exception e) {
+                    // we have already checked if user is null so this never happens
+                }
+                newUser.addUserStory(story);
+                story.setUser(newUser);
+                story.setColour(newUser.getColour());
+            }
+        }
         updateBoard();
     }
 }
