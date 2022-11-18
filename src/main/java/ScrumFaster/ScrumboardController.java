@@ -360,6 +360,7 @@ public class ScrumboardController {
 
             // redraw the board by adding all the user stories in sorted order
             for (int i = listToIterate.size() - 1; i >= 0; i--) {
+                UserStory currentStory = listToIterate.get(i);
                 // iterate through the list of user stories in reverse order
                 // so that the highest priority is at the top
                 VBox newStoryBox = new VBox();
@@ -374,6 +375,12 @@ public class ScrumboardController {
                 editButton.setPrefSize(50,50);
                 Button deleteButton= new Button("delete");
                 deleteButton.setPrefSize(60,50);
+                deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        deleteStory(currentStory);
+                    }
+                });
 
                 // create drop down menus for editing the stories
                 ComboBox<String> asigneeChoice = new ComboBox<>();
@@ -685,5 +692,38 @@ public class ScrumboardController {
         stage.setWidth(450);
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+    /**
+     * Delete a user story from the board
+     * @precondition the story must exist and be assigned a status
+     * @postcondition: story icon is removed from board, if assigned to user it is removed from user's list of stories
+     * @postcondition:  and is removed from its corresponding status' list
+     * @param story the story you wish to delete
+     */
+    protected void deleteStory(UserStory story)
+    {
+        // remove from user
+        User user = story.getUser();
+        try {
+            user.removeUserStory(story);
+        }
+        catch (Exception e)
+        {
+            // user story is not assigned to a user, do nothing
+        }
+        // from list"Backlog", "To-do", "In progress", "Done"
+        String status = story.getStatus();
+        if (status.equals("Backlog")) {
+            this.backlog.remove(story);
+        }
+        else if (status.equals("To-do"))
+            this.toDo.remove(story);
+        else if (status.equals("In progress"))
+            this.inProgress.remove(story);
+        else if (status.equals("Done"))
+            this.done.remove(story);
+
+        updateBoard();
     }
 }
