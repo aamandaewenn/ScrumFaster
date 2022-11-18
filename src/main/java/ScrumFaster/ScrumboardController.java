@@ -769,8 +769,13 @@ public class ScrumboardController implements Initializable {
             this.toDo.remove(story);
         else if (status.equals("In progress"))
             this.inProgress.remove(story);
-        else if (status.equals("Done"))
+        else if (status.equals("Done")) {
             this.done.remove(story);
+            totalPointsCompleted = totalPointsCompleted - story.getPriority();
+        }
+
+
+        totalPoints = totalPoints - story.getPriority();
 
         updateBoard();
     }
@@ -786,6 +791,24 @@ public class ScrumboardController implements Initializable {
      * status list may change if moving story around board, burndown chart may change if changing priority
      */
     protected void editStory(UserStory story, String user, String priority, String status) {
+
+        // change priority
+        if (priority != null) {
+            int oldPriority = story.getPriority();
+            int newPriority = Integer.parseInt(priority);
+            if (newPriority != story.getPriority()) {
+                story.setPriority(newPriority);
+                //update priority values for burndown
+                totalPoints = totalPoints - oldPriority;
+                totalPoints = totalPoints + newPriority;
+                if (story.getStatus().equals("Done"))
+                {
+                    totalPointsCompleted = totalPointsCompleted - oldPriority;
+                    totalPointsCompleted = totalPointsCompleted + newPriority;
+                }
+
+            }
+        }
         // change status
         if ((status != null)) {
             if (!status.equals(story.getStatus())) {
@@ -797,8 +820,11 @@ public class ScrumboardController implements Initializable {
                     this.toDo.remove(story);
                 else if (oldStatus.equals("In progress"))
                     this.inProgress.remove(story);
-                else if (oldStatus.equals("Done"))
+                else if (oldStatus.equals("Done")) {
                     this.done.remove(story);
+                    totalPointsCompleted = totalPointsCompleted - story.getPriority();
+                }
+
                 // add to new status list
                 story.setStatus(status);
                 if (status.equals("Backlog")) {
@@ -807,20 +833,13 @@ public class ScrumboardController implements Initializable {
                     this.toDo.add(story);
                 else if (status.equals("In progress"))
                     this.inProgress.add(story);
-                else if (status.equals("Done"))
+                else if (status.equals("Done")) {
                     this.done.add(story);
+                    totalPointsCompleted = totalPointsCompleted + story.getPriority();
+                }
             }
         }
 
-        // change priority
-        if (priority != null) {
-            System.out.println("change in priority");
-            int newPriority = Integer.parseInt(priority);
-            if (newPriority != story.getPriority()) {
-                story.setPriority(newPriority);
-                // possibly update burndown values here not sure?
-            }
-        }
         // change user
         if (user != null) {
             // find user that was selected
