@@ -1,9 +1,11 @@
 package ScrumFaster;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -32,9 +34,6 @@ import java.net.URL;
 import java.nio.channels.Pipe;
 import java.util.*;
 
-import static java.util.Collections.list;
-import static java.util.Collections.sort;
-
 ///////////////////////////importing files for the progress bar///////////////////////////
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -44,6 +43,8 @@ import javafx.scene.control.ProgressBar;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static java.util.Collections.*;
 
 public class ScrumboardController implements Initializable {
     @FXML
@@ -98,6 +99,9 @@ public class ScrumboardController implements Initializable {
     private Label progresslabel;
     @FXML
     private ProgressBar myprogressbar;
+
+    @FXML
+    private Label taskupdate;
 
     @FXML
     private Button nextSprintButton;
@@ -379,10 +383,30 @@ public class ScrumboardController implements Initializable {
                 Pane colorpane = new Pane();
                 Pane blankSpacePane = new Pane();
                 HBox storyname = new HBox();
-
+                TilePane tilePane = new TilePane();
                 newStoryBox.setMaxWidth(258);
 
-                TilePane seemore = new TilePane();
+                //create two buttons for editing and deleting
+                Button one= new Button("edit");
+                one.setPrefSize(50,50);
+                Button two= new Button("delete");
+                two.setPrefSize(60,50);
+
+                //set the orientation of the tile pane
+                tilePane.setOrientation(Orientation.HORIZONTAL);
+
+                //setting alignment for the tile pane
+                tilePane.setAlignment(Pos.CENTER_LEFT);
+
+                //setting the preferred columns for the tile pane
+                tilePane.setPrefRows(1);
+
+                //Retrieving the observable list of the Tile Pane
+                ObservableList list = tilePane.getChildren();
+
+                //Adding the array of buttons to the pane
+                list.addAll(one, two);
+
 
                 // put coloured bar on user story
                 String colour = listToIterate.get(i).getColour();
@@ -417,6 +441,7 @@ public class ScrumboardController implements Initializable {
                 storyname.getChildren().add(priorityLabel);
                 newStoryBox.getChildren().add(storyname);
                 newStoryBox.getChildren().add(blankRec);
+                newStoryBox.getChildren().add(tilePane);
 
                 boxToUpdate.getChildren().add(newStoryBox);
 
@@ -482,7 +507,7 @@ public class ScrumboardController implements Initializable {
 
     /**
      * Action listener for button that loads a save file and updates the board.
-     *
+     * 
      * @throws IOException if fxml file not found
      */
     public void loadBoard() throws IOException {
@@ -549,15 +574,14 @@ public class ScrumboardController implements Initializable {
 
     public void updateProgress() {
 
-        // find total number of user stories in every section
-        Double total_stories = Double.valueOf(backlog.size() + toDo.size() + inProgress.size() + done.size());
-
-        // ratio of stories that are done to total number of stories
-        progress = new BigDecimal(String.format("%.2f", done.size() / (total_stories)));
-        myprogressbar.setProgress(progress.doubleValue());
+        double progress = Double.valueOf(totalPointsCompleted)/totalPoints;
+        myprogressbar.setProgress(progress);
 
         // display the progress as a percentage
-        progresslabel.setText(Integer.toString((int) Math.round(progress.doubleValue() * 100)) + "%");
+        progresslabel.setText(Integer.toString((int) Math.round(progress * 100)) + "%");
+
+        //display how many points are done over the total number of points
+        taskupdate.setText(totalPointsCompleted+" / "+totalPoints+" "+"Points Completed.");
 
     }
 
