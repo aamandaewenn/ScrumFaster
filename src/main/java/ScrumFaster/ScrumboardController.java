@@ -221,6 +221,9 @@ public class ScrumboardController implements Initializable {
 
         // display new user on the board
         displayTeammate(name, colour.toString());
+
+        //update board so that combo box of all user stories is updated
+        updateBoard();
     }
 
 
@@ -383,29 +386,58 @@ public class ScrumboardController implements Initializable {
                 Pane colorpane = new Pane();
                 Pane blankSpacePane = new Pane();
                 HBox storyname = new HBox();
-                TilePane tilePane = new TilePane();
+                TitledPane seeMorePane = new TitledPane();
                 newStoryBox.setMaxWidth(258);
 
                 //create two buttons for editing and deleting
-                Button one= new Button("edit");
-                one.setPrefSize(50,50);
-                Button two= new Button("delete");
-                two.setPrefSize(60,50);
+                Button editButton= new Button("edit");
+                editButton.setPrefSize(50,50);
+                Button deleteButton= new Button("delete");
+                deleteButton.setPrefSize(60,50);
 
-                //set the orientation of the tile pane
-                tilePane.setOrientation(Orientation.HORIZONTAL);
+                // create drop down menus for editing the stories
+                ComboBox<String> asigneeChoice = new ComboBox<>();
+                asigneeChoice.getItems().addAll(this.assignToComboBox.getItems());
+                ComboBox<String> priorityChoice = new ComboBox<>();
+                String[] priorities = { "1", "2", "3", "4", "5" };
+                priorityChoice.getItems().addAll(priorities);
+                ComboBox<String> statusChoice = new ComboBox<>();
+                String[] statuses = { "Backlog)", "To-do", "In progress", "Done" };
+                statusChoice.getItems().addAll(statuses);
 
-                //setting alignment for the tile pane
-                tilePane.setAlignment(Pos.CENTER_LEFT);
+                // create pane to put inside see more
+                Pane droppedDownPane = new Pane();
+                //construct items to put on pane
+                HBox assigneeRow = new HBox();
+                Label changeUserLabel = new Label("Select User");
+                assigneeRow.getChildren().add(changeUserLabel);
+                assigneeRow.getChildren().add(asigneeChoice);
 
-                //setting the preferred columns for the tile pane
-                tilePane.setPrefRows(1);
+                HBox priorityRow = new HBox();
+                Label changePriorityLabel = new Label("Select Priority");
+                priorityRow.getChildren().add(changePriorityLabel);
+                priorityRow.getChildren().add(priorityChoice);
 
-                //Retrieving the observable list of the Tile Pane
-                ObservableList list = tilePane.getChildren();
+                HBox statusRow = new HBox();
+                Label changeStatusLabel = new Label("Select Status");
+                statusRow.getChildren().add(changeStatusLabel);
+                statusRow.getChildren().add(statusChoice);
 
-                //Adding the array of buttons to the pane
-                list.addAll(one, two);
+
+                HBox buttonRow = new HBox();
+                buttonRow.getChildren().add(editButton);
+                buttonRow.getChildren().add(deleteButton);
+
+                VBox rows = new VBox();
+                rows.getChildren().add(assigneeRow);
+                rows.getChildren().add(priorityRow);
+                rows.getChildren().add(statusRow);
+                rows.getChildren().add(buttonRow);
+
+                // add all content to the edit story drop down
+                seeMorePane.setContent(rows);
+                seeMorePane.setText("Edit Story");
+                seeMorePane.setExpanded(false);
 
 
                 // put coloured bar on user story
@@ -441,7 +473,7 @@ public class ScrumboardController implements Initializable {
                 storyname.getChildren().add(priorityLabel);
                 newStoryBox.getChildren().add(storyname);
                 newStoryBox.getChildren().add(blankRec);
-                newStoryBox.getChildren().add(tilePane);
+                newStoryBox.getChildren().add(seeMorePane);
 
                 boxToUpdate.getChildren().add(newStoryBox);
 
