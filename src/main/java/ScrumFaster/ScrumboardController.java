@@ -394,7 +394,7 @@ public class ScrumboardController implements Initializable {
                 String[] statuses = { "Backlog", "To-do", "In progress", "Done" };
                 statusChoice.getItems().addAll(statuses);
 
-                //create two buttons for editing and deleting
+                // create two buttons for editing and deleting
                 Button editButton= new Button("Save");
                 editButton.setPrefSize(50,50);
                 editButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -617,9 +617,6 @@ public class ScrumboardController implements Initializable {
         taskupdate.setText(totalPointsCompleted+ " / " + totalPoints + " Points Completed.");
     }
 
-    final NumberAxis xAxis = new NumberAxis();
-    final NumberAxis yAxis = new NumberAxis();
-
     // list of points of actual team velocity
     // index will be x value, value will be y value
     ArrayList<Integer> finalActual = new ArrayList<Integer>();
@@ -745,23 +742,20 @@ public class ScrumboardController implements Initializable {
      */
     protected void editStory(UserStory story, String user, String priority, String status) {
 
-        // change priority
+        // update priority by difference between old and new priority
         if (priority != null) {
-            int oldPriority = story.getPriority();
-            int newPriority = Integer.parseInt(priority);
-            if (newPriority != story.getPriority()) {
-                story.setPriority(newPriority);
-                //update priority values for burndown
-                totalPoints = totalPoints - oldPriority;
-                totalPoints = totalPoints + newPriority;
-                if (story.getStatus().equals("Done"))
-                {
-                    totalPointsCompleted = totalPointsCompleted - oldPriority;
-                    totalPointsCompleted = totalPointsCompleted + newPriority;
-                }
-
+            totalPoints = totalPoints - (story.getPriority() - Integer.parseInt(priority));
+            if (story.getStatus().equals("Done"))
+            {
+                totalPointsCompleted = totalPointsCompleted - (story.getPriority() - Integer.parseInt(priority));
             }
+
+        } else {
+            Popup unfilledPopup = new Popup("Please fill in all required fields");
+            unfilledPopup.displayPopup();
+            return;
         }
+        
         // change status
         if ((status != null)) {
             if (!status.equals(story.getStatus())) {

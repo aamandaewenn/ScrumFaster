@@ -27,7 +27,6 @@ public class BurndownChart {
         xAxis.setLabel("Sprints Completed");
         yAxis.setLabel("Remaining Effort");
 
-
         ideal.setName("Ideal Burndown");
         actual.setName("Actual Burndown");
     }

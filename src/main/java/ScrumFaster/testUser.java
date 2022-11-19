@@ -215,8 +215,7 @@ public class testUser {
             System.out.println("Error: failed to compare user to non-user object");
         }
 
-        // compare two users that are different: two user objects with different
-        // attributes
+        // compare two users that are different: two user objects with different attributes
         tests++;
         User testUser3 = new User("Katia", "#FF0000");
         if (!testUser.equals(testUser3)) {
