@@ -46,7 +46,7 @@ import java.util.ResourceBundle;
 
 import static java.util.Collections.*;
 
-public class ScrumboardController {
+public class ScrumboardController implements Initializable {
     @FXML
     private Button AddNewUserStoryButton;
     @FXML
@@ -108,6 +108,16 @@ public class ScrumboardController {
 
     @FXML
     private Button viewBurndownButton;
+
+    // we could use the BigDecimal class because it gives the user complete control
+    // over rounding behaviour.
+    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+    // could pass in a format string.
+    // format the string to be %.2f, and the arguments will be the initial value we
+    // will begin with
+    // which is set t0 zero.
+    // another variable will be use to calulate the percent of work done over the
+    // ones that are not complete.
 
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
@@ -172,10 +182,11 @@ public class ScrumboardController {
         Paint colour = UsersColourPicker.getValue();
 
         // if name is not entered, create team mate called "TeamMate #"
-        if (name.equals("")) {
+        if (name.equals("") || name.equals("No User Assigned")) {
             int TeammateNumber = ScrumboardController.teammates.size() + 1;
             name = "TeamMate " + TeammateNumber;
         }
+
 
         // if colour is white don't create a new teammate and inform user
         if (colour.toString().equals("0xffffffff")) {
@@ -184,11 +195,19 @@ public class ScrumboardController {
             return;
         }
 
-        // if colour is already chosen for another teammate, do not create teammate and
-        // inform user
         for (User teamMate : ScrumboardController.teammates) {
+            // if colour is already chosen for another teammate, do not create teammate and
+            // inform user
             if (teamMate.getColour().equals(colour.toString())) {
                 Popup DuplicatePopup = new Popup("Cannot have same colour as another user");
+                DuplicatePopup.displayPopup();
+                return;
+            }
+            if (teamMate.getName().equals(name))
+            {
+                String popupMessage = "Cannot have users with same name. You could try ";
+                popupMessage =  popupMessage.concat(name).concat("2 instead");
+                Popup DuplicatePopup = new Popup(popupMessage);
                 DuplicatePopup.displayPopup();
                 return;
             }
@@ -207,7 +226,8 @@ public class ScrumboardController {
         updateBoard();
     }
 
-    /*
+
+    /**
      * Create a new user story: obtain all the information filled out by a user,
      * create a new userStory object that will get populated with that info.
      * Save that new userStory object to the stories array.
@@ -483,7 +503,7 @@ public class ScrumboardController {
     /**
      * Add statuses and priorities to combo box as well as a null/non-assigned
      * option for assignee combo box
-     */
+     **/
     public void setStatusPriority() {
         String statuses[] = { "Backlog", "To-do", "In progress", "Done" };
         if (statusComboBox.getItems().isEmpty()) {
@@ -497,14 +517,6 @@ public class ScrumboardController {
             for (int i = 1; i <= 5; i++) {
                 priorityComboBox.getItems().add("" + i);
             }
-        }
-
-        // TODO Figure out how to make this execute exactly once even if box is not
-        // empty since user can be added first
-        // right now it only executes if a drop down menu is selected before a user is
-        // added
-        if (assignToComboBox.getItems().isEmpty()) {
-            assignToComboBox.getItems().add("");
         }
     }
 
@@ -597,6 +609,16 @@ public class ScrumboardController {
         }
     }
 
+    // we could use the BigDecimal class because it gives the user complete control
+    // over rounding behaviour.
+    //BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
+                                                                      // could pass in a format string.
+    // format the string to be %.2f, and the arguments will be the initial value we
+    // will begin with
+    // which is set t0 zero.
+    // another variable will be use to calulate the percent of work done over the
+    // ones that are not complete.
+
     public void updateProgress() {
 
         double progress = Double.valueOf(totalPointsCompleted)/totalPoints;
@@ -610,17 +632,34 @@ public class ScrumboardController {
 
     }
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        myprogressbar.setStyle("-fx-accent: blue;");
-    }
 
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
-    
+
     // list of points of actual team velocity
     // index will be x value, value will be y value
     ArrayList<Integer> finalActual = new ArrayList<Integer>();
 
+
+    /**
+     * Initialize the scrumBoard progress bar and assign to user combo box
+     * @param url ?
+     * @param resourceBundle ?
+     */
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // set colour of progress bar
+        myprogressbar.setStyle("-fx-accent: blue;");
+
+        // add no user option to assign to user combo box
+        assignToComboBox.getItems().add("No User Assigned");
+
+    }
+
+    /**
+     * Updates board to reflect next spring when button is pressed
+     * @postcondition: user stories in inProgress and to-do are moved to backlog
+     * @postcondition: number of sprint updates
+     */
     public void goToNextSprint() {
 
         ArrayList<UserStory> incompleteStories = new ArrayList<>();
@@ -700,6 +739,146 @@ public class ScrumboardController {
         stage.setWidth(450);
         stage.setScene(scene);
         stage.showAndWait();
+
+    }
+
+    /**
+     * Delete a user story from the board
+     * @precondition the story must exist and be assigned a status
+     * @postcondition: story icon is removed from board, if assigned to user it is removed from user's list of stories
+     * @postcondition:  and is removed from its corresponding status' list
+     * @param story the story you wish to delete
+     */
+    protected void deleteStory(UserStory story)
+    {
+        // remove from user
+        User user = story.getUser();
+        try {
+            user.removeUserStory(story);
+        }
+        catch (Exception e)
+        {
+            // user story is not assigned to a user, do nothing
+        }
+        // from list"Backlog", "To-do", "In progress", "Done"
+        String status = story.getStatus();
+        if (status.equals("Backlog")) {
+            this.backlog.remove(story);
+        }
+        else if (status.equals("To-do"))
+            this.toDo.remove(story);
+        else if (status.equals("In progress"))
+            this.inProgress.remove(story);
+        else if (status.equals("Done")) {
+            this.done.remove(story);
+            totalPointsCompleted = totalPointsCompleted - story.getPriority();
+        }
+
+
+        totalPoints = totalPoints - story.getPriority();
+
+        updateBoard();
+    }
+
+    /**
+     * Change the attributes of a user story when edit is selected
+     * @param story the story to be edited
+     * @param user a user to assign the story to (can be null if no change wanted)
+     * @param priority the new priority you want the story to be (can be null if no change wanted)
+     * @param status the new status you want the story to have (can be null if no change wanted)
+     * @precondition story is on board and edit button is selected
+     * @postcondition: story attributes change, board updates, user's stories may change if reassigning,
+     * status list may change if moving story around board, burndown chart may change if changing priority
+     */
+    protected void editStory(UserStory story, String user, String priority, String status) {
+
+        // change priority
+        if (priority != null) {
+            int oldPriority = story.getPriority();
+            int newPriority = Integer.parseInt(priority);
+            if (newPriority != story.getPriority()) {
+                story.setPriority(newPriority);
+                //update priority values for burndown
+                totalPoints = totalPoints - oldPriority;
+                totalPoints = totalPoints + newPriority;
+                if (story.getStatus().equals("Done"))
+                {
+                    totalPointsCompleted = totalPointsCompleted - oldPriority;
+                    totalPointsCompleted = totalPointsCompleted + newPriority;
+                }
+
+            }
+        }
+        // change status
+        if ((status != null)) {
+            if (!status.equals(story.getStatus())) {
+                // remove from old status list
+                String oldStatus = story.getStatus();
+                if (oldStatus.equals("Backlog")) {
+                    this.backlog.remove(story);
+                } else if (oldStatus.equals("To-do"))
+                    this.toDo.remove(story);
+                else if (oldStatus.equals("In progress"))
+                    this.inProgress.remove(story);
+                else if (oldStatus.equals("Done")) {
+                    this.done.remove(story);
+                    totalPointsCompleted = totalPointsCompleted - story.getPriority();
+                }
+
+                // add to new status list
+                story.setStatus(status);
+                if (status.equals("Backlog")) {
+                    this.backlog.add(story);
+                } else if (status.equals("To-do"))
+                    this.toDo.add(story);
+                else if (status.equals("In progress"))
+                    this.inProgress.add(story);
+                else if (status.equals("Done")) {
+                    this.done.add(story);
+                    totalPointsCompleted = totalPointsCompleted + story.getPriority();
+                }
+            }
+        }
+
+        // change user
+        if (user != null) {
+            // find user that was selected
+            User newUser = null;
+            for (User u : teammates) {
+                if (u.getName().equals(user)) {
+                    newUser = u;
+                }
+            }
+            User oldUser = story.getUser();
+            if (newUser == null || oldUser == null) {
+                if (oldUser != null) {
+                    try {
+                        oldUser.removeUserStory(story);
+                        // we now know that newUser is null so just set attribute to null
+                        story.setUser(null);
+                        story.setColour("White");
+                    } catch (Exception e) {
+                        // this should never happen as we check if user is null before removing
+                    }
+                }
+                else if (newUser != null){
+                    // oldUser is null, new user is not
+                    newUser.addUserStory(story);
+                    story.setColour(newUser.getColour());
+                }
+                // if both are null, nothing to change
+            } else if (!(newUser.equals(oldUser))) {
+                try {
+                    oldUser.removeUserStory(story);
+                } catch (Exception e) {
+                    // we have already checked if user is null so this never happens
+                }
+                newUser.addUserStory(story);
+                story.setUser(newUser);
+                story.setColour(newUser.getColour());
+            }
+        }
+        updateBoard();
     }
 
     /**
