@@ -383,6 +383,8 @@ public class ScrumboardController implements Initializable {
                 TitledPane seeMorePane = new TitledPane();
                 newStoryBox.setMaxWidth(258);
 
+                //create hbox display for user story in see more pane.
+
 
                 // create drop down menus for editing the stories
                 ComboBox<String> asigneeChoice = new ComboBox<>();
@@ -415,6 +417,31 @@ public class ScrumboardController implements Initializable {
 
                 // create pane to put inside see more
                 Pane droppedDownPane = new Pane();
+                //construct see more items for persona, feature name and description.
+                HBox personaRow= new HBox();
+                HBox featureRow= new HBox();
+                HBox descriptionRow=new HBox();
+                HBox assignRow=new HBox();
+                HBox statusRRow=new HBox();
+                HBox priorityRRow= new HBox();
+                HBox blancspaceRow=new HBox();
+
+                Label Persona = new Label("As:"+" "+listToIterate.get(i).getPersona());
+                Label feature= new Label("I want: %s".formatted(listToIterate.get(i).getTitle()));
+                Label description=new Label("So that:"+" "+listToIterate.get(i).getDescription());
+                Label assignto=new Label("Assigned to: "+teammates.get(i).getName());
+                Label status= new Label("Status: " + listToIterate.get(i).getStatus());
+                Label priority= new Label("Priority: " + listToIterate.get(i).getPriority());
+                Label blancspace=new Label("                       ");
+
+                personaRow.getChildren().add(Persona);
+                featureRow.getChildren().add(feature);
+                descriptionRow.getChildren().add(description);
+                assignRow.getChildren().add(assignto);
+                statusRRow.getChildren().add(status);
+                priorityRRow.getChildren().add(priority);
+                blancspaceRow.getChildren().add(blancspace);
+
                 //construct items to put on pane
                 HBox assigneeRow = new HBox();
                 Label changeUserLabel = new Label("Select User");
@@ -431,20 +458,33 @@ public class ScrumboardController implements Initializable {
                 statusRow.getChildren().add(changeStatusLabel);
                 statusRow.getChildren().add(statusChoice);
 
+                HBox blancspace2Row= new HBox();
+                Label blankspace2= new Label("                                              ");
+                blancspace2Row.getChildren().add(blankspace2);
+
+
 
                 HBox buttonRow = new HBox();
                 buttonRow.getChildren().add(editButton);
                 buttonRow.getChildren().add(deleteButton);
 
                 VBox rows = new VBox();
+                rows.getChildren().add(personaRow);
+                rows.getChildren().add(featureRow);
+                rows.getChildren().add(descriptionRow);
+                rows.getChildren().add(assignRow);
+                rows.getChildren().add(statusRRow);
+                rows.getChildren().add(priorityRRow);
+                rows.getChildren().add(blancspace);
                 rows.getChildren().add(assigneeRow);
                 rows.getChildren().add(priorityRow);
                 rows.getChildren().add(statusRow);
+                rows.getChildren().add(blancspace2Row);
                 rows.getChildren().add(buttonRow);
 
                 // add all content to the edit story drop down
                 seeMorePane.setContent(rows);
-                seeMorePane.setText("More");
+                seeMorePane.setText("See More");
                 seeMorePane.setExpanded(false);
 
 
