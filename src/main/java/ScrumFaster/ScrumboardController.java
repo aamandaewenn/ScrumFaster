@@ -109,15 +109,8 @@ public class ScrumboardController implements Initializable {
     @FXML
     private Button viewBurndownButton;
 
-    // we could use the BigDecimal class because it gives the user complete control
-    // over rounding behaviour.
-    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
-    // could pass in a format string.
-    // format the string to be %.2f, and the arguments will be the initial value we
-    // will begin with
-    // which is set t0 zero.
-    // another variable will be use to calulate the percent of work done over the
-    // ones that are not complete.
+    // Use BigDecimal class to control rounding behaviour, initialize to 0
+    BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0));
 
     // ArrayList of all users added to the system.
     public static ArrayList<User> teammates = new ArrayList<User>();
@@ -609,16 +602,9 @@ public class ScrumboardController implements Initializable {
         }
     }
 
-    // we could use the BigDecimal class because it gives the user complete control
-    // over rounding behaviour.
-    //BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
-                                                                      // could pass in a format string.
-    // format the string to be %.2f, and the arguments will be the initial value we
-    // will begin with
-    // which is set t0 zero.
-    // another variable will be use to calulate the percent of work done over the
-    // ones that are not complete.
-
+    /*
+     * Update the progress bar to reflect current progress
+     */
     public void updateProgress() {
 
         double progress = Double.valueOf(totalPointsCompleted)/totalPoints;
@@ -628,10 +614,8 @@ public class ScrumboardController implements Initializable {
         progresslabel.setText(Integer.toString((int) Math.round(progress * 100)) + "%");
 
         //display how many points are done over the total number of points
-        taskupdate.setText(totalPointsCompleted+" / "+totalPoints+" "+"Points Completed.");
-
+        taskupdate.setText(totalPointsCompleted+ " / " + totalPoints + " Points Completed.");
     }
-
 
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
@@ -652,7 +636,6 @@ public class ScrumboardController implements Initializable {
 
         // add no user option to assign to user combo box
         assignToComboBox.getItems().add("No User Assigned");
-
     }
 
     /**
@@ -691,59 +674,27 @@ public class ScrumboardController implements Initializable {
     /*
      * This function is called when the user clicks on the "View Burndown" button.
      * It will open a new window with the burndown chart depicting team velocity.
+     * 
+     * @postcondition: the user has clicked on the "View Burndown" button
+     * @postcondition: a new window will open with the burndown chart
      */
-    public void BurndownChartWindow() throws IOException {
+    public void BurndownChartWindow() {
+        
+        // create a new burndown chart
+        BurndownChart burndownChart = new BurndownChart();
 
-        // draw the burndown chart
-        LineChart<Number, Number> burndownChart = new LineChart<Number, Number>(xAxis, yAxis);
-        burndownChart.setTitle("Burndown Chart");
-
-        xAxis.setLabel("Sprints Completed");
-        yAxis.setLabel("Remaining Effort");
-
-        // map ideal burndown to chart
-        final XYChart.Series ideal = new XYChart.Series();
-        final XYChart.Series actual = new XYChart.Series();
-
-        ideal.setName("Ideal Burndown");
-        actual.setName("Actual Burndown");
-
-        actual.getData().add(new XYChart.Data(0, totalPoints));
-        for (int i = 0; i < finalActual.size(); i++) {
-            // plot the effort remaining for each sprint prior to the current one
-            actual.getData().add(new XYChart.Data(i + 1, finalActual.get(i)));
-        }
-
-        // points will correspond to the number of sprints needed to complete the story
-        // calculate number of sprints needed to complete entire projet based on average story points
-        Double averagePoints = Double.valueOf(totalPoints)
-                / (backlog.size() + toDo.size() + inProgress.size() + done.size());
-        Double decrement = totalPoints / averagePoints;
-
-        // map ideal burndown to chart
-        for (int i = 0; i <= decrement; i++) {
-            if (totalPoints - i * averagePoints >= 0) {
-                ideal.getData().add(new XYChart.Data(i, totalPoints - i * averagePoints));
-            } else {
-                ideal.getData().add(new XYChart.Data(i, 0));
-                break;
-            }
-        }
-
-        Scene scene = new Scene(burndownChart, 800, 600);
-        burndownChart.getData().addAll(ideal, actual);
-
-        Stage stage = new Stage();
-        stage.setTitle("Burndown Chart");
-        stage.setHeight(450);
-        stage.setWidth(450);
-        stage.setScene(scene);
-        stage.showAndWait();
+        // add ideal and actual team velocity to the burndown chart
+        burndownChart.mapIdealBurndown(totalPoints, backlog.size()+toDo.size()+inProgress.size()+done.size());
+        burndownChart.mapActualBurndown(finalActual, totalPoints);
+        
+        // display to user
+        burndownChart.displayBurndownChart();
 
     }
 
     /**
      * Delete a user story from the board
+     * 
      * @precondition the story must exist and be assigned a status
      * @postcondition: story icon is removed from board, if assigned to user it is removed from user's list of stories
      * @postcondition:  and is removed from its corresponding status' list
@@ -774,7 +725,7 @@ public class ScrumboardController implements Initializable {
             totalPointsCompleted = totalPointsCompleted - story.getPriority();
         }
 
-
+        // decrement total points to omit deleted story
         totalPoints = totalPoints - story.getPriority();
 
         updateBoard();
@@ -782,11 +733,13 @@ public class ScrumboardController implements Initializable {
 
     /**
      * Change the attributes of a user story when edit is selected
+     * 
      * @param story the story to be edited
      * @param user a user to assign the story to (can be null if no change wanted)
      * @param priority the new priority you want the story to be (can be null if no change wanted)
      * @param status the new status you want the story to have (can be null if no change wanted)
      * @precondition story is on board and edit button is selected
+     * 
      * @postcondition: story attributes change, board updates, user's stories may change if reassigning,
      * status list may change if moving story around board, burndown chart may change if changing priority
      */
