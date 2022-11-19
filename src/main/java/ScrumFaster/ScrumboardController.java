@@ -391,11 +391,11 @@ public class ScrumboardController implements Initializable {
                 String[] priorities = { "1", "2", "3", "4", "5" };
                 priorityChoice.getItems().addAll(priorities);
                 ComboBox<String> statusChoice = new ComboBox<>();
-                String[] statuses = { "Backlog)", "To-do", "In progress", "Done" };
+                String[] statuses = { "Backlog", "To-do", "In progress", "Done" };
                 statusChoice.getItems().addAll(statuses);
 
                 //create two buttons for editing and deleting
-                Button editButton= new Button("edit");
+                Button editButton= new Button("Save");
                 editButton.setPrefSize(50,50);
                 editButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -403,7 +403,7 @@ public class ScrumboardController implements Initializable {
                         editStory(currentStory,asigneeChoice.getValue(), priorityChoice.getValue(), statusChoice.getValue() );
                     }
                 });
-                Button deleteButton= new Button("delete");
+                Button deleteButton= new Button("Delete");
                 deleteButton.setPrefSize(60,50);
                 deleteButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -444,7 +444,7 @@ public class ScrumboardController implements Initializable {
 
                 // add all content to the edit story drop down
                 seeMorePane.setContent(rows);
-                seeMorePane.setText("Edit Story");
+                seeMorePane.setText("More");
                 seeMorePane.setExpanded(false);
 
 
