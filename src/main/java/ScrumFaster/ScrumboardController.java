@@ -398,7 +398,7 @@ public class ScrumboardController implements Initializable {
                 String[] priorities = { "1", "2", "3", "4", "5" };
                 priorityChoice.getItems().addAll(priorities);
                 ComboBox<String> statusChoice = new ComboBox<>();
-                String[] statuses = { "Backlog)", "To-do", "In progress", "Done" };
+                String[] statuses = { "Backlog", "To-do", "In progress", "Done" };
                 statusChoice.getItems().addAll(statuses);
 
                 //create two buttons for editing and deleting
@@ -609,15 +609,6 @@ public class ScrumboardController implements Initializable {
         }
     }
 
-    // we could use the BigDecimal class because it gives the user complete control
-    // over rounding behaviour.
-    //BigDecimal progress = new BigDecimal(String.format("%.2f", 0.0)); // this is a big decimal constructor, where we
-                                                                      // could pass in a format string.
-    // format the string to be %.2f, and the arguments will be the initial value we
-    // will begin with
-    // which is set t0 zero.
-    // another variable will be use to calulate the percent of work done over the
-    // ones that are not complete.
 
     public void updateProgress() {
 
@@ -865,6 +856,7 @@ public class ScrumboardController implements Initializable {
                     // oldUser is null, new user is not
                     newUser.addUserStory(story);
                     story.setColour(newUser.getColour());
+                    story.setUser(newUser);
                 }
                 // if both are null, nothing to change
             } else if (!(newUser.equals(oldUser))) {
@@ -881,142 +873,7 @@ public class ScrumboardController implements Initializable {
         updateBoard();
     }
 
-    /**
-     * Delete a user story from the board
-     * @precondition the story must exist and be assigned a status
-     * @postcondition: story icon is removed from board, if assigned to user it is removed from user's list of stories
-     * @postcondition:  and is removed from its corresponding status' list
-     * @param story the story you wish to delete
-     */
-    protected void deleteStory(UserStory story)
-    {
-        // remove from user
-        User user = story.getUser();
-        try {
-            user.removeUserStory(story);
-        }
-        catch (Exception e)
-        {
-            // user story is not assigned to a user, do nothing
-        }
-        // from list"Backlog", "To-do", "In progress", "Done"
-        String status = story.getStatus();
-        if (status.equals("Backlog")) {
-            this.backlog.remove(story);
-        }
-        else if (status.equals("To-do"))
-            this.toDo.remove(story);
-        else if (status.equals("In progress"))
-            this.inProgress.remove(story);
-        else if (status.equals("Done")) {
-            this.done.remove(story);
-            totalPointsCompleted = totalPointsCompleted - story.getPriority();
-        }
 
 
-        totalPoints = totalPoints - story.getPriority();
 
-        updateBoard();
-    }
-
-    /**
-     * Change the attributes of a user story when edit is selected
-     * @param story the story to be edited
-     * @param user a user to assign the story to (can be null if no change wanted)
-     * @param priority the new priority you want the story to be (can be null if no change wanted)
-     * @param status the new status you want the story to have (can be null if no change wanted)
-     * @precondition story is on board and edit button is selected
-     * @postcondition: story attributes change, board updates, user's stories may change if reassigning,
-     * status list may change if moving story around board, burndown chart may change if changing priority
-     */
-    protected void editStory(UserStory story, String user, String priority, String status) {
-
-        // change priority
-        if (priority != null) {
-            int oldPriority = story.getPriority();
-            int newPriority = Integer.parseInt(priority);
-            if (newPriority != story.getPriority()) {
-                story.setPriority(newPriority);
-                //update priority values for burndown
-                totalPoints = totalPoints - oldPriority;
-                totalPoints = totalPoints + newPriority;
-                if (story.getStatus().equals("Done"))
-                {
-                    totalPointsCompleted = totalPointsCompleted - oldPriority;
-                    totalPointsCompleted = totalPointsCompleted + newPriority;
-                }
-
-            }
-        }
-        // change status
-        if ((status != null)) {
-            if (!status.equals(story.getStatus())) {
-                // remove from old status list
-                String oldStatus = story.getStatus();
-                if (oldStatus.equals("Backlog")) {
-                    this.backlog.remove(story);
-                } else if (oldStatus.equals("To-do"))
-                    this.toDo.remove(story);
-                else if (oldStatus.equals("In progress"))
-                    this.inProgress.remove(story);
-                else if (oldStatus.equals("Done")) {
-                    this.done.remove(story);
-                    totalPointsCompleted = totalPointsCompleted - story.getPriority();
-                }
-
-                // add to new status list
-                story.setStatus(status);
-                if (status.equals("Backlog")) {
-                    this.backlog.add(story);
-                } else if (status.equals("To-do"))
-                    this.toDo.add(story);
-                else if (status.equals("In progress"))
-                    this.inProgress.add(story);
-                else if (status.equals("Done")) {
-                    this.done.add(story);
-                    totalPointsCompleted = totalPointsCompleted + story.getPriority();
-                }
-            }
-        }
-
-        // change user
-        if (user != null) {
-            // find user that was selected
-            User newUser = null;
-            for (User u : teammates) {
-                if (u.getName().equals(user)) {
-                    newUser = u;
-                }
-            }
-            User oldUser = story.getUser();
-            if (newUser == null || oldUser == null) {
-                if (oldUser != null) {
-                    try {
-                        oldUser.removeUserStory(story);
-                        // we now know that newUser is null so just set attribute to null
-                        story.setUser(null);
-                        story.setColour("White");
-                    } catch (Exception e) {
-                        // this should never happen as we check if user is null before removing
-                    }
-                }
-                else if (newUser != null){
-                    // oldUser is null, new user is not
-                    newUser.addUserStory(story);
-                    story.setColour(newUser.getColour());
-                }
-                // if both are null, nothing to change
-            } else if (!(newUser.equals(oldUser))) {
-                try {
-                    oldUser.removeUserStory(story);
-                } catch (Exception e) {
-                    // we have already checked if user is null so this never happens
-                }
-                newUser.addUserStory(story);
-                story.setUser(newUser);
-                story.setColour(newUser.getColour());
-            }
-        }
-        updateBoard();
-    }
 }
