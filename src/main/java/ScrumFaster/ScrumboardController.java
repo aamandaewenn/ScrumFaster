@@ -403,6 +403,7 @@ public class ScrumboardController implements Initializable {
                         editStory(currentStory,asigneeChoice.getValue(), priorityChoice.getValue(), statusChoice.getValue() );
                     }
                 });
+                
                 Button deleteButton= new Button("Delete");
                 deleteButton.setPrefSize(60,50);
                 deleteButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -725,6 +726,7 @@ public class ScrumboardController implements Initializable {
         // decrement total points to omit deleted story
         totalPoints = totalPoints - story.getPriority();
 
+        updateProgress();
         updateBoard();
     }
 
