@@ -32,8 +32,10 @@ public class ScrumBoardUI extends Application {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ScrumBoardUI.fxml")));
         Scene scene = new Scene(root, 320, 240);
         stage.setTitle("ScrumFaster");
-        stage.setHeight(687);
-        stage.setWidth(1329);
+        stage.setHeight(835);
+        stage.setWidth(1470);
+        stage.setMinHeight(835);
+        stage.setMinWidth(1470);
         stage.setScene(scene);
         stage.show();
     }
