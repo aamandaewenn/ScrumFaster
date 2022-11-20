@@ -543,7 +543,6 @@ public class ScrumboardController implements Initializable {
     public void setStatusPriority() {
         String statuses[] = { "Backlog", "To-do", "In progress", "Done" };
         if (statusComboBox.getItems().isEmpty()) {
-            System.out.println("this executes");
             for (String status : statuses) {
                 statusComboBox.getItems().add(status);
             }
@@ -766,8 +765,6 @@ public class ScrumboardController implements Initializable {
             System.out.println(totalPointsCompleted);
         }
 
-
-
         // decrement total points to omit deleted story
         totalPoints = totalPoints - story.getPriority();
         
@@ -791,7 +788,7 @@ public class ScrumboardController implements Initializable {
         // update priority by difference between old and new priority
         if (priority != null) {
             totalPoints = totalPoints - (story.getPriority() - Integer.parseInt(priority));
-            System.out.println("dsd"+totalPoints);
+
             if (story.getStatus().equals("Done"))
             {
                 totalPointsCompleted = totalPointsCompleted - (story.getPriority() - Integer.parseInt(priority));
