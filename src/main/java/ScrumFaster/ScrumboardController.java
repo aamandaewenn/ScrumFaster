@@ -43,6 +43,7 @@ import javafx.scene.control.ProgressBar;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.Collections.*;
 
@@ -531,6 +532,7 @@ public class ScrumboardController implements Initializable {
 
             updateProgress();
         }
+
     }
 
     /**
@@ -760,7 +762,10 @@ public class ScrumboardController implements Initializable {
         else if (status.equals("Done")) {
             this.done.remove(story);
             totalPointsCompleted = totalPointsCompleted - story.getPriority();
+            System.out.println(totalPointsCompleted);
         }
+
+
 
         // decrement total points to omit deleted story
         totalPoints = totalPoints - story.getPriority();
@@ -786,9 +791,11 @@ public class ScrumboardController implements Initializable {
         if (priority != null) {
             story.setPriority(Integer.parseInt(priority));
             totalPoints = totalPoints - (story.getPriority() - Integer.parseInt(priority));
+            System.out.println("dsd"+totalPoints);
             if (story.getStatus().equals("Done"))
             {
                 totalPointsCompleted = totalPointsCompleted - (story.getPriority() - Integer.parseInt(priority));
+
             }
 
         } else {
@@ -868,5 +875,6 @@ public class ScrumboardController implements Initializable {
             }
         }
         updateBoard();
+
     }
 }
