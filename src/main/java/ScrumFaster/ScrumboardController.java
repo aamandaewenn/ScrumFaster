@@ -784,6 +784,7 @@ public class ScrumboardController implements Initializable {
 
         // update priority by difference between old and new priority
         if (priority != null) {
+            story.setPriority(Integer.parseInt(priority));
             totalPoints = totalPoints - (story.getPriority() - Integer.parseInt(priority));
             if (story.getStatus().equals("Done"))
             {
@@ -852,6 +853,7 @@ public class ScrumboardController implements Initializable {
                     // oldUser is null, new user is not
                     newUser.addUserStory(story);
                     story.setColour(newUser.getColour());
+                    story.setUser(newUser);
                 }
                 // if both are null, nothing to change
             } else if (!(newUser.equals(oldUser))) {
