@@ -615,7 +615,7 @@ public class ScrumboardController implements Initializable {
         progresslabel.setText(Integer.toString((int) Math.round(progress * 100)) + "%");
 
         //display how many points are done over the total number of points
-        taskupdate.setText(totalPointsCompleted+ " / " + totalPoints + " Points Completed.");
+        taskupdate.setText(totalPointsCompleted + " / " + totalPoints + " Points Completed");
     }
 
     // list of points of actual team velocity
@@ -725,8 +725,7 @@ public class ScrumboardController implements Initializable {
 
         // decrement total points to omit deleted story
         totalPoints = totalPoints - story.getPriority();
-
-        updateProgress();
+        
         updateBoard();
     }
 
@@ -746,12 +745,13 @@ public class ScrumboardController implements Initializable {
 
         // update priority by difference between old and new priority
         if (priority != null) {
-            story.setPriority(Integer.parseInt(priority));
             totalPoints = totalPoints - (story.getPriority() - Integer.parseInt(priority));
+
             if (story.getStatus().equals("Done"))
             {
                 totalPointsCompleted = totalPointsCompleted - (story.getPriority() - Integer.parseInt(priority));
             }
+            story.setPriority(Integer.parseInt(priority));
 
         } else {
             Popup unfilledPopup = new Popup("Please fill in all required fields");
@@ -811,7 +811,7 @@ public class ScrumboardController implements Initializable {
                         // this should never happen as we check if user is null before removing
                     }
                 }
-                else if (newUser != null){
+                else if (newUser != null) {
                     // oldUser is null, new user is not
                     newUser.addUserStory(story);
                     story.setColour(newUser.getColour());
