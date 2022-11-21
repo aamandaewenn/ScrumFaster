@@ -423,6 +423,7 @@ public class ScrumboardController implements Initializable {
                 HBox personaRow= new HBox();
                 HBox featureRow= new HBox();
                 HBox descriptionRow=new HBox();
+                HBox assignRow=new HBox();
                 HBox statusRRow=new HBox();
                 HBox priorityRRow= new HBox();
                 HBox blancspaceRow=new HBox();
@@ -430,6 +431,17 @@ public class ScrumboardController implements Initializable {
                 Label Persona = new Label("As:"+" "+listToIterate.get(i).getPersona());
                 Label feature= new Label("I want: %s".formatted(listToIterate.get(i).getTitle()));
                 Label description=new Label("So that:"+" "+listToIterate.get(i).getDescription());
+
+                Label assignto = new Label();
+
+                try{
+                    assignto.setText("Assigned to: "+teammates.get(i).getName());
+                }
+                catch (Exception e){
+                    System.out.println("Error");
+                }
+
+
                 Label status= new Label("Status: " + listToIterate.get(i).getStatus());
                 Label priority= new Label("Priority: " + listToIterate.get(i).getPriority());
                 Label blancspace=new Label("                       ");
@@ -437,6 +449,7 @@ public class ScrumboardController implements Initializable {
                 personaRow.getChildren().add(Persona);
                 featureRow.getChildren().add(feature);
                 descriptionRow.getChildren().add(description);
+                assignRow.getChildren().add(assignto);
                 statusRRow.getChildren().add(status);
                 priorityRRow.getChildren().add(priority);
                 blancspaceRow.getChildren().add(blancspace);
@@ -471,6 +484,7 @@ public class ScrumboardController implements Initializable {
                 rows.getChildren().add(personaRow);
                 rows.getChildren().add(featureRow);
                 rows.getChildren().add(descriptionRow);
+                rows.getChildren().add(assignRow);
                 rows.getChildren().add(statusRRow);
                 rows.getChildren().add(priorityRRow);
                 rows.getChildren().add(blancspace);
