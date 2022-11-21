@@ -1,7 +1,0 @@
-.mainBackgroundColor{
-    -fx-background-color: linear-gradient(to right,#61D8DE, #E839F6);
-}
-
-.transparentPane{
-    -fx-background-color: rgba(255, 255, 255, 0.7)"
-}

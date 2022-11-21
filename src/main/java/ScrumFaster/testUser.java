@@ -37,14 +37,13 @@ public class testUser {
             System.out.println("Error: User colour not changed properly");
         }
 
-        tests++;
+        tests += 2;
         // Create a new user story and assign to test user
         UserStory story1 = new UserStory("Katia", "Add Users", "Add users to board", "Backlog", 3);
         testUser.addUserStory(story1);
 
         if (testUser.getStories().size() == 1) {
             // check that user story was added
-            tests++;
             passed++;
             // check that all attributes of the user story are correct
             if (testUser.getStories().get(0).getPersona().equals("Katia")
@@ -80,27 +79,16 @@ public class testUser {
         // check that the user story was added
         if (testUser.getStories().size() == 3) {
             passed++;
-            // check that all attributes of the user story are correct
-            tests++;
-            if (testUser.getStories().get(2).getPersona().equals("Sam")
-                    && testUser.getStories().get(2).getTitle().equals("Add User Stories")
-                    && testUser.getStories().get(2).getDescription().equals("Add user stories to board")
-                    && testUser.getStories().get(2).getStatus().equals("Backlog")
-                    && testUser.getStories().get(2).getPriority() == 4) {
-                passed++;
-            } else {
-                System.out.println("Error: User story attributes not initiated properly");
-            }
         } else {
             System.out.println("Error: failed to add user story to user with multiple existing stories");
         }
 
-        tests ++;
+        tests++;
         // remove user story
         try {
             testUser.removeUserStory(story2);
             if (testUser.getStories().size() == 2) {
-                // check that the correct user story was removed from user
+                // check that the correct user story was removed
                 if (testUser.getStories().get(0).getPersona().equals("Katia")
                         && testUser.getStories().get(0).getTitle().equals("Add Users")
                         && testUser.getStories().get(0).getDescription().equals("Add users to board")
@@ -114,14 +102,6 @@ public class testUser {
                     passed++;
                 } else {
                     System.out.println("Error: User story not removed properly");
-                }
-
-                // test that story's user is set to null
-                tests++;
-                if (story2.getUser() == null) {
-                    passed++;
-                } else {
-                    System.out.println("Error: User story's user not set to null after unassigning user");
                 }
             } else {
                 System.out.println("Error: failed to remove user story from user with multiple existing stories");
@@ -177,6 +157,71 @@ public class testUser {
             System.out.println("Error: failed to throw exception when removing user story from empty list");
         } catch (Exception e) {
             passed++;
+        }
+
+        // compare two users that are the same: user object to compare to is itself
+        tests++;
+        if (testUser.equals(testUser)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to itself");
+        }
+
+        // compare two users that are the same:
+        // two user objects with same name and colour,
+        // neither have any user stories
+        tests++;
+        User testUser2 = new User("Amanda", "#00FF00");
+        if (testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are the same");
+        }
+
+        // compare two users that are different:
+        // two user objects with same name and colour,
+        // but different user stories
+        tests++;
+        testUser.addUserStory(story1);
+        if (!testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are different");
+        }
+
+        // compare two users that are the same:
+        // two user objects with same name, colour, and user stories
+        tests++;
+        testUser2.addUserStory(story1);
+        if (testUser.equals(testUser2)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are the same");
+        }
+
+        // compare two users that are different: object to compare to is null
+        tests++;
+        if (!testUser.equals(null)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to null");
+        }
+
+        // compare two users that are different: object to compare to is not a user
+        tests++;
+        if (!testUser.equals(story1)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare user to non-user object");
+        }
+
+        // compare two users that are different: two user objects with different attributes
+        tests++;
+        User testUser3 = new User("Katia", "#FF0000");
+        if (!testUser.equals(testUser3)) {
+            passed++;
+        } else {
+            System.out.println("Error: failed to compare two users that are different");
         }
 
         System.out.println("Testing complete: Passed " + passed + " out of " + tests + " tests.");
