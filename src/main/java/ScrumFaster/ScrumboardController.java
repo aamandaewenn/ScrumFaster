@@ -578,6 +578,15 @@ public class ScrumboardController implements Initializable {
         map.put("inProgress", inProgress);
         map.put("done", done);
 
+        ArrayList<Integer> numbersArray = new ArrayList<>();
+        numbersArray.add(sprintNumber);
+        numbersArray.add(totalPoints);
+        numbersArray.add(totalPointsCompleted);
+
+        map.put("numbersArray", numbersArray);
+
+        map.put("finalActual", finalActual);
+
         // allow a user to choose a file by themselves
         Stage stageSave = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -636,6 +645,16 @@ public class ScrumboardController implements Initializable {
             toDo = (ArrayList<UserStory>) map.get("toDo");
             inProgress = (ArrayList<UserStory>) map.get("inProgress");
             done = (ArrayList<UserStory>) map.get("done");
+
+
+            ArrayList<Integer> numbersArray;
+            numbersArray = (ArrayList<Integer>) map.get("numbersArray");
+
+            sprintNumber = numbersArray.get(0);
+            totalPoints = numbersArray.get(1);
+            totalPointsCompleted = numbersArray.get(2);
+
+            finalActual = (ArrayList<Integer>) map.get("finalActual");
 
             // update the board to display the info read from the file regarding all the user stories
             updateBoard();
