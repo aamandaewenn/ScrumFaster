@@ -140,8 +140,6 @@ public class ScrumboardController implements Initializable {
      * @param colour colour of the teammate to display
      */
     public void displayTeammate(String name, String colour) {
-//        // add the name to the combo box
-//        assignToComboBox.getItems().add(name);
 
         // add user to scrum board by creating icon
         VBox IconNameCombo = new VBox();
