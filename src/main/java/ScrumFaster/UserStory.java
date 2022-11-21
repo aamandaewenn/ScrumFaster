@@ -59,6 +59,11 @@ public class UserStory implements Serializable, Comparable<UserStory> {
         return this.colour;
     }
 
+    public void setColour(String colour)
+    {
+        this.colour = colour;
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -122,9 +127,9 @@ public class UserStory implements Serializable, Comparable<UserStory> {
         // all attributes must be equal for two user stories to be equal
         return this.getPersona().equals(story.getPersona())
                 && this.getTitle().equals(story.getTitle())
-                && this.getDescription().equals(story.getDescription()) 
+                && this.getDescription().equals(story.getDescription())
                 && this.getUser().equals(story.getUser())
-                && this.getStatus().equals(story.getStatus()) 
+                && this.getStatus().equals(story.getStatus())
                 && this.getPriority() == story.getPriority();
     }
 }
