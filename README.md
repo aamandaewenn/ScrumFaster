@@ -6,4 +6,4 @@ To run the ScrumFaster, you need to have:
 
 Once you have those things installed, open the terminal and run the command:
 
-$java --module-path <absolute path to your javafx-sdk-19 library> --add-modules javafx.controls,javafx.fxml,javafx.swing -jar <absolute path to the project .jar file>
+$java --module-path < absolute path to your javafx-sdk-19 library > --add-modules javafx.controls,javafx.fxml,javafx.swing -jar < absolute path to the project .jar file >
