@@ -140,8 +140,8 @@ public class ScrumboardController implements Initializable {
      * @param colour colour of the teammate to display
      */
     public void displayTeammate(String name, String colour) {
-        // add the name to the combo box
-        assignToComboBox.getItems().add(name);
+//        // add the name to the combo box
+//        assignToComboBox.getItems().add(name);
 
         // add user to scrum board by creating icon
         VBox IconNameCombo = new VBox();
@@ -656,9 +656,6 @@ public class ScrumboardController implements Initializable {
 
             finalActual = (ArrayList<Integer>) map.get("finalActual");
 
-            // update the board to display the info read from the file regarding all the user stories
-            updateBoard();
-
             // For cases when user clicks 'Load Board' more than once,
             // clear the teammates HBoxand combo box before adding to them to avoid duplicates
             UsersHBox.getChildren().clear();
@@ -667,7 +664,12 @@ public class ScrumboardController implements Initializable {
             // update the teammates section to display info read from the file regarding all the teammates
             for (User teammate : teammates) {
                 displayTeammate(teammate.getName(), teammate.getColour());
+                assignToComboBox.getItems().add(teammate.getName());
             }
+
+            // update the board to display the info read from the file regarding all the user stories
+            updateBoard();
+
         } else {
             System.out.println("Info was not read from the file");
         }
