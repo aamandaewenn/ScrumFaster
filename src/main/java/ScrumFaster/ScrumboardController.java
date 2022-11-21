@@ -431,7 +431,17 @@ public class ScrumboardController implements Initializable {
                 Label Persona = new Label("As:"+" "+listToIterate.get(i).getPersona());
                 Label feature= new Label("I want: %s".formatted(listToIterate.get(i).getTitle()));
                 Label description=new Label("So that:"+" "+listToIterate.get(i).getDescription());
-                Label assignto=new Label("Assigned to: "+teammates.get(i).getName());
+
+                Label assignto = new Label();
+
+                try{
+                    assignto.setText("Assigned to: "+teammates.get(i).getName());
+                }
+                catch (Exception e){
+                    System.out.println("Error");
+                }
+
+
                 Label status= new Label("Status: " + listToIterate.get(i).getStatus());
                 Label priority= new Label("Priority: " + listToIterate.get(i).getPriority());
                 Label blancspace=new Label("                       ");
