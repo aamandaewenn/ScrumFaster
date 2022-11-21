@@ -212,6 +212,7 @@ public class ScrumboardController implements Initializable {
         ScrumboardController.teammates.add(newUser);
 
         // display new user on the board
+        assignToComboBox.getItems().add(name);
         displayTeammate(name, colour.toString());
 
         //update board so that combo box of all user stories is updated
